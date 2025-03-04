@@ -1,7 +1,7 @@
 import { Button, Modal, Select, Space } from 'antd'
 import React from 'react'
 
-export default function FilterModal({isFilterVisible, setFillerVisible, categories, selectedCategory, setSelectedCategory, handleProvinceChange, handleDistrictChange,handleWardChange, provinces, districts, wards, selectedProvince, selectedDistrict, priceRanges,acreages, characteristics, selectedPrice, setSelectedPrice, isAcreage, setIsAcreage, isCharacteristics, setIsCharacteristics}) {
+export default function FilterModal({isFilterVisible, setFillerVisible, categories, selectedCategory, setSelectedCategory, handleProvinceChange, handleDistrictChange,handleWardChange, provinces, districts, wards, selectedProvince, selectedDistrict,selectedWard, priceRanges,acreages, characteristics, selectedPrice, setSelectedPrice, isAcreage, setIsAcreage, isCharacteristics, setIsCharacteristics}) {
   return (
     <Modal title="Bộ lọc" open={isFilterVisible} onCancel={() => setFillerVisible(false) } okText="Áp dụng" cancelText="Hủy">
                 <h3>Danh mục cho thuê</h3>
@@ -23,6 +23,7 @@ export default function FilterModal({isFilterVisible, setFillerVisible, categori
                     onChange={handleProvinceChange}
                     className="custom-modal"
                     style={{ width: "30%"}}
+                    value={selectedProvince?.code}
                   >
                     {provinces.map((province) => (
                       <Select.Option key={province.code} value={province.code}>
@@ -35,6 +36,7 @@ export default function FilterModal({isFilterVisible, setFillerVisible, categori
                     onChange={handleDistrictChange}
                     style={{ width: "30%" }}
                     disabled={!selectedProvince}
+                    value={selectedDistrict?.code}
                   >
                     {districts.map((district) => (
                       <Select.Option key={district.code} value={district.code}>
@@ -47,6 +49,7 @@ export default function FilterModal({isFilterVisible, setFillerVisible, categori
                     onChange={handleWardChange}
                     style={{ width: "30%" }}
                     disabled={!selectedDistrict}
+                    value={selectedWard?.code}
                   >
                     {wards.map((ward) => (
                       <Select.Option key={ward.code} value={ward.code}>
