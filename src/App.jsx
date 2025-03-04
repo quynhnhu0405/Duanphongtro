@@ -8,6 +8,7 @@ import Introduce from './Pages/Introduce'
 import ActiveRegulation from './Pages/Regulations'
 import TermsOfUse from './Pages/TermsOfUse'
 import PrivacyPolicy from './Pages/PrivacyPolicy'
+import Questions from './Pages/Questions'
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ function App() {
           <Route path="quy-che-hoat-dinh" element={<ActiveRegulation/>} />
           <Route path="quy-dinh-su-dung" element={<TermsOfUse/>} />
           <Route path="chinh-sach-bao-mat" element = {<PrivacyPolicy/>} />
+          <Route path="cau-hoi-thuong-gap" element={<Questions/>} />
         </Route>
       </Routes>
     </BrowserRouter>
