@@ -13,10 +13,10 @@ const ActiveRegulation = () => {
             <a href="/">Trang chủ</a>
           </Breadcrumb.Item>
           <Breadcrumb.Item>
-            <span>Giới thiệu</span>
+            <span>Quy chế hoạt động</span>
           </Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="text-3xl font-semibold mt-5">Giới thiệu</h1>
+        <h1 className="text-3xl font-semibold mt-5">Quy chế hoạt động</h1>
       </header>
       <div className=" text-base leading-8">
         <div dangerouslySetInnerHTML={{ __html: content }}></div>
