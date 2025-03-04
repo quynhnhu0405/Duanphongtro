@@ -1,10 +1,9 @@
-import { CaretDownOutlined, CloudUploadOutlined, DownOutlined, FilterOutlined, UserOutlined, EnvironmentOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Input, Layout, Menu, Modal, Select, Space } from "antd";
-import React, { useEffect, useState } from "react";
-import SearchModal from "../../../Components/search/SearchModal";
-import FilterModal from "../../../Components/Filter/FilterModal";
+import { CaretDownOutlined, CloudUploadOutlined, FilterOutlined, UserOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { Avatar, Button, Dropdown, Input, Layout, Menu, Space } from "antd";
+import  { useEffect, useState } from "react";
+import FilterModal from "../../Filter/FilterModal";
+import SearchModal from "../../search/SearchModal";
 
-const { Option } = Select;
 
 const menuItems = [
   { label: "Trang chủ", key: "1" },
@@ -48,6 +47,7 @@ const DefaultHeader = () => {
   }, []);
 
   const handleProvinceChange = (value) => {
+    console.log(value)
     const province = provinces.find((p) => p.code === value);
     setSelectedProvince(province);
     setDistricts(province?.districts || []);
@@ -76,8 +76,7 @@ const DefaultHeader = () => {
   };
 
   return (
-    <Layout>
-      <Layout.Header style={{ background: "rgb(255, 248, 238)", height: "auto", paddingTop: "10px", position:"fixed", zIndex: 1000, width:" 100%" }}>
+      <Layout.Header style={{ background: "rgb(255, 248, 238)", height: "auto", paddingTop: "10px", position:"sticky", top: 0, zIndex: 1000, width:" 100%" }}>
         <div className="header">
           <div className="header-left">
             <div className="logo">
@@ -108,10 +107,10 @@ const DefaultHeader = () => {
                 selectedProvince={selectedProvince}
                 selectedDistrict={selectedDistrict}
                 selectedWard={selectedWard}
-                onProvinceChange={handleProvinceChange}
-                onDistrictChange={handleDistrictChange}
-                onWardChange={handleWardChange}
-                onConfirm={handleConfirm}
+                handleProvinceChange={handleProvinceChange}
+                handleDistrictChange={handleDistrictChange}
+                handleWardChange={handleWardChange}
+                handleConfirm={handleConfirm}
                 onCancel={() => setVisible(false)}
               />
             </div>
@@ -134,6 +133,7 @@ const DefaultHeader = () => {
                 wards={wards}
                 selectedProvince={selectedProvince}
                 selectedDistrict={selectedDistrict}
+                selectedWard={selectedWard}
                 priceRanges={priceRanges}
                 acreages={acreages}
                 characteristics={characteristics}
@@ -168,10 +168,9 @@ const DefaultHeader = () => {
           </div>
         </div>
         <div className="menu">
-          <Menu mode="horizontal" defaultSelectedKeys={["1"]} items={menuItems} className="main-menu" />
+          <Menu mode="horizontal" items={menuItems} className="main-menu" />
         </div>
       </Layout.Header>
-    </Layout>
   );
 };
 

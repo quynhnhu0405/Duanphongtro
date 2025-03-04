@@ -1,6 +1,5 @@
-import { useState } from 'react'
 import './App.scss'
-import Manager from './Layouts/ManagerLayout'
+import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import DefaultLayout from './Layouts/DefaultLayout'
 import Home from './Pages/Home'
@@ -12,6 +11,7 @@ function App() {
         <Route path="/" element={<DefaultLayout />} >
           <Route path="trang-chu" element={<Home/>} />
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation/>} />
+          
         </Route>
       </Routes>
     </BrowserRouter>
