@@ -5,6 +5,7 @@ import DefaultLayout from './Layouts/DefaultLayout'
 import Home from './Pages/Home'
 import PostingRegulation from './Pages/PostingRegulations'
 import Introduce from './Pages/Introduce'
+import ActiveRegulation from './Pages/Regulations'
 function App() {
   return (
     <BrowserRouter>
@@ -13,6 +14,7 @@ function App() {
           <Route path="trang-chu" element={<Home/>} />
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation/>} />
           <Route path="gioi-thieu" element={<Introduce/>} />
+          <Route path="quy-che-dang-tin" element={<ActiveRegulation/>} />
         </Route>
       </Routes>
     </BrowserRouter>
