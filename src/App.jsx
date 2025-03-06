@@ -10,6 +10,7 @@ import TermsOfUse from './Pages/TermsOfUse'
 import PrivacyPolicy from './Pages/PrivacyPolicy'
 import Questions from './Pages/Questions'
 import InstructPost from './Pages/Instruct'
+import ResolveComplaints from './Pages/Complaints'
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +24,7 @@ function App() {
           <Route path="chinh-sach-bao-mat" element = {<PrivacyPolicy/>} />
           <Route path="cau-hoi-thuong-gap" element={<Questions/>} />
           <Route path="huong-dan-dang-tin" element={<InstructPost/>} />
+          <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints/>} />
         </Route>
       </Routes>
     </BrowserRouter>

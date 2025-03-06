@@ -1,5 +1,4 @@
-*
-{
+* {
   font-family: "Philosopher", serif !important;
 }
 body {
@@ -17,106 +16,89 @@ body {
 .filter button,
 .manage,
 .user,
-.post
-{
+.post {
   border-radius: 20px;
 }
-.filter button, .post
-{
+.filter button,
+.post {
   padding: 18px 15px;
 }
-.logo img{
-  width: 10vw;
+.logo img {
+  width: 190px;
+  height: 50px;
 }
 .logo {
   display: flex;
   justify-content: center;
   margin-right: 5%;
 }
-.main-menu
-    {
-      justify-content: center;
-      background: rgb(255, 248, 238);
-      font-size: 0.9rem;
-      margin: auto;
-    }
-    .header-right, .header-left{
-      display: flex;
-    }
-    .post
-    {
-      background-color: rgb(255, 25, 0);
-      color: aliceblue;
-    }
-    .post:hover
-    {
-      color: rgb(0, 0, 0);
-    }
-    .manage
-    {
-      color: rgb(0, 0, 0);
-      margin-right: 2vw;
-      padding: 5px 15px;
-    }
-    .manage:hover{
-      color: rgb(0, 0, 0);
-      background-color: rgb(248, 248, 248);
-      border-radius: 20px;
-    }
-    .user
-    {
-      margin-right: 2vw;
-    }
-    .user span
-    {
-      color: rgb(0, 0, 0);
-    }
-    
-.header { 
-    display: flex;
-    justify-content : space-between;
-    margin: 0 10%;
-    flex-wrap: wrap;
-    .main-menu
-    {
-      justify-content: center;
-      width: 80%;
-      border-top: 1px solid rgb(223, 223, 223);
-    }
-    .search
-    {
-      width: 20vw;
-      border-radius: 20px;
-    }
-    .menu {
-      width: 100%;
-    }
-    .main-menu .ant-menu-item-selected {
-      color: red !important;
-      border: none !important;
-    }
-    .main-menu .ant-menu-item:hover {
-      color: red !important;
-    }
-    .main-menu .ant-menu-item::after {
-      border-bottom: none !important;
-    }
-    .main-menu .ant-menu-item-selected::after {
-      border-bottom: 2px solid red !important;
-    }
-    .main-menu .ant-menu-item {
-      margin-right: 20px;
-    }
+.ant-layout-header {
+  line-height: 40px !important;
+}
+.main-menu {
+  justify-content: center;
+  background: rgb(255, 248, 238);
+  font-size: 0.9rem;
+  margin: auto;
+}
+.header-right,
+.header-left {
+  display: flex;
+}
+.post {
+  background-color: rgb(255, 25, 0);
+  color: aliceblue;
+}
+.post:hover {
+  color: rgb(0, 0, 0);
+}
+.manage {
+  color: rgb(0, 0, 0);
+  margin-right: 2vw;
+  padding: 5px 15px;
+}
+.manage:hover {
+  color: rgb(0, 0, 0);
+  background-color: rgb(248, 248, 248);
+  border-radius: 20px;
+}
+.user {
+  margin-right: 2vw;
+}
+.user span {
+  color: rgb(0, 0, 0);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10%;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+  .main-menu {
+    justify-content: center;
+    width: 80%;
+    border-top: 1px solid rgb(223, 223, 223);
+  }
+  .search {
+    width: 20vw;
+    border-radius: 20px;
+  }
+}
+.menu {
+  width: 80%;
+  line-height: 45px;
+  margin: auto;
+  border-top: 1px solid rgb(191, 191, 191);
 }
 .ant-modal-title {
   font-size: 1.2rem !important;
   font-weight: bold !important;
-  color: #ff0000  !important;
+  color: #ff0000 !important;
   position: relative;
   padding-bottom: 8px;
 }
-.ant-modal-header
-{
+.ant-modal-header {
   border-bottom: 1px solid !important;
 }
 .ant-modal-title::after {
@@ -129,12 +111,10 @@ body {
   bottom: 0;
   left: 0;
 }
-.modal-search .ant-modal-body
-{
+.modal-search .ant-modal-body {
   padding: 20px 5px !important;
 }
-.modal-search .ant-select
-{
+.modal-search .ant-select {
   height: 50px;
 }
 .modal-search .ant-select-selector {
@@ -151,74 +131,64 @@ body {
   border-color: rgb(133, 0, 0) !important;
   color: white !important;
 }
-.filter .ant-select-selection-item
-{
+.filter .ant-select-selection-item {
   width: 25%;
 }
-.filter-location
-{
+.filter-location {
   display: flex;
   justify-content: space-between;
 }
-.filter-location .ant-select-selector
-{
+.filter-location .ant-select-selector {
   border-radius: 10px;
 }
-.footer{
+.footer {
   background: rgb(255, 248, 238);
   width: 100%;
   bottom: 0;
-  .policy
-  {
+  .policy {
     display: flex;
     justify-content: space-between;
     margin: 0 10%;
     border-bottom: 1px solid rgb(223, 223, 223);
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
-  .policy div{
+  .policy div {
     width: 30%;
   }
-  .policy img{
+  .policy img {
     width: 1vw;
     margin: 0 1vw;
   }
-  .policy li{
+  .policy li {
     margin-bottom: 1vw;
   }
-  .policy ul
-  {
+  .policy ul {
     list-style: none;
     padding: 0;
   }
-  .policy a
-  {
+  .policy a {
     color: rgb(0, 0, 0);
   }
-  .infomation-company
-  {
+  .infomation-company {
     margin: 0 10%;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }
-.manager-header
-{
+.manager-header {
   display: flex;
   justify-content: space-between;
-  margin: 0 30px ;
-  .main-menu{
+  margin: 0 30px;
+  .main-menu {
     border: none !important;
   }
 }
-.user-info
-  {
-    line-height: 10px;
-    text-align: left;
-    margin-left: 2vw;
-    font-size: 0.8rem;
-  }
-.ant-layout-sider
-{
+.user-info {
+  line-height: 10px;
+  text-align: left;
+  margin-left: 2vw;
+  font-size: 0.8rem;
+}
+.ant-layout-sider {
   max-width: 300px !important;
   min-width: 200px !important;
   width: 300px !important;
@@ -228,29 +198,24 @@ body {
   position: fixed;
   height: 100%;
 }
-.manager-sider{
-  .ant-menu
-{
-  margin-top: 3vw;
-  height: 100%;
-  .ant-menu-item{
-    margin-bottom: 2vw;
+.manager-sider {
+  .ant-menu {
+    margin-top: 3vw;
+    height: 100%;
+    .ant-menu-item {
+      margin-bottom: 2vw;
+    }
   }
 }
+.footer-manager {
 }
-.footer-manager
-{
-
-}
-.ant-breadcrumb-link a
-{
+.ant-breadcrumb-link a {
   color: rgb(0, 144, 241);
 }
-.ant-breadcrumb-link a:hover{
+.ant-breadcrumb-link a:hover {
   color: rgb(255, 25, 0) !important;
-    background-color: unset !important;
+  background-color: unset !important;
 }
-.ant-card
-{
-  font-size: 1rem
+.ant-card {
+  font-size: 1rem;
 }
