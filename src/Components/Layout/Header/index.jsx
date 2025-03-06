@@ -114,7 +114,7 @@ const DefaultHeader = () => {
                 onCancel={() => setVisible(false)}
               />
             </div>
-            <div className="filter" style={{ display: "flex", alignItems: "center" }}>
+            <div className="filter" style={{ display: "flex"}}>
               <Button onClick={() => setFillerVisible(true)}>
                 <FilterOutlined />
                 <span>Filter</span>
@@ -159,7 +159,7 @@ const DefaultHeader = () => {
                 </Space>
               </Dropdown>
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex"}}>
               <Button className="post">
                 <CloudUploadOutlined />
                 <span>Đăng bài</span>
