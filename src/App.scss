@@ -145,7 +145,10 @@ body {
   background: rgb(255, 248, 238);
   width: 100%;
   bottom: 0;
-  .policy {
+  margin-top: 5vw;
+  .policy
+  {
+
     display: flex;
     justify-content: space-between;
     margin: 0 10%;
@@ -219,3 +222,84 @@ body {
 .ant-card {
   font-size: 1rem;
 }
+.ant-card
+{
+  font-size: 1rem
+}
+.list-room
+{
+  .ant-card
+  {
+    padding: 15px !important;
+  }
+  .ant-card-body
+  {
+    padding: 10px 0;
+    line-height: 35px;
+  }
+  .title {
+    white-space: nowrap;      
+    overflow: hidden;         
+    text-overflow: ellipsis;  
+    width: 100%;             
+    display: block;          
+  }
+  .btn-action a
+  {
+    color: #ff0000;
+    padding: 10px 20px;
+  }
+  .btn-action a:hover
+  {
+    color: blue;
+  }
+  a
+  {
+    text-decoration: none;
+  }
+}
+.box-news 
+{
+  a{
+    color: #ff0000;
+  }
+  a:hover
+  {
+    color: blue;
+  }
+  .ant-card-body
+  {
+    padding: 10px;
+    line-height: 35px;
+  }
+  .titleNews
+  {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+}
+.bodypage
+{
+  max-width: 1300px;
+  width: 100%;
+  margin: auto;
+}
+.box-about 
+{
+  img
+{
+  width: 18vw;
+  height: 18vw;
+  margin: auto;
+}
+  p
+  {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}
+
