@@ -5,7 +5,7 @@ const DefaultFooter = () => {
         <Layout.Footer className="footer">
           <div className="policy">
             <div>
-              <h3 className="font-bold mb-2">VỀ ROOMGO</h3>
+              <h3 className="font-bold mb-2 text-lg">VỀ ROOMGO</h3>
               <ul className="space-y-1">
                 <li><a>Giới thiệu</a></li>
                 <li><a>Quy chế hoạt động</a></li>
@@ -15,7 +15,7 @@ const DefaultFooter = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-2">DÀNH CHO KHÁCH HÀNG</h3>
+              <h3 className="font-bold mb-2 text-lg">DÀNH CHO KHÁCH HÀNG</h3>
               <ul className="space-y-1">
                 <li><a>Câu hỏi thường gặp</a></li>
                 <li><a>Hướng dẫn đăng tin</a></li>
@@ -25,7 +25,7 @@ const DefaultFooter = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-2">PHƯƠNG THỨC THANH TOÁN</h3>
+              <h3 className="font-bold mb-2 text-lg">PHƯƠNG THỨC THANH TOÁN</h3>
               <div style={{ display: "flex"}}>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/MoMo_Logo.png/1024px-MoMo_Logo.png" className="w-12 h-8" />
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/1200px-Visa.svg.png" className="w-12 h-8" />
@@ -35,7 +35,7 @@ const DefaultFooter = () => {
               </div>
             </div>
           </div>
-          <div className="infomation-company">
+          <div className="infomation-company text-base">
             <h3 className="font-bold mb-2">CÔNG TY TNHH LBKCORP</h3>
             <p>
               Căn 02.34, Lầu 2, Tháp 3, The Sun Avenue, Số 28 Mai Chí Thọ, TP. Thủ Đức, TP. Hồ Chí Minh, Việt Nam.

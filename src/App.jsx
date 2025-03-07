@@ -1,3 +1,4 @@
+
 import "./App.scss";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
@@ -12,6 +13,7 @@ import Questions from "./Pages/Questions";
 import InstructPost from "./Pages/Instruct";
 import HomeLayout from "./Layouts/HomeLayout";
 import HomePage from "./Pages/Home";
+
 function App() {
   return (
     <BrowserRouter>
