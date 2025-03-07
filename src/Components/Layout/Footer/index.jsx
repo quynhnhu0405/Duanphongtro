@@ -1,4 +1,3 @@
-import { FacebookOutlined, YoutubeOutlined, TwitterOutlined } from "@ant-design/icons";
 import { Layout } from "antd";
 
 const DefaultFooter = () => {
@@ -42,7 +41,7 @@ const DefaultFooter = () => {
               Căn 02.34, Lầu 2, Tháp 3, The Sun Avenue, Số 28 Mai Chí Thọ, TP. Thủ Đức, TP. Hồ Chí Minh, Việt Nam.
             </p>
             <p>
-              Tổng đài CSKH: <span className="text-red-500">0909 316 890</span> - Email: cskh.phongtro123@gmail.com
+              Tổng đài CSKH: <span className="text-red-500">0785 604 557</span> - Email: cskh.roomgo@gmail.com
             </p>
             <p>Giấy phép kinh doanh số 0313588502 cấp ngày 24/12/2015.</p>
           </div>

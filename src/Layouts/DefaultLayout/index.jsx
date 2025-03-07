@@ -9,8 +9,8 @@ const DefaultLayout = () => {
   return (
     <Layout>
         <DefaultHeader />
-        <Layout.Content className='container mx-auto'>
-            <div className='flex justify-between mx-28 mt-3'>
+        <Layout.Content className='mx-auto'>
+            <div className='flex justify-between bodypage'>
               <div className='w-8/12 p-4'>
                 <Outlet />
               </div>
@@ -18,7 +18,7 @@ const DefaultLayout = () => {
                 <NewPost />
               </div>
             </div>
-            <div className='mx-28 mt-3 p-4 pb-24'>
+            <div className='bodypage p-4'>
               <Contact/>
             </div>
         </Layout.Content>

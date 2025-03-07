@@ -3,14 +3,16 @@ import { Avatar, Button, Dropdown, Input, Layout, Menu, Space } from "antd";
 import  { useEffect, useState } from "react";
 import FilterModal from "../../Filter/FilterModal";
 import SearchModal from "../../search/SearchModal";
+import { useLocation, useNavigate } from "react-router";
 
 
 const menuItems = [
-  { label: "Trang chủ", key: "1" },
-  { label: "Phòng trọ", key: "2" },
-  { label: "Chung cư", key: "3" },
-  { label: "Ở ghép", key: "4" },
-  { label: "Bảng giá đăng bài", key: "5" },
+    { label: "Trang chủ", key: "/", path: "/" },
+    { label: "Phòng trọ", key: "/phong-tro", path: "/phong-tro" },
+    { label: "Chung cư", key: "/chung-cu", path: "/chung-cu" },
+    { label: "Ở ghép", key: "/o-ghep", path: "/o-ghep" },
+    { label: "Bảng giá đăng bài", key: "/bang-gia", path: "/bang-gia" },  
+    { label: "Blog", key: "/blog", path: "/blog" },  
 ];
 
 const userMenuItems = [
@@ -34,7 +36,8 @@ const DefaultHeader = () => {
   const [selectedPrice, setSelectedPrice] = useState("Tất cả");
   const [isAcreage, setIsAcreage] = useState("Tất cả");
   const [isCharacteristics, setIsCharacteristics] = useState([]);
-
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const categories = ["Phòng trọ", "Nhà riêng", "Ở ghép", "Mặt bằng", "Căn hộ chung cư", "Căn hộ mini", "Căn hộ dịch vụ"];
   const priceRanges = ["Tất cả", "Dưới 1 triệu", "1 - 2 triệu", "2 - 3 triệu", "3 - 5 triệu", "5 - 7 triệu", "7 - 10 triệu", "10 - 15 triệu", "Trên 15 triệu"];
@@ -168,8 +171,17 @@ const DefaultHeader = () => {
           </div>
         </div>
         <div className="menu">
-          <Menu mode="horizontal" items={menuItems} className="main-menu" />
-        </div>
+      <Menu
+        mode="horizontal"
+        selectedKeys={[location.pathname]}
+        className="main-menu"
+        onClick={(e) => navigate(e.key)}
+        items={menuItems.map((item) => ({
+          key: item.path,
+          label: item.label,
+        }))}
+      />
+    </div>
       </Layout.Header>
   );
 };
