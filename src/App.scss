@@ -76,18 +76,14 @@ body {
   max-width: 1300px;
   flex-wrap: wrap;
   margin-bottom: 5px;
-  .main-menu {
-    justify-content: center;
-    width: 80%;
-    border-top: 1px solid rgb(223, 223, 223);
-  }
   .search {
     width: 20vw;
     border-radius: 20px;
   }
 }
 .menu {
-  width: 80%;
+  width: 100%;
+  max-width: 1300px;
   line-height: 45px;
   margin: auto;
   border-top: 1px solid rgb(191, 191, 191);
@@ -171,24 +167,28 @@ body {
     max-width: 1300px;
     border-bottom: 1px solid rgb(223, 223, 223);
     font-size: 0.9rem;
-  }
-  .policy div {
+  div {
     width: 30%;
   }
-  .policy img {
-    width: 1vw;
+  img {
+    width: 25px;
     margin: 0 1vw;
   }
-  .policy li {
+  li {
     margin-bottom: 1vw;
   }
-  .policy ul {
+  ul {
     list-style: none;
     padding: 0;
   }
-  .policy a {
+  a {
     color: rgb(0, 0, 0);
   }
+  a:hover
+  {
+    color: blue;
+  }
+  } 
   .infomation-company {
     margin: auto;
     margin-top: 1vw;
