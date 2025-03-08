@@ -9,21 +9,21 @@ const ManagerFooter = () => {
             <div>
               <h3 className="font-bold mb-2">VỀ ROOMGO</h3>
               <ul className="space-y-1">
-                <li><a>Giới thiệu</a></li>
-                <li><a>Quy chế hoạt động</a></li>
-                <li><a>Quy định sử dụng</a></li>
-                <li><a>Chính sách bảo mật</a></li>
-                <li><a>Liên hệ</a></li>
+                <li><a href="/gioi-thieu">Giới thiệu</a></li>
+                <li><a href="/quy-che-hoat-dong">Quy chế hoạt động</a></li>
+                <li><a href="/quy-dinh-su-dung">Quy định sử dụng</a></li>
+                <li><a href="/chinh-sach-bao-mat">Chính sách bảo mật</a></li>
+                <li><a href="/lien-he">Liên hệ</a></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold mb-2">DÀNH CHO KHÁCH HÀNG</h3>
               <ul className="space-y-1">
-                <li><a>Câu hỏi thường gặp</a></li>
-                <li><a>Hướng dẫn đăng tin</a></li>
-                <li><a>Bảng giá dịch vụ</a></li>
-                <li><a>Quy định đăng tin</a></li>
-                <li><a>Giải quyết khiếu nại</a></li>
+                <li><a href="/cau-hoi-thuong-gap">Câu hỏi thường gặp</a></li>
+                <li><a href="/huong-dan-dang-tin">Hướng dẫn đăng tin</a></li>
+                <li><a href="/bang-gia-dich-vu">Bảng giá dịch vụ</a></li>
+                <li><a href="/quy-dinh-dang-tin">Quy định đăng tin</a></li>
+                <li><a href="/giai-quyet-khieu-nai">Giải quyết khiếu nại</a></li>
               </ul>
             </div>
             <div>

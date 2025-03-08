@@ -12,6 +12,7 @@ import Questions from "./Pages/Questions";
 import InstructPost from "./Pages/Instruct";
 import HomeLayout from "./Layouts/HomeLayout";
 import HomePage from "./Pages/Home";
+import ResolveComplaints from "./Pages/Complaints";
 function App() {
   return (
     <BrowserRouter>
@@ -22,13 +23,14 @@ function App() {
         <Route element={<DefaultLayout />}>
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation />} />
           <Route path="gioi-thieu" element={<Introduce />} />
-          <Route path="quy-che-hoat-dinh" element={<ActiveRegulation />} />
+          <Route path="quy-che-hoat-dong" element={<ActiveRegulation />} />
           <Route path="quy-dinh-su-dung" element={<TermsOfUse />} />
           <Route path="chinh-sach-bao-mat" element={<PrivacyPolicy />} />
           <Route path="cau-hoi-thuong-gap" element={<Questions />} />
           <Route path="huong-dan-dang-tin" element={<InstructPost />} />
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation/>} />
-          <Route path="gioi-thieu" element={<Introduce/>} />
+          <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints/>} />
+          
         </Route>
       </Routes>
     </BrowserRouter>
