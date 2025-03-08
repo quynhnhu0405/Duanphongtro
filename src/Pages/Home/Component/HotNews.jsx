@@ -54,7 +54,7 @@ const HotNews = () => {
                         style={{
                           fontSize: "2vw",
                           color: "red",
-                          textAlign: "center",
+                          justifyContent: "center",
                           width: "40%",
                         }}
                       />

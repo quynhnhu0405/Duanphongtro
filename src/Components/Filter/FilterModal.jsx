@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function FilterModal({isFilterVisible, setFillerVisible, categories, selectedCategory, setSelectedCategory, handleProvinceChange, handleDistrictChange,handleWardChange, provinces, districts, wards, selectedProvince, selectedDistrict,selectedWard, priceRanges,acreages, characteristics, selectedPrice, setSelectedPrice, isAcreage, setIsAcreage, isCharacteristics, setIsCharacteristics}) {
   return (
-    <Modal title="Bộ lọc" open={isFilterVisible} onCancel={() => setFillerVisible(false) } okText="Áp dụng" cancelText="Hủy">
+    <Modal title="Bộ lọc" className="modal-filter" open={isFilterVisible} onCancel={() => setFillerVisible(false) } okText="Áp dụng" cancelText="Hủy">
                 <h3>Danh mục cho thuê</h3>
                 <Space wrap>
                   {categories.map((category) => (
