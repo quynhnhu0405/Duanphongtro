@@ -14,6 +14,7 @@ import HomePage from "./Pages/Home";
 import ResolveComplaints from "./Pages/Complaints";
 import MotelRoom from "./Pages/MotelRoom";
 import PolicyLayout from "./Layouts/PolicyLayout";
+import Apartments from "./Pages/Apartments";
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +24,7 @@ function App() {
         </Route>
         <Route element={<DefaultLayout />}>
           <Route path="phong-tro" element={<MotelRoom />} />
+          <Route path="chung-cu" element={<Apartments />} />
         </Route>
         <Route element={<PolicyLayout />}>
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation />} />

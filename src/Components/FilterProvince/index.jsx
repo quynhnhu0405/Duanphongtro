@@ -2,23 +2,24 @@ import { Menu } from "antd";
 import { useLocation, useNavigate } from "react-router";
 
 const FilterProvince = () => {
+    const location = useLocation();
   const city = [
-    { label: "Tất cả", key: 1, path: "/phong-tro" },
-    { label: "Hà Nội", key: "Thành Phố Hà Nội", path: "/tinh-thanh/ha-noi" },
+    { label: "Tất cả", key: 1, path: `${location.pathname}`},
+    { label: "Hà Nội", key: "Thành Phố Hà Nội", path: `${location.pathname}/phong-tro/tinh-thanh/ha-noi` },
     {
       label: "TP Hồ Chí Minh",
       key: "/tinh-thanh/ho-chi-minh",
-      path: "/tinh-thanh/ho-chi-minh",
+      path: `${location.pathname}/tinh-thanh/ho-chi-minh`,
     },
     {
       label: "Đà Nẵng",
       key: "/tinh-thanh/da-nang",
-      path: "/tinh-thanh/da-nang",
+      path: `${location.pathname}/tinh-thanh/da-nang`,
     },
     {
       label: "Bình Dương",
       key: "/tinh-thanh/binh-duong",
-      path: "/tinh-thanh/binh-duong",
+      path: `${location.pathname}/tinh-thanh/binh-duong`,
     },
   ];
   const locations = [
@@ -64,7 +65,7 @@ const FilterProvince = () => {
     },
   ];
   const navigate = useNavigate();
-  const location = useLocation();
+
   return (
     <div>
       <Menu
