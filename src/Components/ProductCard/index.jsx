@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 const ProductItem = ({ item }) => {
   return (
     <Link
-      to={`/chi-tiet/${item?.id}`}
+      to={`/chi-tiet/${item?.title}`}
       style={{ textDecoration: "none" }}
     >
       <Card
@@ -23,8 +23,8 @@ const ProductItem = ({ item }) => {
           Từ {item.price}
         </p>
         <div className="flex">
-          <span className="p-1 text-sm font-bold rounded-md bg-gray-100">{item.type}</span>
-          <span className="p-1 text-sm font-bold ml-2 rounded-md bg-gray-100">{item.acreage}</span>
+          <a className="p-1 text-sm font-bold rounded-md bg-gray-100" href=''>{item.type}</a>
+          <span className="p-1 text-sm font-bold ml-2 rounded-md bg-gray-100">{item.acreage}m<sup>2</sup></span>
         </div>
         <p style={{ color: "gray", fontSize: "0.9rem" }}>📍 {item.location}</p>
       </Card>

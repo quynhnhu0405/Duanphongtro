@@ -8,7 +8,7 @@ const data = [
       image: "./src/assets/1.jpg",
       title: "Nhà Trọ 416/23 Dương Quảng Hàm",
       price: "4.5 triệu/tháng",
-      acreage: "20m2",
+      acreage: "20",
       location: "Gò Vấp, TP Hồ Chí Minh",
       type: "Nhà trọ, phòng trọ",
     },
@@ -51,9 +51,9 @@ const data = [
   ];
 const HotApartment = () => {
   return (
-    <div className="bg-white p-10 rounded-3xl list-room">
+    <div className="bg-white p-10 rounded-3xl list-room mt-6">
         <h2 className="text-xl font-semibold text-red-600 pb-6">
-          PHÒNG TRỌ HOT NHẤT
+          CĂN HỘ HOT NHẤT
         </h2>
 
         <Row gutter={[16, 16]}>

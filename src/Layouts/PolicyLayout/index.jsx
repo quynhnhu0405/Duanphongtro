@@ -4,9 +4,8 @@ import DefaultHeader from "../../Components/Layout/Header";
 import DefaultFooter from "../../Components/Layout/Footer";
 import NewPost from "../../Components/NewPost";
 import Contact from "../../Components/Contact";
-import FilterCard from "../../Components/CardFilter";
 
-const DefaultLayout = () => {
+const PolicyLayout = () => {
   return (
     <Layout>
       <DefaultHeader />
@@ -17,7 +16,6 @@ const DefaultLayout = () => {
               <Outlet />
             </Col>
             <Col className="p-4" sm={24} md={8} lg={8}>
-              <FilterCard />
               <NewPost />
             </Col>
           </Row>
@@ -31,4 +29,4 @@ const DefaultLayout = () => {
   );
 };
 
-export default DefaultLayout;
+export default PolicyLayout;
