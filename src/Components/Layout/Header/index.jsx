@@ -4,6 +4,7 @@ import  { useEffect, useState } from "react";
 import FilterModal from "../../Filter/FilterModal";
 import SearchModal from "../../search/SearchModal";
 import { useLocation, useNavigate } from "react-router";
+import User from "./User";
 
 
 const menuItems = [
@@ -14,14 +15,6 @@ const menuItems = [
     { label: "Bảng giá đăng bài", key: "/bang-gia", path: "/bang-gia" },  
     { label: "Blog", key: "/blog", path: "/blog" },  
 ];
-
-const userMenuItems = [
-  { label: "1st menu item", key: "1", icon: <UserOutlined /> },
-  { label: "2nd menu item", key: "2", icon: <UserOutlined /> },
-  { label: "3rd menu item", key: "3", icon: <UserOutlined />, danger: true },
-  { label: "4th menu item", key: "4", icon: <UserOutlined />, danger: true, disabled: true },
-];
-
 const DefaultHeader = () => {
   const [visible, setVisible] = useState(false);
   const [provinces, setProvinces] = useState([]);
@@ -41,7 +34,7 @@ const DefaultHeader = () => {
 
   const categories = ["Phòng trọ", "Nhà riêng", "Ở ghép", "Mặt bằng", "Căn hộ chung cư", "Căn hộ mini", "Căn hộ dịch vụ"];
   const priceRanges = ["Tất cả", "Dưới 1 triệu", "1 - 2 triệu", "2 - 3 triệu", "3 - 5 triệu", "5 - 7 triệu", "7 - 10 triệu", "10 - 15 triệu", "Trên 15 triệu"];
-  const acreages = ["Tất cả", "Dưới 20m2", "20m2 - 30m2", "30m2 - 50m2", "50m2 - 70m2", "70m2 - 90m2", "Trên 90m2"];
+  const acreages = ["Tất cả", "Dưới 20m²", "20m² - 30m²", "30m² - 50m²", "50m² - 70m²", "70m² - 90m²", "Trên 90m²"];
   const characteristics = ["Đầy đủ nội thất", "Có gác", "Có bếp", "Có tủ lạnh","Có máy lạnh", "Có máy giặt","Không chung chủ","Có thang máy", "Giờ giấc tự do", "Có hầm để xe"];
   useEffect(() => {
     fetch("https://provinces.open-api.vn/api/?depth=3")
@@ -50,7 +43,6 @@ const DefaultHeader = () => {
   }, []);
 
   const handleProvinceChange = (value) => {
-    console.log(value)
     const province = provinces.find((p) => p.code === value);
     setSelectedProvince(province);
     setDistricts(province?.districts || []);
@@ -154,13 +146,7 @@ const DefaultHeader = () => {
               <a className="manage">Quản lý</a>
             </div>
             <div className="user">
-              <Dropdown trigger={["click"]} menu={{ items: userMenuItems }}>
-                <Space style={{ color: "white" }}>
-                  <Avatar src="https://random.imagecdn.app/500/150"></Avatar>
-                  <span>Admin</span>
-                  <CaretDownOutlined />
-                </Space>
-              </Dropdown>
+              <User/>
             </div>
             <div style={{ display: "flex"}}>
               <Button className="post">

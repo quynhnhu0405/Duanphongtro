@@ -8,7 +8,7 @@ const data = [
       image: "./src/assets/1.jpg",
       title: "Nhà Trọ 416/23 Dương Quảng Hàm",
       price: "4.5 triệu/tháng",
-      acreage: "20m2",
+      acreage: "20",
       location: "Gò Vấp, TP Hồ Chí Minh",
       type: "Nhà trọ, phòng trọ",
     },
@@ -17,7 +17,7 @@ const data = [
       image: "./src/assets/1.jpg",
       title: "Nhà tại Phường Đông Hòa, Dĩ An",
       price: "2.9 triệu/tháng",
-      acreage: "20m2",
+      acreage: "20",
       location: "Dĩ An, Bình Dương",
       type: "Nhà trọ, phòng trọ",
     },
@@ -26,7 +26,7 @@ const data = [
       image: "./src/assets/1.jpg",
       title: "Nhà trọ số 279 Đường Hòa Hảo",
       price: "4.5 triệu/tháng",
-      acreage: "20m2",
+      acreage: "20",
       location: "Quận 10, TP Hồ Chí Minh",
       type: "Nhà trọ, phòng trọ",
     },
@@ -35,7 +35,7 @@ const data = [
       image: "./src/assets/1.jpg",
       title: "Nhà nguyên căn Tỉnh lộ 286",
       price: "4.5 triệu/tháng",
-      acreage: "20m2",
+      acreage: "20",
       location: "Cần Giuộc, Long An",
       type: "Nhà nguyên căn",
     },
@@ -44,7 +44,7 @@ const data = [
       image: "./src/assets/1.jpg",
       title: "Nhà nguyên căn Tỉnh lộ 286",
       price: "4.5 triệu/tháng",
-      acreage: "20m2",
+      acreage: "20",
       location: "Cần Giuộc, Long An",
       type: "Nhà nguyên căn",
     },
@@ -55,7 +55,6 @@ const HotRoom = () => {
         <h2 className="text-xl font-semibold text-red-600 pb-6">
           PHÒNG TRỌ HOT NHẤT
         </h2>
-
         <Row gutter={[16, 16]}>
           {data.map((item) => (
             <Col xs={24} sm={12} md={12} lg={6} key={item.id}>

@@ -1,4 +1,3 @@
-
 import "./App.scss";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
@@ -13,6 +12,8 @@ import InstructPost from "./Pages/Instruct";
 import HomeLayout from "./Layouts/HomeLayout";
 import HomePage from "./Pages/Home";
 import ResolveComplaints from "./Pages/Complaints";
+import MotelRoom from "./Pages/MotelRoom";
+import PolicyLayout from "./Layouts/PolicyLayout";
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
         </Route>
         <Route element={<DefaultLayout />}>
+          <Route path="phong-tro" element={<MotelRoom />} />
+        </Route>
+        <Route element={<PolicyLayout />}>
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation />} />
           <Route path="gioi-thieu" element={<Introduce />} />
           <Route path="quy-che-hoat-dong" element={<ActiveRegulation />} />
@@ -28,9 +32,8 @@ function App() {
           <Route path="chinh-sach-bao-mat" element={<PrivacyPolicy />} />
           <Route path="cau-hoi-thuong-gap" element={<Questions />} />
           <Route path="huong-dan-dang-tin" element={<InstructPost />} />
-          <Route path="quy-dinh-dang-tin" element={<PostingRegulation/>} />
-          <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints/>} />
-          
+          <Route path="quy-dinh-dang-tin" element={<PostingRegulation />} />
+          <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints />} />
         </Route>
       </Routes>
     </BrowserRouter>
