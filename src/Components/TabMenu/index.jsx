@@ -3,12 +3,12 @@ import { useNavigate } from "react-router";
 
 const TabMenu = () => {
   const menu = [
-    { label: "Đề xuất", key: 1, path: "/phong-tro" },
-    { label: "Mới Đăng", key: 2, path: "/moi-dang" },
+    { label: "Đề xuất", key: 1, path: `${location.pathname}` },
+    { label: "Mới Đăng", key: 2, path: `${location.pathname}/moi-dang` },
     {
       label: "Có video",
       key: 3,
-      path: "/co-video",
+      path: `${location.pathname}/co-video`,
     },
   ];
   const navigate = useNavigate();
