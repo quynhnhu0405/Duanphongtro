@@ -5,7 +5,7 @@ const FilterProvince = () => {
     const location = useLocation();
   const city = [
     { label: "Tất cả", key: 1, path: `${location.pathname}`},
-    { label: "Hà Nội", key: "Thành Phố Hà Nội", path: `${location.pathname}/phong-tro/tinh-thanh/ha-noi` },
+    { label: "Hà Nội", key: "Thành Phố Hà Nội", path: `${location.pathname}/tinh-thanh/ha-noi` },
     {
       label: "TP Hồ Chí Minh",
       key: "/tinh-thanh/ho-chi-minh",

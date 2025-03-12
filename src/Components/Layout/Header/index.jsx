@@ -32,7 +32,7 @@ const DefaultHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const categories = ["Phòng trọ", "Nhà riêng", "Ở ghép", "Mặt bằng", "Căn hộ chung cư", "Căn hộ mini", "Căn hộ dịch vụ"];
+  const categories = ["Phòng trọ", "Căn hộ chung cư","Ở ghép"];
   const priceRanges = ["Tất cả", "Dưới 1 triệu", "1 - 2 triệu", "2 - 3 triệu", "3 - 5 triệu", "5 - 7 triệu", "7 - 10 triệu", "10 - 15 triệu", "Trên 15 triệu"];
   const acreages = ["Tất cả", "Dưới 20m²", "20m² - 30m²", "30m² - 50m²", "50m² - 70m²", "70m² - 90m²", "Trên 90m²"];
   const characteristics = ["Đầy đủ nội thất", "Có gác", "Có bếp", "Có tủ lạnh","Có máy lạnh", "Có máy giặt","Không chung chủ","Có thang máy", "Giờ giấc tự do", "Có hầm để xe"];
