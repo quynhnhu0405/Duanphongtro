@@ -417,3 +417,9 @@ body {
     border-color: black !important;
   }
 }
+.slick-active, .slick-current{
+  display: flex !important;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  height: 400px; /* Chiều cao cố định cho mỗi slide */
+}

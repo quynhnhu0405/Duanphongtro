@@ -10,7 +10,7 @@ const DefaultLayout = () => {
   return (
     <Layout>
       <DefaultHeader />
-      <Layout.Content className="mx-auto">
+      <Layout.Content className="mx-auto w-full">
         <div className="flex justify-between bodypage">
           <Row>
             <Col className="p-4" sm={24} md={16} lg={16}>
