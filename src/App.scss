@@ -419,7 +419,27 @@ body {
 }
 .slick-active, .slick-current{
   display: flex !important;
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  height: 400px; /* Chiều cao cố định cho mỗi slide */
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+.text-white
+{
+  color: white !important;
+}
+.phone
+{
+  background: rgb(0, 166, 0) !important;
+  padding: 10px 20px !important;
+  margin: 10px;
+  border-radius: 15px;
+  font-weight: bold !important;
+}
+.zalo
+{
+  background: rgb(51, 119, 255) !important;
+  padding: 10px 20px !important;
+  margin: 10px;
+  border-radius: 15px;
+  font-weight: bold !important;
 }

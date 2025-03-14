@@ -17,6 +17,7 @@ import PolicyLayout from "./Layouts/PolicyLayout";
 import Apartments from "./Pages/Apartments";
 import Roommate from "./Pages/Roommate";
 import DetailRoom from "./Pages/DetailRoom";
+import DetailRoomLayout from "./Layouts/DetailRoomLayout";
 function App() {
   return (
     <BrowserRouter>
@@ -28,6 +29,8 @@ function App() {
           <Route path="phong-tro" element={<MotelRoom />} />
           <Route path="chung-cu" element={<Apartments />} />
           <Route path="o-ghep" element={<Roommate />} />
+        </Route>
+        <Route element={<DetailRoomLayout />}>
           <Route path="chi-tiet" element={<DetailRoom />} />
         </Route>
         <Route element={<PolicyLayout />}>
