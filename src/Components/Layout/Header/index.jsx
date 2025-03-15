@@ -13,7 +13,6 @@ const menuItems = [
     { label: "Chung cư", key: "/chung-cu", path: "/chung-cu" },
     { label: "Ở ghép", key: "/o-ghep", path: "/o-ghep" },
     { label: "Bảng giá đăng bài", key: "/bang-gia", path: "/bang-gia" },  
-    { label: "Blog", key: "/blog", path: "/blog" },  
 ];
 const DefaultHeader = () => {
   const [visible, setVisible] = useState(false);
