@@ -45,7 +45,7 @@ const items = [
       "Đến Homestay Hoàng Phúc – hệ thống Kytucxa Q7 rẻ nhất Sài Gòn với những căn phòng đẹp lung linh chuẩn 2 sao, đa dạng tiện nghi và bao trọn toàn bộ các chi",
     host: {
       id: 1,
-      name: "Phúc Cứt",
+      name: "Phúc",
       avatar: "./src/assets/defaul-avt.png",
       phone: "0123456789",
     },
@@ -65,9 +65,9 @@ const Roommate = () => {
 
           <FilterProvince />
           <TabMenu/>
-        <FeaturedPost item={items[0]} />
-        <Vip1Card item={items[0]} />
-        <Vip2Card item={items[0]} />
+        <RegularCard item={items[0]} />
+        <RegularCard item={items[0]} />
+        <RegularCard item={items[0]} />
         <RegularCard item={items[0]} />
       </Card>
     </div>

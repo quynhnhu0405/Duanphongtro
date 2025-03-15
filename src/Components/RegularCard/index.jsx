@@ -21,7 +21,7 @@ const RegularCard = ({ item }) => {
                   />
             </Col>
             <Col className="p-3 text-black" xs={24} sm={24} md={18} lg={18}>
-              <h1 className="font-bold text-base mb-2 text-blue-800 two-line-text">
+              <h1 className="font-bold text-base mb-2 text-blue-500 two-line-text">
                 {item.title}
               </h1>
               <p className="text-base text-red-500 font-bold inline">

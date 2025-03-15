@@ -22,17 +22,24 @@ import LoginLayout from "./Layouts/LoginLayout";
 import Login from "./Pages/Auth/Login";
 import Register from "./Pages/Auth/Register";
 import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import PricePosts from "./Pages/PricePosts";
+import PricePostsLayout from "./Layouts/PricePostLayout";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
+          
         </Route>
         <Route element={<DefaultLayout />}>
           <Route path="phong-tro" element={<MotelRoom />} />
           <Route path="chung-cu" element={<Apartments />} />
           <Route path="o-ghep" element={<Roommate />} />
+         
+        </Route>
+        <Route element={<PricePostsLayout />}>
+        <Route path="bang-gia" element={<PricePosts />} />
         </Route>
         <Route element={<DetailRoomLayout />}>
           <Route path="chi-tiet" element={<DetailRoom />} />

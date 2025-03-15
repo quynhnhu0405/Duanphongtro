@@ -447,3 +447,28 @@ body {
 {
   background-color: rgb(255, 250, 250) !important;
 }
+.price-list
+{
+  th, td
+  {
+    border: 1px solid #d7d7d7 !important;
+  }
+  th
+  {
+    font-weight: bold !important;
+    font-size: larger;
+    color: #ffffff;
+  }
+  td
+  {
+    font-size: 16px;
+    padding: 15px;
+    font-weight: bold ;
+    text-align: center;
+  }
+  .font-thin
+  {
+    color: #676767 !important;
+    font-size: small;
+  }
+}
