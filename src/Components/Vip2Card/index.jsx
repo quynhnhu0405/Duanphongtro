@@ -59,14 +59,6 @@ const Vip2Card = ({ item }) => {
             </p>
           </div>
         </div>
-        <a
-          target="_blank"
-          rel="nofollow"
-          href={`tel:${item.host.phone}`}
-          className=" host-phone text-sm"
-        >
-          <PhoneOutlined /> {item.host.phone}
-        </a>
       </div>
     </div>
   );

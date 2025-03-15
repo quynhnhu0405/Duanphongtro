@@ -18,6 +18,10 @@ import Apartments from "./Pages/Apartments";
 import Roommate from "./Pages/Roommate";
 import DetailRoom from "./Pages/DetailRoom";
 import DetailRoomLayout from "./Layouts/DetailRoomLayout";
+import LoginLayout from "./Layouts/LoginLayout";
+import Login from "./Pages/Auth/Login";
+import Register from "./Pages/Auth/Register";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
 function App() {
   return (
     <BrowserRouter>
@@ -43,6 +47,11 @@ function App() {
           <Route path="huong-dan-dang-tin" element={<InstructPost />} />
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation />} />
           <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints />} />
+        </Route>
+        <Route element={<LoginLayout />}>
+          <Route path="dang-nhap" element={<Login />} />
+          <Route path="tao-tai-khoan-moi" element={<Register />} />
+          <Route path="quen-mat-khau" element={<ForgotPassword />} />
         </Route>
       </Routes>
     </BrowserRouter>

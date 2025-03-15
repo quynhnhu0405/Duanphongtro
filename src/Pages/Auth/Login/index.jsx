@@ -1,0 +1,70 @@
+import { Card } from "antd";
+
+const Login = () => {
+  return (
+    <div className="w-[600px] m-auto mt-15 h-full">
+      <Card className="bg-white !p-7 ">
+        <div className="flex justify-between !text-black border-b border-gray-300 mb-6">
+          <a
+            href="/dang-nhap"
+            className="text-2xl font-black w-1/2 text-center !text-black border-b-3 border-red-600 pb-4 "
+            placeholder=" "
+          >
+            Đăng nhập
+          </a>
+          <a
+            href="/tao-tai-khoan-moi"
+            className="text-2xl w-1/2 text-center !text-black"
+          >
+            Tạo tài khoản mới
+          </a>
+        </div>
+        <div className="mt-15">
+          <div className="relative w-full">
+            <input
+              type="text"
+              id="phone"
+              className="peer w-full border border-gray-300 rounded-2xl p-3 pt-5 outline-none  focus:border-blue-300"
+              placeholder=" "
+              required
+            />
+            <label
+              htmlFor="phone"
+              className="absolute left-3 bg-unset transition-all text-black
+                peer-placeholder-shown:top-5 peer-placeholder-shown:text-base
+                peer-focus:top-1 peer-focus:text-xs peer-focus:pt-1
+                peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:text-xs"
+            >
+              Số điện thoại
+            </label>
+          </div>
+          <div className="relative w-full mt-5">
+            <input
+              type="password"
+              id="password"
+              className="peer w-full border border-gray-300 rounded-2xl p-3 pt-5 outline-none  focus:border-blue-300"
+              placeholder=" "
+              required
+            />
+            <label
+              htmlFor="password"
+              className="absolute left-3 bg-unset transition-all  text-black
+                peer-placeholder-shown:top-5 peer-placeholder-shown:text-base 
+                peer-focus:top-1 peer-focus:text-xs peer-focus:pt-1
+                peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:text-xs"
+            >
+              Mật khẩu
+            </label>
+          </div>
+          <button className="w-full mt-5 mb-3 bg-red-500 text-white p-2 font-black text-lg rounded-3xl hover:bg-red-600">
+            Đăng nhập
+          </button>
+          <a href="/quen-mat-khau" className=" underline text-sm">Bạn quên mật khẩu ?</a>
+          <p className="text-xs mt-3">Qua việc đăng nhập hoặc tạo tài khoản, bạn đồng ý với các <a href="/quy-dinh-su-dung">quy định sử dụng</a> cũng như <a href="/chinh-sach-bao-mat">chính sách bảo mật</a> của chúng tôi</p>
+        </div>
+      </Card>
+    </div>
+  );
+};
+
+export default Login;
