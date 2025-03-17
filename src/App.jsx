@@ -24,22 +24,22 @@ import Register from "./Pages/Auth/Register";
 import ForgotPassword from "./Pages/Auth/ForgotPassword";
 import PricePosts from "./Pages/PricePosts";
 import PricePostsLayout from "./Layouts/PricePostLayout";
+import PostNew from "./Pages/Manager/PostNewNews";
+import ManageLayout from "./Layouts/ManageLayout";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
-          
         </Route>
         <Route element={<DefaultLayout />}>
           <Route path="phong-tro" element={<MotelRoom />} />
           <Route path="chung-cu" element={<Apartments />} />
           <Route path="o-ghep" element={<Roommate />} />
-         
         </Route>
         <Route element={<PricePostsLayout />}>
-        <Route path="bang-gia" element={<PricePosts />} />
+          <Route path="bang-gia" element={<PricePosts />} />
         </Route>
         <Route element={<DetailRoomLayout />}>
           <Route path="chi-tiet" element={<DetailRoom />} />
@@ -54,6 +54,9 @@ function App() {
           <Route path="huong-dan-dang-tin" element={<InstructPost />} />
           <Route path="quy-dinh-dang-tin" element={<PostingRegulation />} />
           <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints />} />
+        </Route>
+        <Route path="quan-ly" element={<ManageLayout />}>
+          <Route path="dang-bai-moi" element={<PostNew />} />
         </Route>
         <Route element={<LoginLayout />}>
           <Route path="dang-nhap" element={<Login />} />

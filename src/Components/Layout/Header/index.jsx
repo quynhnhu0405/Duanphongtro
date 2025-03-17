@@ -1,5 +1,5 @@
-import { CaretDownOutlined, CloudUploadOutlined, FilterOutlined, UserOutlined, EnvironmentOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Input, Layout, Menu, Space } from "antd";
+import {  CloudUploadOutlined, FilterOutlined, EnvironmentOutlined } from "@ant-design/icons";
+import { Button, Input, Layout, Menu,  } from "antd";
 import  { useEffect, useState } from "react";
 import FilterModal from "../../Filter/FilterModal";
 import SearchModal from "../../search/SearchModal";
@@ -74,7 +74,7 @@ const DefaultHeader = () => {
         <div className="header">
           <div className="header-left">
             <div className="logo">
-              <img src="./src/assets/logo.png" alt="logo" />
+              <a href="/"><img src="./src/assets/logo.png" alt="logo"  /></a>
             </div>
             <div>
               <Input
@@ -142,13 +142,13 @@ const DefaultHeader = () => {
           </div>
           <div className="header-right">
             <div>
-              <a className="manage">Quản lý</a>
+              <a className="manage" href="/quan-ly/tin-dang">Quản lý</a>
             </div>
             <div className="user">
               <User/>
             </div>
             <div style={{ display: "flex"}}>
-              <Button className="post">
+              <Button className="post" href="/quan-ly/dang-bai-moi">
                 <CloudUploadOutlined />
                 <span>Đăng bài</span>
               </Button>
