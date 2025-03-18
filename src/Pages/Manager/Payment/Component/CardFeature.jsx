@@ -1,12 +1,10 @@
-import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
-import { Col, Row } from "antd";
-import { Link } from "react-router";
-import { formatTimeAgo } from "../../Utils/dateUtil";
-const FeaturedPost = ({ item }) => {
+import { EnvironmentOutlined } from '@ant-design/icons'
+import { Col, Row } from 'antd'
+import React from 'react'
 
-    return (
+const CardFeature = ({item}) => {
+  return (
     <div className="roomCard mb-7">
-      <Link to={`/phong-tro/${item.title}`}>
         <div className="border-gray-200 border rounded-t-lg">
           <Row>
             <Col className="pr-2" xs={24} sm={24} md={12} lg={12}>
@@ -87,28 +85,8 @@ const FeaturedPost = ({ item }) => {
             </Col>
           </Row>
         </div>
-      </Link>
-      <div className="border-gray-200 border rounded-b-lg flex items-center justify-between p-3">
-        <div className=" flex items-center">
-          <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
-            <img src={item.host.avatar} className="w-7 rounded-3xl"></img>
-          </div>
-          <div className="ml-3 text-sm text-black leading-4">
-            <p className="font-bold">{item.host.name}</p>
-            <p className="text-gray-400">Đăng {formatTimeAgo(item.createdAt)}</p>
-          </div>
-        </div>
-        <a
-          target="_blank"
-          rel="nofollow"
-          href={`tel:${item.host.phone}`}
-          className=" host-phone text-sm"
-        >
-          <PhoneOutlined /> {item.host.phone}
-        </a>
-      </div>
     </div>
-  );
-};
+  )
+}
 
-export default FeaturedPost;
+export default CardFeature

@@ -10,7 +10,7 @@ const ManageLayout = () => {
         <HeaderManage />
       <Layout>
         <SiderMenu />
-        <Layout.Content className="ml-[300px]">
+        <Layout.Content className="content-manage-desktop ">
         <Outlet/>
         <ManageFooter />
         </Layout.Content>

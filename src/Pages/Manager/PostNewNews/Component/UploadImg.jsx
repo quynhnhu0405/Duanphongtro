@@ -1,53 +1,65 @@
 import { Card } from "antd";
 import { useState } from "react";
 
-const ImageUpload = () => {
+const ImageUpload = ({ onValidate }) => {
   const [images, setImages] = useState([]);
 
-  const ImgLimit = (files, images) => {
+  const ImgLimit = (files) => {
     if (files.length + images.length > 20) {
       alert("Bạn chỉ được tải lên tối đa 20 ảnh");
       return false;
     }
     return true;
   };
+
   const SizeLimit = (file) => {
     if (file.size > 10 * 1024 * 1024) {
-      alert("Ảnh không được vượt quá 10MB");
+      alert(`Ảnh ${file.name} vượt quá 10MB`);
       return false;
     }
     return true;
   };
 
-  const handleImageUpload = (e) => {
-    const files = e.target.files;
-    if (!ImgLimit(files, images)) {
-      return;
-    }
-    if (!SizeLimit(files)) {
-      return;
-    }
-    const newImages = [];
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        newImages.push(e.target.result);
-        if (newImages.length === files.length) {
-          setImages([...images, ...newImages]);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+  const updateValidation = (newImages) => {
+    onValidate(newImages.length >= 4);
   };
 
-  // Xóa ảnh
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+
+    if (!ImgLimit(files)) return;
+
+    const validFiles = files.filter(SizeLimit);
+    if (validFiles.length === 0) return;
+
+    Promise.all(
+      validFiles.map(
+        (file) =>
+          new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+          })
+      )
+    ).then((newImages) => {
+      setImages((prev) => {
+        const updatedImages = [...prev, ...newImages];
+        updateValidation(updatedImages);
+        return updatedImages;
+      });
+    });
+  };
+
   const handleDeleteImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
+    setImages((prev) => {
+      const updatedImages = prev.filter((_, i) => i !== index);
+      updateValidation(updatedImages);
+      return updatedImages;
+    });
   };
 
   return (
-    <div className="!mt-6 ">
+    <div className="!mt-6">
       <Card className="bg-white w-full rounded-2xl mt-20 shadow-[0_1px_5px_rgba(0,0,0,0.3)] !p-4">
         <div className="text-xl font-black mb-4">Hình ảnh</div>
         <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
@@ -66,18 +78,10 @@ const ImageUpload = () => {
             className="hidden"
           />
           <p className="mt-2 text-sm text-gray-500">
-            Tải lên tối đa 20 ảnh, dung lượng mỗi ảnh tối đa 10MB
+            Tải lên tối đa 20 ảnh, tối thiểu 4 ảnh, dung lượng mỗi ảnh tối đa 10MB
           </p>
         </div>
 
-        <div className="text-sm mt-3">
-          <p>
-            • Hình ảnh phải liên quan đến phòng trọ, nhà cho thuê 
-          </p>
-          <p>
-          • Không chèn văn bản, số điện thoại lên ảnh
-          </p>
-        </div>
         <div className="mt-6 flex flex-wrap gap-4">
           {images.map((image, index) => (
             <div key={index} className="relative">
@@ -95,6 +99,12 @@ const ImageUpload = () => {
             </div>
           ))}
         </div>
+
+        {images.length < 4 && (
+          <p className="mt-2 text-xs text-red-500">
+            Vui lòng tải lên ít nhất 4 ảnh.
+          </p>
+        )}
       </Card>
     </div>
   );

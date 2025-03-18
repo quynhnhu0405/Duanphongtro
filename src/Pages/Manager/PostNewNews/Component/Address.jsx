@@ -1,7 +1,7 @@
-import { Card, Col, Row, Select } from "antd";
+import { Card, Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 
-const Address = () => {
+const Address = ({ onValidate }) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -9,10 +9,7 @@ const Address = () => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedWard, setSelectedWard] = useState(null);
   const [street, setStreet] = useState("");
-  const [displayProvince, setDisplayProvince] = useState("");
-  const [displayDistrict, setDisplayDistrict] = useState("");
-  const [displayWard, setDisplayWard] = useState("");
-  const [displayStreet, setDisplayStreet] = useState("");
+
   const [buttonText, setButtonText] = useState("Địa chỉ");
 
   useEffect(() => {
@@ -22,169 +19,135 @@ const Address = () => {
   }, []);
 
   const handleProvinceChange = (e) => {
-    const selectedProvinceCode = e.target.value;
-    const selectedProvince = provinces.find(
-      (province) => province.code === parseInt(selectedProvinceCode)
-    );
-    setSelectedProvince(selectedProvince);
-    setDistricts(selectedProvince?.districts || []);
+    const selectedProvinceCode = parseInt(e.target.value);
+    const province = provinces.find((p) => p.code === selectedProvinceCode);
+    setSelectedProvince(province);
+    setDistricts(province?.districts || []);
     setSelectedDistrict(null);
     setWards([]);
     setSelectedWard(null);
-    setDisplayProvince(selectedProvince?.name || "");
-    setDisplayDistrict("");
-    setDisplayWard("");
-    setDisplayStreet("");
-    setButtonText(selectedProvince?.name || "Địa chỉ");
+    setStreet("");
+    updateButtonText(province?.name || "");
   };
 
   const handleDistrictChange = (e) => {
-    const selectedDistrictCode = e.target.value;
-    const district = districts.find(
-      (d) => d.code === parseInt(selectedDistrictCode)
-    );
+    const selectedDistrictCode = parseInt(e.target.value);
+    const district = districts.find((d) => d.code === selectedDistrictCode);
     setSelectedDistrict(district);
     setWards(district?.wards || []);
     setSelectedWard(null);
-    setDisplayDistrict(district?.name || "");
-    setDisplayWard("");
-    setDisplayStreet("");
-    setButtonText(`${district?.name}, ${selectedProvince?.name}` || "Địa chỉ");
+    setStreet("");
+    updateButtonText(district?.name, selectedProvince?.name);
   };
 
   const handleWardChange = (e) => {
-    const selectedWardCode = e.target.value;
-    const ward = wards.find((w) => w.code === parseInt(selectedWardCode));
+    const selectedWardCode = parseInt(e.target.value);
+    const ward = wards.find((w) => w.code === selectedWardCode);
     setSelectedWard(ward);
-    setDisplayWard(ward?.name || "");
-    setDisplayStreet("");
-    setButtonText(
-      `${ward?.name}, ${selectedDistrict?.name}, ${selectedProvince?.name}` ||
-        "Địa chỉ"
+    setStreet("");
+    updateButtonText(ward?.name, selectedDistrict?.name, selectedProvince?.name);
+  };
+
+  const handleStreetChange = (e) => {
+    const streetName = e.target.value;
+    setStreet(streetName);
+    updateButtonText(
+      streetName,
+      selectedWard?.name,
+      selectedDistrict?.name,
+      selectedProvince?.name
     );
   };
 
-  const handleStreet = (e) => {
-    setStreet(e.target.value);
-    setDisplayStreet(e.target.value);
-    setButtonText(
-      `${e.target.value}, ${selectedWard?.name}, ${selectedDistrict?.name}, ${selectedProvince?.name}` ||
-        "Địa chỉ"
-    );
+  const updateButtonText = (street = "", ward = "", district = "", province = "") => {
+    const addressParts = [street, ward, district, province].filter(Boolean);
+    setButtonText(addressParts.length > 0 ? addressParts.join(", ") : "Địa chỉ");
   };
+
+  const validateAddress = () => {
+    if (!selectedProvince || !selectedDistrict || !selectedWard || !street.trim()) {
+      return false;
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    if (onValidate) {
+      onValidate(validateAddress());
+    }
+  }, [selectedProvince, selectedDistrict, selectedWard, street]);  
 
   return (
-    <div className="!mb-6 ">
-      <Card className="bg-white w-full rounded-2xl mt-20 shadow-[0_1px_5px_rgba(0,0,0,0.3)]">
+    <div className="!mb-6">
+      <Card className="bg-white w-full rounded-2xl mt-20 shadow-md">
         <div className="text-xl font-black mb-3">Khu vực</div>
-        <div>
-          <Row>
-            <Col xs={24} sm={12} md={12} lg={12} className="pr-2 mt-2">
-              <div className="mb-3"></div>
-              <label
-                className="form-label mb-1 d-block text-base"
-                htmlFor="tinh"
-              >
-                Tỉnh/Thành phố <span className="text-red-500">(*)</span>
-              </label>
-              <br />
-              <select
-                placeholder="Chọn tỉnh/thành phố"
-                onChange={handleProvinceChange}
-                className="p-3 mt-3 w-full border border-gray-300 rounded-2xl focus:border-black focus:border-1"
-                value={selectedProvince?.code}
-              >
-                <option value="" selected="">
-                  -- Chọn tỉnh --
-                </option>
-                {provinces.map((province) => (
-                  <option key={province.code} value={province.code}>
-                    {province.name}
-                  </option>
-                ))}
-              </select>
-              <div className="text-red-500 text-sm ml-2"></div>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={12} className="pl-2 mt-2">
-              <div className="mb-3"></div>
-              <label
-                className="form-label mb-1 d-block text-base"
-                htmlFor="huyen"
-              >
-                Chọn quận/huyện <span className="text-red-500">(*)</span>
-              </label>
-              <br />
-              <select
-                placeholder="Chọn quận/huyện"
-                onChange={handleDistrictChange}
-                className="p-3 mt-3 w-full border border-gray-300 rounded-2xl focus:border-black focus:border-1"
-                disabled={!selectedProvince}
-                value={selectedDistrict?.code}
-              >
-                <option value="" selected="">
-                  -- Chọn quận/huyện --
-                </option>
-                {districts.map((district) => (
-                  <option key={district.code} value={district.code}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-              <div className="text-red-500 text-sm ml-2"></div>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={12} className="pr-2 mt-3">
-              <div className="mb-3"></div>
-              <label className="form-label mb-1 d-block text-base" htmlFor="xa">
-                Chọn phường/xã <span className="text-red-500">(*)</span>
-              </label>
-              <br />
-              <select
-                placeholder="Chọn phường/xã"
-                onChange={handleWardChange}
-                className="p-3 mt-3 w-full border border-gray-300 rounded-2xl focus:border-black focus:border-1"
-                disabled={!selectedDistrict}
-                value={selectedWard?.code}
-              >
-                <option value="" selected="">
-                  -- Chọn phường/xã --
-                </option>
-                {wards.map((ward) => (
-                  <option key={ward.code} value={ward.code}>
-                    {ward.name}
-                  </option>
-                ))}
-              </select>
-              <div className="text-red-500 text-sm ml-2"></div>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={12} className="pl-2 mt-3">
-              <div className="mb-3"></div>
-              <label className="form-label mb-1 d-block text-base" htmlFor="xa">
-                Địa chỉ cụ thể <span className="text-red-500">(*)</span>
-              </label>
-              <br />
-              <input
-                type="text"
-                id="street"
-                className="p-3 mt-3 w-full border border-gray-300 rounded-2xl focus:border-black focus:border-1"
-                placeholder="Nhập tên đường/phố"
-                onChange={handleStreet}
-                value={street}
-              ></input>
-              <div className="text-red-500 text-sm ml-2"></div>
-            </Col>
-          </Row>
-          <div className="mt-3">
-            <label className="form-label mb-1 d-block text-base">
-              Địa chỉ
-            </label>
-            <button
-              type="text"
-              id="street"
-              className="p-3 mt-3 w-full border text-[15px] text-left bg-gray-100 border-gray-300 rounded-2xl  focus:border-black focus:border-1"
+        <Row gutter={[16, 16]}>
+          <Col xs={24} sm={12}>
+            <label className="font-medium">Tỉnh/Thành phố <span className="text-red-500">(*)</span></label>
+            <select
+              className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
+              onChange={handleProvinceChange}
+              value={selectedProvince?.code || ""}
             >
-              {buttonText}
-            </button>
-          </div>
+              <option value="">-- Chọn tỉnh --</option>
+              {provinces.map((province) => (
+                <option key={province.code} value={province.code}>
+                  {province.name}
+                </option>
+              ))}
+            </select>
+          </Col>
+          <Col xs={24} sm={12}>
+            <label className="font-medium">Quận/Huyện <span className="text-red-500">(*)</span></label>
+            <select
+              className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
+              onChange={handleDistrictChange}
+              value={selectedDistrict?.code || ""}
+              disabled={!selectedProvince}
+            >
+              <option value="">-- Chọn quận/huyện --</option>
+              {districts.map((district) => (
+                <option key={district.code} value={district.code}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+          </Col>
+          <Col xs={24} sm={12}>
+            <label className="font-medium">Phường/Xã <span className="text-red-500">(*)</span></label>
+            <select
+              className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
+              onChange={handleWardChange}
+              value={selectedWard?.code || ""}
+              disabled={!selectedDistrict}
+            >
+              <option value="">-- Chọn phường/xã --</option>
+              {wards.map((ward) => (
+                <option key={ward.code} value={ward.code}>
+                  {ward.name}
+                </option>
+              ))}
+            </select>
+          </Col>
+          <Col xs={24} sm={12}>
+            <label className="font-medium">Địa chỉ cụ thể <span className="text-red-500">(*)</span></label>
+            <input
+              type="text"
+              className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
+              placeholder="Nhập tên đường"
+              onChange={handleStreetChange}
+              value={street}
+            />
+          </Col>
+        </Row>
+        <div className="mt-4">
+          <label className="font-medium">Địa chỉ</label>
+          <button
+            type="button"
+            className="p-3 mt-2 w-full border text-left bg-gray-100 border-gray-300 rounded-lg"
+          >
+            {buttonText}
+          </button>
         </div>
       </Card>
     </div>

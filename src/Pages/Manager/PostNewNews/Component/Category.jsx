@@ -1,6 +1,16 @@
 import { Card, Col, Row } from "antd";
 
-const Category = () => {
+const Category = ({ onValidate }) => {
+
+  const handleValidation = () => {
+    const selectElement = document.getElementById("category");
+    if (!selectElement || !selectElement.value) {
+      onValidate(false);
+      return false;
+    }
+    onValidate(true);
+    return true;
+  };
   return (
     <div className="!mb-6 ">
       <Card className="bg-white w-full rounded-2xl mt-20 shadow-[0_1px_5px_rgba(0,0,0,0.3)] !p-4">
@@ -19,10 +29,11 @@ const Category = () => {
                 <Col lg={12} md={12} sm={24} xs={24} className="pr-2">
                   <select
                     className="p-3 mt-3 w-full border border-gray-300 rounded-2xl focus:border-black focus:border-1"
-                    id="post_cat"
+                    id="category"
                     name="loai_chuyen_muc"
                     required=""
                     data-msg-required="Chưa chọn loại chuyên mục"
+                    onChange={handleValidation} 
                   >
                     <option value="" selected="">
                       -- Chọn loại chuyên mục --
@@ -34,7 +45,6 @@ const Category = () => {
                 </Col>
               </Row>
             </div>
-            <div className="text-red-500 text-sm ml-2"></div>
           </div>
         </div>
       </Card>

@@ -28,17 +28,17 @@ const PriceList = () => {
           <tr>
             <td className="!font-normal !text-left">Giá ngày</td>
             <td className="p-25 px-3">
-              <span className="fs-5-5 fw-medium">50.000₫</span>
-              <br />
-              <span className="font-thin">(Tối thiểu 3 ngày)</span>
-            </td>
-            <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">30.000₫</span>
               <br />
               <span className="font-thin">(Tối thiểu 3 ngày)</span>
             </td>
             <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">20.000₫</span>
+              <br />
+              <span className="font-thin">(Tối thiểu 3 ngày)</span>
+            </td>
+            <td className="p-25 px-3">
+              <span className="fs-5-5 fw-medium">10.000₫</span>
               <br />
               <span className="font-thin">(Tối thiểu 3 ngày)</span>
             </td>
@@ -53,13 +53,13 @@ const PriceList = () => {
               Giá tuần <div className="font-thin">(7 ngày)</div>
             </td>
             <td className="p-25 px-3">
-              <span className="fs-5-5 fw-medium">315.000₫</span>
-            </td>
-            <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">190.000₫</span>
             </td>
             <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">133.000₫</span>
+            </td>
+            <td className="p-25 px-3">
+              <span className="fs-5-5 fw-medium">63.000₫</span>
             </td>
             <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">12.000₫</span>
@@ -70,24 +70,17 @@ const PriceList = () => {
               Giá tháng <div className="font-thin">(30 ngày)</div>
             </td>
             <td className="p-25 px-3">
-              <span className="fs-5-5 fw-medium">1.200.000₫</span>
-            </td>
-            <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">800.000₫</span>
             </td>
             <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">540.000₫</span>
             </td>
             <td className="p-25 px-3">
+              <span className="fs-5-5 fw-medium">240.000₫</span>
+            </td>
+            <td className="p-25 px-3">
               <span className="fs-5-5 fw-medium">48.000₫</span>
             </td>
-          </tr>
-          <tr>
-            <td className="!font-normal !text-left">Giá đẩy tin</td>
-            <td className="!font-normal">5.000₫</td>
-            <td className="!font-normal">3.000₫</td>
-            <td className="!font-normal">2.000₫</td>
-            <td className="!font-normal">2.000₫</td>
           </tr>
           <tr>
             <td className="!font-normal !text-left">Màu sắc tiêu đề</td>

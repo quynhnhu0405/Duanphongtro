@@ -8,7 +8,7 @@ const Vip1 = () => {
           <span className="text-blue-600 font-bold">
             TIÊU ĐỀ IN HOA MÀU XANH
           </span>
-          , gắn biểu tượng 4 ngôi sao màu vàng ở tiêu
+          , gắn biểu tượng 3 ngôi sao màu vàng ở tiêu
           đề tin đăng. Hiển thị sau tin VIP Nổi Bật và trên các tin khác.
         </p>
         <img src="./src/assets/vip1.png" alt="" className="w-1/2 m-auto mt-5" />

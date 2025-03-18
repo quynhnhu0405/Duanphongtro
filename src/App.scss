@@ -482,3 +482,12 @@ body {
   width: 17px !important;
   height: 17px !important;
 }
+.content-manage-desktop {
+  margin-left: 300px;
+}
+
+@media (max-width: 1220px) {
+  .content-manage-desktop  {
+    margin-left: 0;
+  }
+}

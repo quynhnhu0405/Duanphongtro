@@ -26,6 +26,7 @@ import PricePosts from "./Pages/PricePosts";
 import PricePostsLayout from "./Layouts/PricePostLayout";
 import PostNew from "./Pages/Manager/PostNewNews";
 import ManageLayout from "./Layouts/ManageLayout";
+import Payment from "./Pages/Manager/Payment";
 function App() {
   return (
     <BrowserRouter>
@@ -56,7 +57,8 @@ function App() {
           <Route path="giai-quyet-khieu-nai" element={<ResolveComplaints />} />
         </Route>
         <Route path="quan-ly" element={<ManageLayout />}>
-          <Route path="dang-bai-moi" element={<PostNew />} />
+          <Route path="dang-bai-moi" element={<PostNew />}/>
+          <Route path="dang-bai-moi/thanh-toan" element={<Payment />} />
         </Route>
         <Route element={<LoginLayout />}>
           <Route path="dang-nhap" element={<Login />} />
