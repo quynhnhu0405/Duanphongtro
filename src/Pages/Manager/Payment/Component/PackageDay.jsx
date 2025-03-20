@@ -1,9 +1,17 @@
 import { Col } from "antd";
 
-const PackageDay = () => {
+const PackageDay = ({  setTotalDays, setPricePerDay, selectedPackage, packageType, calculatePrice }) => {
+  const handleChange = (e) => {
+    const days = parseInt(e.target.value, 10);
+    setTotalDays(`${days} ngày`);
+
+    // Tính toán lại giá dựa trên loại tin và gói thời gian
+    const price = calculatePrice(selectedPackage, packageType);
+    setPricePerDay(price);
+  };
   return (
     <Col lg={8} className="!pl-2">
-      <div className="relative ">
+      <div className="relative">
         <label
           htmlFor="package_type"
           className="absolute top-1 left-3 text-gray-500 text-xs transition-all pointer-events-none"
@@ -15,6 +23,7 @@ const PackageDay = () => {
           id="total_day"
           name="total_day"
           aria-label="Chọn số ngày"
+          onChange={handleChange}
         >
           {Array.from({ length: 90 }, (_, i) => i + 1).map((day) => (
             <option key={day} value={day}>

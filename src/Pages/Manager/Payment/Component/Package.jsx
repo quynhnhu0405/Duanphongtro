@@ -1,14 +1,37 @@
 import { Col } from "antd";
 import { useState } from "react";
 
-const Package = ({ packageType, onSelect }) => {
+const Package = ({ packageType, onSelect, onPriceChange }) => {
   const [selectedPackage, setSelectedPackage] = useState("");
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setSelectedPackage(value);
-    onSelect(value); // Truyền value lên component cha
+    if (value !== selectedPackage) {
+      setSelectedPackage(value);
+      onSelect(value);
+
+      let price = 0;
+      switch (value) {
+        case "1":
+          price = packageType === "day" ? 30000 : packageType === "week" ? 190000 : 800000;
+          break;
+        case "2":
+          price = packageType === "day" ? 20000 : packageType === "week" ? 133000 : 540000;
+          break;
+        case "3":
+          price = packageType === "day" ? 10000 : packageType === "week" ? 63000 : 240000;
+          break;
+        case "4":
+          price = packageType === "day" ? 2000 : packageType === "week" ? 12000 : 48000;
+          break;
+        default:
+          price = 0;
+      }
+
+      onPriceChange(price);
+    }
   };
+
   return (
     <Col lg={8} className="!pl-1 !pr-1">
       <div className="relative">

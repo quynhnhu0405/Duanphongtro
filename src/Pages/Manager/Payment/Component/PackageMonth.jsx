@@ -1,9 +1,18 @@
 import { Col } from "antd";
 
-const PackageMonth = () => {
+const PackageMonth = ({ setTotalDays, setPricePerDay, selectedPackage, packageType, calculatePrice }) => {
+  const handleChange = (e) => {
+    const months = parseInt(e.target.value, 10);
+    setTotalDays(`${months} tháng`); // Sửa thành "tháng"
+
+    // Tính toán lại giá dựa trên loại tin và gói thời gian
+    const price = calculatePrice(selectedPackage, packageType);
+    setPricePerDay(price);
+  };
+
   return (
     <Col lg={8} className="!pl-2">
-      <div className="relative ">
+      <div className="relative">
         <label
           htmlFor="package_type"
           className="absolute top-1 left-3 text-gray-500 text-xs transition-all pointer-events-none"
@@ -15,6 +24,7 @@ const PackageMonth = () => {
           id="total_month"
           name="total_month"
           aria-label="Chọn số tháng"
+          onChange={handleChange}
         >
           {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
             <option key={month} value={month}>
