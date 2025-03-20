@@ -491,3 +491,16 @@ body {
     margin-left: 0;
   }
 }
+.check-bill
+{
+    width: 100% !important;
+  td
+  {
+    width: 50% !important;
+    padding: 5px 0 !important;
+  }
+tbody tr:not(:last-child) {
+    border-bottom: 1px solid #bfbfbf; /* Định dạng đường gạch dưới */
+  }
+  
+}
