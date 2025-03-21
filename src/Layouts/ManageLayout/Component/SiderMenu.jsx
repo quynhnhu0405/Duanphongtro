@@ -1,62 +1,56 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   FormOutlined,
   LogoutOutlined,
   ProfileOutlined,
   TagsOutlined,
   UserOutlined,
-  WalletOutlined,
   MenuOutlined,
 } from "@ant-design/icons";
 import { Avatar, Menu, Drawer, Button } from "antd";
 import Sider from "antd/es/layout/Sider";
+import { useLocation } from "react-router";
 
 const items = [
   {
     label: "Đăng tin mới",
-    key: "1",
+    key: "/quan-ly/dang-bai-moi",
     icon: <FormOutlined />,
-    path: "/quan-ly/dang-tin-moi",
+    path: "/quan-ly/dang-bai-moi",
   },
   {
     label: "Danh sách tin đăng",
-    key: "2",
+    key: "/quan-ly/danh-sach-tin-dang",
     icon: <ProfileOutlined />,
     path: "/quan-ly/danh-sach-tin-dang",
   },
   {
-    label: "Lịch sử thanh toán",
-    key: "3",
-    icon: <WalletOutlined />,
-    path: "/quan-ly/lich-su-thanh-toan",
-  },
-  {
     label: "Bảng giá dịch vụ",
-    key: "4",
+    key: "/bang-gia",
     icon: <TagsOutlined />,
     path: "/bang-gia",
   },
   {
     label: "Quản lý tài khoản",
-    key: "5",
+    key: "/quan-ly/quan-ly-tai-khoan",
     icon: <UserOutlined />,
     path: "/quan-ly/quan-ly-tai-khoan",
   },
 ];
 
 const SiderMenu = () => {
-  const [isMobile, setIsMobile] = useState(false); 
-  const [drawerVisible, setDrawerVisible] = useState(false); 
+  const location = useLocation();
+  const [isMobile, setIsMobile] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
 
   const checkScreenSize = () => {
     setIsMobile(window.innerWidth <= 1220);
   };
 
-
   useEffect(() => {
-    checkScreenSize(); 
-    window.addEventListener("resize", checkScreenSize); 
-    return () => window.removeEventListener("resize", checkScreenSize); 
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   const showDrawer = () => {
@@ -69,7 +63,6 @@ const SiderMenu = () => {
 
   return (
     <div>
-      {/* Nút menu cho mobile */}
       {isMobile && (
         <Button
           type="primary"
@@ -81,7 +74,6 @@ const SiderMenu = () => {
         </Button>
       )}
 
-      {/* Sider cho desktop */}
       {!isMobile && (
         <div
           className="fixed shadow-[1px_0_5px_rgba(0,0,0,0.3)] bg-white z-40"
@@ -101,13 +93,13 @@ const SiderMenu = () => {
                 <p>Mã tài khoản: 123</p>
               </div>
             </div>
-            <Menu mode="vertical" defaultSelectedKeys={["1"]}>
+            <Menu mode="vertical" selectedKeys={[location.pathname]}>
               {items.map((item) => (
                 <Menu.Item key={item.key} icon={item.icon}>
                   <a href={item.path}>{item.label}</a>
                 </Menu.Item>
               ))}
-              <Menu.Item key="6" icon={<LogoutOutlined />} danger>
+              <Menu.Item key="logout" icon={<LogoutOutlined />} danger>
                 Đăng xuất
               </Menu.Item>
             </Menu>
@@ -115,7 +107,6 @@ const SiderMenu = () => {
         </div>
       )}
 
-      {/* Drawer cho mobile */}
       <Drawer
         title="Menu"
         placement="left"
@@ -123,13 +114,13 @@ const SiderMenu = () => {
         visible={drawerVisible}
         width={250}
       >
-        <Menu mode="vertical" defaultSelectedKeys={["1"]}>
+        <Menu mode="vertical" selectedKeys={[location.pathname]}>
           {items.map((item) => (
             <Menu.Item key={item.key} icon={item.icon}>
               <a href={item.path}>{item.label}</a>
             </Menu.Item>
           ))}
-          <Menu.Item key="6" icon={<LogoutOutlined />} danger>
+          <Menu.Item key="logout" icon={<LogoutOutlined />} danger>
             Đăng xuất
           </Menu.Item>
         </Menu>

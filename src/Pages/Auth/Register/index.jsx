@@ -1,6 +1,12 @@
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Card } from "antd";
+import { useState } from "react";
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+    const toggleShowPassword = () => {
+      setShowPassword(!showPassword);
+    };
   return (
     <div className="w-[600px] m-auto mt-15 h-full">
       <Card className="bg-white !p-7 ">
@@ -58,7 +64,7 @@ const Register = () => {
           </div>
           <div className="relative w-full mt-5">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               className="peer w-full border border-gray-300 rounded-2xl p-3 pt-5 outline-none  focus:border-blue-300"
               placeholder=" "
@@ -73,6 +79,13 @@ const Register = () => {
             >
               Mật khẩu
             </label>
+            <button
+              type="button"
+              onClick={toggleShowPassword}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500"
+            >
+              {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+            </button>
           </div>
           <button className="w-full mt-5 mb-3 bg-red-500 text-white p-2 font-black text-lg rounded-3xl hover:bg-red-600">
             Tạo tài khoản

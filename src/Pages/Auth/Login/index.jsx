@@ -1,6 +1,12 @@
+import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Card } from "antd";
+import { useState } from "react";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div className="w-[600px] m-auto mt-15 h-full">
       <Card className="bg-white !p-7 ">
@@ -40,7 +46,7 @@ const Login = () => {
           </div>
           <div className="relative w-full mt-5">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               className="peer w-full border border-gray-300 rounded-2xl p-3 pt-5 outline-none  focus:border-blue-300"
               placeholder=" "
@@ -55,12 +61,25 @@ const Login = () => {
             >
               Mật khẩu
             </label>
+            <button
+              type="button"
+              onClick={toggleShowPassword}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-500"
+            >
+              {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
+            </button>
           </div>
           <button className="w-full mt-5 mb-3 bg-red-500 text-white p-2 font-black text-lg rounded-3xl hover:bg-red-600">
             Đăng nhập
           </button>
-          <a href="/quen-mat-khau" className=" underline text-sm">Bạn quên mật khẩu ?</a>
-          <p className="text-xs mt-3">Qua việc đăng nhập hoặc tạo tài khoản, bạn đồng ý với các <a href="/quy-dinh-su-dung">quy định sử dụng</a> cũng như <a href="/chinh-sach-bao-mat">chính sách bảo mật</a> của chúng tôi</p>
+          <a href="/quen-mat-khau" className=" underline text-sm">
+            Bạn quên mật khẩu ?
+          </a>
+          <p className="text-xs mt-3">
+            Qua việc đăng nhập hoặc tạo tài khoản, bạn đồng ý với các{" "}
+            <a href="/quy-dinh-su-dung">quy định sử dụng</a> cũng như{" "}
+            <a href="/chinh-sach-bao-mat">chính sách bảo mật</a> của chúng tôi
+          </p>
         </div>
       </Card>
     </div>
