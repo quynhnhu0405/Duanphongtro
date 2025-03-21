@@ -76,15 +76,11 @@ const User = () => {
                 <br />
               </div>
               <div className="leading-12">
-                <a className="text-black">
+                <a className="text-black" href="/bang-gia">
                   <TagsOutlined className="icon" /> Bảng giá dịch vụ
                 </a>
                 <br />
-                <a className="text-black">
-                  <CreditCardOutlined className="icon" /> Lịch sử thanh toán
-                </a>
-                <br />
-                <a className="text-black">
+                <a className="text-black" href="/quan-ly-tai-khoan">
                   <UserOutlined className="icon" /> Quản lý tài khoản
                 </a>
                 <br />

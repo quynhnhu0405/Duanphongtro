@@ -8,10 +8,10 @@ import Package from "./Package";
 import PackageDay from "./PackageDay";
 import PackageWeek from "./PackageWeek";
 import PackageMonth from "./PackageMonth";
-import CardFeature from "./CardFeature";
-import CardVip1 from "./CardVip1";
-import CardVip2 from "./CardVip2";
-import CardRegular from "./CardRegular";
+import CardFeature from "../../Component/CardFeature";
+import CardVip1 from "../../Component/CardVip1";
+import CardVip2 from "../../Component/CardVip2";
+import CardRegular from "../../Component/CardRegular";
 import { useEffect } from "react";
 
 const SelectPackage = ({

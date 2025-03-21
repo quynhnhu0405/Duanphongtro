@@ -504,3 +504,28 @@ tbody tr:not(:last-child) {
   }
   
 }
+.table-list-post
+{
+  table, td, th {
+    border: 1px solid #676767;
+    
+  }
+  td, th {
+    padding: 10px 7px;
+    text-align: left;
+  }
+  th
+  {
+    background: rgb(255, 196, 196);
+    font-size: 15px;
+  }
+}
+.modal-list-post
+{
+  .ant-modal-body
+  {
+    padding: 10px 0 !important;
+    line-height: 30px;
+    font-size: 16px;
+  }
+}

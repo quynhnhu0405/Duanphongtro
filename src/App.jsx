@@ -27,6 +27,11 @@ import PricePostsLayout from "./Layouts/PricePostLayout";
 import PostNew from "./Pages/Manager/PostNewNews";
 import ManageLayout from "./Layouts/ManageLayout";
 import Payment from "./Pages/Manager/Payment";
+import ListPosts from "./Pages/Manager/ListOfNews";
+import Account from "./Pages/Manager/Account";
+import Profile from "./Pages/Manager/Account/Profile";
+import ChangePassword from "./Pages/Manager/Account/ChangePassword";
+import ForgotPasswordAccount from "./Pages/Manager/Account/ForgotPassword";
 function App() {
   return (
     <BrowserRouter>
@@ -59,6 +64,12 @@ function App() {
         <Route path="quan-ly" element={<ManageLayout />}>
           <Route path="dang-bai-moi" element={<PostNew />}/>
           <Route path="dang-bai-moi/thanh-toan" element={<Payment />} />
+          <Route path="danh-sach-tin-dang" element={<ListPosts />} />
+          <Route path="quan-ly-tai-khoan" element={<Account />}>
+            <Route index element={<Profile />} />
+            <Route path="doi-mat-khau" element={<ChangePassword />} />
+            <Route path="doi-mat-khau/quen-mat-khau" element={<ForgotPasswordAccount />} />
+          </Route>
         </Route>
         <Route element={<LoginLayout />}>
           <Route path="dang-nhap" element={<Login />} />
