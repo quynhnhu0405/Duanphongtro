@@ -32,6 +32,12 @@ import Account from "./Pages/Manager/Account";
 import Profile from "./Pages/Manager/Account/Profile";
 import ChangePassword from "./Pages/Manager/Account/ChangePassword";
 import ForgotPasswordAccount from "./Pages/Manager/Account/ForgotPassword";
+import AdminLayout from "./Layouts/AdminLayout";
+import DashboardPage from "./Pages/Admin/Dashboard";
+import PostManagementPage from "./Pages/Admin/ManagePost";
+import AccountManagementPage from "./Pages/Admin/AccountManagementPage";
+import CategoryManagementPage from "./Pages/Admin/CategoryManagement";
+import PriceManagementPage from "./Pages/Admin/PricesManagement";
 function App() {
   return (
     <BrowserRouter>
@@ -75,6 +81,13 @@ function App() {
           <Route path="dang-nhap" element={<Login />} />
           <Route path="tao-tai-khoan-moi" element={<Register />} />
           <Route path="quen-mat-khau" element={<ForgotPassword />} />
+        </Route>
+        <Route path="admin" element={<AdminLayout />} >
+          <Route index element={<DashboardPage />} />
+          <Route path="posts" element={<PostManagementPage />} />
+          <Route path="users" element={<AccountManagementPage />} />
+          <Route path="categories" element={<CategoryManagementPage />} />
+          <Route path="prices" element={<PriceManagementPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
