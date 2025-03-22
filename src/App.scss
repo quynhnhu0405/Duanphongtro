@@ -529,3 +529,10 @@ tbody tr:not(:last-child) {
     font-size: 16px;
   }
 }
+.admin-layout
+{
+  .ant-layout-sider-trigger
+  {
+    width: 248px !important;
+  }
+}
