@@ -2,16 +2,22 @@ import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
 import { Card, Col, Row } from "antd";
 import { Link } from "react-router";
 import { formatTimeAgo } from "../../Utils/dateUtil";
+import { useEffect, useState } from "react";
+import slugify from "slugify";
 const Vip1Card = ({ item }) => {
-  const today = new Date(); // Lấy ngày hôm nay
-  const otherDate = new Date(item.createdAt); // Chuyển createdAt thành Date object
+  const [landlord, setLandlord] = useState(null);
 
-  // Tính số ngày chênh lệch
-  const differenceInTime = today - otherDate;
-  const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
+  useEffect(() => {
+    if (item.landlordId) {
+      fetch(`http://localhost:5000/api/users/user/${item.landlordId}`)
+        .then((res) => res.json())
+        .then((data) => setLandlord(data))
+        .catch((error) => console.error("Lỗi lấy dữ liệu chủ nhà:", error))
+    }
+  }, [item.landlordId]);
   return (
     <div className="roomCard mb-7">
-      <Link to={`/${item.title}`}>
+      <Link to={`/${slugify(item?.title, { lower: true, locale: "vi" })}`}>
         <div className="border-gray-200 border rounded-t-lg">
           <Row>
             <Col className="pr-2" xs={24} sm={24} md={10} lg={10}>
@@ -19,9 +25,10 @@ const Vip1Card = ({ item }) => {
                 <Col span={14}>
                   <img
                     alt={item.title}
-                    src={item.images[0].url}
+                    src={item.images[0]}
                     style={{
                       height: "210px",
+                      width: "100%",
                       objectFit: "cover",
                       paddingRight: "1px",
                     }}
@@ -32,9 +39,10 @@ const Vip1Card = ({ item }) => {
                   <Row>
                     <img
                       alt={item.title}
-                      src={item.images[1].url}
+                      src={item.images[1]}
                       style={{
                         height: "105px",
+                        width: "100%",
                         objectFit: "cover",
                         padding: "0 0 1px 1px",
                       }}
@@ -43,9 +51,10 @@ const Vip1Card = ({ item }) => {
                   <Row>
                     <img
                       alt={item.title}
-                      src={item.images[1].url}
+                      src={item.images[2]}
                       style={{
                         height: "105px",
+                        width: "100%",
                         objectFit: "cover",
                         padding: "0 0 1px 1px",
                       }}
@@ -59,39 +68,53 @@ const Vip1Card = ({ item }) => {
                 {item.title}
               </h1>
               <p className="text-base text-red-500 font-bold inline">
-                {item.price}
+                {item.price.toLocaleString("vi-VN")} VND
               </p>
               <p className="text-base text-blue-500 font-bold inline ml-10">
-                {item.acreage}m<sup>2</sup>
+                {item.area}m<sup>2</sup>
               </p>
               <p className="text-sm mb-2 mt-1">⭐️⭐️⭐️</p>
               <p className="text-sm mb-2">
-                <EnvironmentOutlined /> {item.location.ward},{" "}
-                {item.location.city}
+                <EnvironmentOutlined /> {item.location.district},{" "}
+                {item.location.province}
               </p>
-              <p className="text-sm two-line-text text-gray-700">{item.description}</p>
+              <p className="text-sm two-line-text text-gray-700">
+                {item.description}
+              </p>
             </Col>
           </Row>
         </div>
       </Link>
       <div className="border-gray-200 border rounded-b-lg flex items-center justify-between p-3">
-        <div className=" flex items-center">
-          <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
-            <img src={item.host.avatar} className="w-7 rounded-3xl"></img>
-          </div>
-          <div className="ml-3 text-sm text-black leading-4">
-            <p className="font-bold">{item.host.name}</p>
-            <p className="text-gray-400">Đăng {formatTimeAgo(item.createdAt)}</p>
-          </div>
+        <div className="flex items-center">
+          {landlord && (
+            <>
+              <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
+                <img
+                  src={landlord?.avatar || "./src/assets/defaul-avt.png"}
+                  className="w-7 rounded-3xl"
+                  alt="Avatar"
+                />
+              </div>
+              <div className="ml-3 text-sm text-black leading-4">
+                <p className="font-bold">{landlord.name}</p>
+                <p className="text-gray-400">
+                  Đăng {formatTimeAgo(item.createdAt)}
+                </p>
+              </div>
+            </>
+          )}
         </div>
-        <a
-          target="_blank"
-          rel="nofollow"
-          href={`tel:${item.host.phone}`}
-          className=" host-phone text-sm"
-        >
-          <PhoneOutlined /> {item.host.phone}
-        </a>
+        {landlord && (
+          <a
+            target="_blank"
+            rel="nofollow"
+            href={`tel:${landlord.phone}`}
+            className="host-phone text-sm"
+          >
+            <PhoneOutlined /> {landlord.phone}
+          </a>
+        )}
       </div>
     </div>
   );

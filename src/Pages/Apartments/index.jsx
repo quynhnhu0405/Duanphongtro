@@ -5,54 +5,18 @@ import Vip2Card from "../../Components/Vip2Card";
 import RegularCard from "../../Components/RegularCard";
 import FilterProvince from "../../Components/FilterProvince";
 import TabMenu from "../../Components/TabMenu";
+import { useEffect, useState } from "react";
 
-const items = [
-  {
-    id: 1,
-    title: "Nhà Trọ 416/23 Dương Quảng Hàm",
-    images: [
-      {
-        id: 1,
-        url: "./src/assets/1.jpg",
-      },
-      {
-        id: 2,
-        url: "./src/assets/1.jpg",
-      },
-      {
-        id: 3,
-        url: "./src/assets/1.jpg",
-      },
-      {
-        id: 4,
-        url: "./src/assets/1.jpg",
-      },
-    ],
-    createdAt: "2025-03-01",
-    price: "4.5 triệu/tháng",
-    acreage: "20",
-    location: {
-      id: 1,
-      city: "TP Hồ Chí Minh",
-      ward: "Gò Vấp",
-      street: "416/23 Dương Quảng Hàm",
-    },
-    type: {
-      id: 1,
-      name: "Nhà trọ, phòng trọ",
-    },
-    description:
-      "Đến Homestay Hoàng Phúc – hệ thống Kytucxa Q7 rẻ nhất Sài Gòn với những căn phòng đẹp lung linh chuẩn 2 sao, đa dạng tiện nghi và bao trọn toàn bộ các chi",
-    host: {
-      id: 1,
-      name: "Phúc Cứt",
-      avatar: "./src/assets/defaul-avt.png",
-      phone: "0123456789",
-    },
-    package: 1,
-  },
-];
 const Apartments = () => {
+  const [room, setRoom] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/posts/can-ho")
+      .then((res) => res.json())
+      .then((data) => {
+        setRoom(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div>
       <Card className="bg-white p-7  ">
@@ -65,10 +29,27 @@ const Apartments = () => {
 
         <FilterProvince />
         <TabMenu />
-        <FeaturedPost item={items[0]} />
-        <Vip1Card item={items[0]} />
-        <Vip2Card item={items[0]} />
-        <RegularCard item={items[0]} />
+        <div>
+          {room.length === 0 && (
+            <div className="flex flex-col items-center">
+              <img src="./src/assets/empty.jpeg" alt="" className="w-1/4" />
+              <p className="text-base">Không có bài đăng nào !!!</p>
+            </div>
+          )}
+          {room.map((item) => {
+            const packageLevel = Number(item?.packageDetails?.level);
+            console.log(packageLevel);
+            if (packageLevel === 1) {
+              return <FeaturedPost key={item._id} item={item} />;
+            } else if (packageLevel === 2) {
+              return <Vip1Card key={item._id} item={item} />;
+            } else if (packageLevel === 3) {
+              return <Vip2Card key={item._id} item={item} />;
+            } else {
+              return <RegularCard key={item._id} item={item} />;
+            }
+          })}
+        </div>
       </Card>
     </div>
   );

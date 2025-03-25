@@ -12,12 +12,24 @@ const Address = ({ onValidate }) => {
 
   const [buttonText, setButtonText] = useState("Địa chỉ");
 
+  const TARGET_PROVINCES = [
+    "Thành phố Hà Nội",
+    "Thành phố Hồ Chí Minh",
+    "Tỉnh Bình Dương",
+    "Thành phố Đà Nẵng",
+  ];
+
   useEffect(() => {
     fetch("https://provinces.open-api.vn/api/?depth=3")
-      .then((res) => res.json())
-      .then((data) => setProvinces(data));
+      .then((response) => response.json())
+      .then((data) => {
+        const targetProvinces = data.filter((province) =>
+          TARGET_PROVINCES.includes(province.name)
+        );
+        setProvinces(targetProvinces);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
-
   const handleProvinceChange = (e) => {
     const selectedProvinceCode = parseInt(e.target.value);
     const province = provinces.find((p) => p.code === selectedProvinceCode);
