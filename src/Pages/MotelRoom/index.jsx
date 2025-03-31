@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 const MotelRoom = () => {
   const [room, setRoom] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/posts")
+    fetch("http://localhost:5000/api/posts/phong-tro")
       .then((res) => res.json())
       .then((data) => {
         setRoom(data);

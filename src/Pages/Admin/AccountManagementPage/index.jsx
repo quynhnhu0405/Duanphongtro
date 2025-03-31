@@ -1,6 +1,36 @@
-import React, { useState } from 'react';
-import { Input, Select, Button, Table, Tag, Dropdown, Menu, Popconfirm, message, Modal, Form } from 'antd';
-import { SearchOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { 
+  Input, 
+  Select, 
+  Button, 
+  Table, 
+  Tag, 
+  Dropdown, 
+  Menu, 
+  Popconfirm, 
+  message, 
+  Modal, 
+  Form, 
+  Avatar, 
+  Descriptions, 
+  Divider,
+  Card,
+  Statistic,
+  Space,
+  Image 
+} from 'antd';
+import { 
+  SearchOutlined, 
+  MoreOutlined, 
+  PlusOutlined, 
+  UserOutlined,
+  EditOutlined,
+  LockOutlined,
+  UnlockOutlined,
+  DeleteOutlined
+} from '@ant-design/icons';
+import axios from 'axios';
+import dayjs from 'dayjs';
 
 const { Option } = Select;
 
@@ -9,79 +39,163 @@ const AccountManagementPage = () => {
   const [filterRole, setFilterRole] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+  const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [userStats, setUserStats] = useState({ postCount: 0, revenue: 0 });
   const [form] = Form.useForm();
 
-  // Dữ liệu mẫu danh sách tài khoản
-  const [accounts, setAccounts] = useState([
-    { id: 1, name: 'Nguyễn Văn A', email: 'nguyenvana@example.com', phone: '0123456789', role: 'admin', status: 'active' },
-    { id: 2, name: 'Trần Thị B', email: 'tranthib@example.com', phone: '0987654321', role: 'user', status: 'active' },
-    { id: 3, name: 'Lê Văn C', email: 'levanc@example.com', phone: '0369852147', role: 'user', status: 'locked' },
-  ]);
+  // Fetch users from API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get('http://localhost:5000/api/users');
+        setAccounts(response.data);
+      } catch (error) {
+        message.error('Không thể tải danh sách tài khoản');
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Hàm xử lý tìm kiếm
+    fetchUsers();
+  }, []);
+
+  // Fetch user stats when selected user changes
+  useEffect(() => {
+    if (selectedUser) {
+      const fetchUserStats = async () => {
+        setDetailLoading(true);
+        try {
+          const response = await axios.get(`http://localhost:5000/api/users/${selectedUser._id}/stats`);
+          setUserStats(response.data);
+          console.log('User Stats:', response.data);
+        } catch (error) {
+          console.error('Error fetching user stats:', error);
+        } finally {
+          setDetailLoading(false);
+        }
+      };
+      fetchUserStats();
+    }
+  }, [selectedUser]);
+
+  // Handle search
   const handleSearch = (value) => {
     setSearchText(value);
   };
 
-  // Hàm xử lý lọc theo vai trò
+  // Handle role filter
   const handleFilterRole = (value) => {
     setFilterRole(value);
   };
 
-  // Hàm xử lý lọc theo trạng thái
+  // Handle status filter
   const handleFilterStatus = (value) => {
     setFilterStatus(value);
   };
 
-  // Hàm xử lý khóa/mở tài khoản
-  const toggleAccountStatus = (id) => {
-    setAccounts(accounts.map(account =>
-      account.id === id
-        ? { ...account, status: account.status === 'active' ? 'locked' : 'active' }
-        : account
-    ));
-    message.success(`Tài khoản đã được ${accounts.find(account => account.id === id).status === 'active' ? 'khóa' : 'mở khóa'}`);
+  // Toggle account status (lock/unlock)
+  const toggleAccountStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'active' ? 'locked' : 'active';
+      await axios.patch(`http://localhost:5000/api/users/${id}/status`, { status: newStatus });
+      
+      setAccounts(accounts.map(account => 
+        account._id === id ? { ...account, status: newStatus } : account
+      ));
+      
+      message.success(`Tài khoản đã được ${newStatus === 'active' ? 'mở khóa' : 'khóa'}`);
+    } catch (error) {
+      message.error('Không thể cập nhật trạng thái tài khoản');
+      console.error('Error updating account status:', error);
+    }
   };
 
-  // Hàm xử lý xóa tài khoản
-  const handleDelete = (id) => {
-    setAccounts(accounts.filter(account => account.id !== id));
-    message.error('Tài khoản đã bị xóa');
+  // Delete account
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      setAccounts(accounts.filter(account => account._id !== id));
+      message.success('Tài khoản đã được xóa thành công');
+    } catch (error) {
+      message.error('Không thể xóa tài khoản');
+      console.error('Error deleting account:', error);
+    }
   };
 
-  // Hàm mở modal thêm tài khoản
+  // Show add account modal
   const showAddAccountModal = () => {
     setIsModalVisible(true);
   };
 
-  // Hàm đóng modal
+  // Show user detail modal
+  const showUserDetail = (user) => {
+    setSelectedUser(user);
+    setIsDetailModalVisible(true);
+  };
+
+  // Close modal
   const handleCancel = () => {
     setIsModalVisible(false);
     form.resetFields();
   };
 
-  // Hàm xử lý thêm tài khoản
-  const handleAddAccount = (values) => {
-    const newAccount = {
-      id: accounts.length + 1, // Tạo ID mới
-      name: values.name,
-      email: values.email,
-      phone: values.phone,
-      role: 'admin', // Mặc định là admin
-      status: 'active', // Mặc định là hoạt động
-    };
-    setAccounts([...accounts, newAccount]);
-    message.success('Thêm tài khoản thành công');
-    setIsModalVisible(false);
-    form.resetFields();
+  // Close detail modal
+  const handleDetailCancel = () => {
+    setIsDetailModalVisible(false);
   };
 
-  // Cột cho bảng tài khoản
+  // Add new account
+  const handleAddAccount = async (values) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/users', {
+        name: values.name,
+        phone: values.phone,
+        password: values.password,
+        role: values.role || 'user',
+        status: 'active'
+      });
+
+      setAccounts([...accounts, response.data.user]);
+      message.success('Tạo tài khoản thành công');
+      setIsModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Không thể tạo tài khoản';
+      message.error(errorMessage);
+      console.error('Error creating account:', error);
+    }
+  };
+
+  // Format currency
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('vi-VN', { 
+      style: 'currency', 
+      currency: 'VND' 
+    }).format(value);
+  };
+
+  // Table columns
   const columns = [
     {
       title: 'Tên người dùng',
       dataIndex: 'name',
       key: 'name',
+      render: (text, record) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar 
+            src={record.avatar || null} 
+            icon={<UserOutlined />} 
+            style={{ marginRight: 8 }}
+          />
+          <span>{text}</span>
+        </div>
+      ),
     },
     {
       title: 'Số điện thoại',
@@ -109,26 +223,45 @@ const AccountManagementPage = () => {
       ),
     },
     {
+      title: 'Ngày tạo',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (date) => dayjs(date).format('DD/MM/YYYY'),
+    },
+    {
       title: 'Thao tác',
       key: 'actions',
+      width: 120,
       render: (_, record) => (
         <Dropdown
           overlay={
             <Menu>
-              <Menu.Item key="toggleStatus" onClick={() => toggleAccountStatus(record.id)}>
+              <Menu.Item 
+                key="toggleStatus" 
+                icon={record.status === 'active' ? <LockOutlined /> : <UnlockOutlined />}
+                onClick={() => toggleAccountStatus(record._id, record.status)}
+              >
                 {record.status === 'active' ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
               </Menu.Item>
-              <Menu.Item key="edit">
-                <a href={`/accounts/edit/${record.id}`}>Chỉnh sửa</a>
+              <Menu.Item 
+                key="detail" 
+                icon={<UserOutlined />}
+                onClick={() => showUserDetail(record)}
+              >
+                Xem chi tiết
               </Menu.Item>
-              <Menu.Item key="delete">
+              <Menu.Item 
+                key="delete"
+                icon={<DeleteOutlined />}
+                danger
+              >
                 <Popconfirm
                   title="Bạn có chắc chắn muốn xóa tài khoản này?"
-                  onConfirm={() => handleDelete(record.id)}
+                  onConfirm={() => handleDelete(record._id)}
                   okText="Xóa"
                   cancelText="Hủy"
                 >
-                  <span style={{ color: 'red' }}>Xóa</span>
+                  <span>Xóa</span>
                 </Popconfirm>
               </Menu.Item>
             </Menu>
@@ -141,94 +274,203 @@ const AccountManagementPage = () => {
     },
   ];
 
-  // Lọc dữ liệu theo tìm kiếm, vai trò và trạng thái
+  // Filter accounts based on search and filters
   const filteredAccounts = accounts.filter(account => {
     const matchesSearch =
-      account.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      account.email.toLowerCase().includes(searchText.toLowerCase()) ||
-      account.phone.toLowerCase().includes(searchText.toLowerCase());
+      account.name?.toLowerCase().includes(searchText.toLowerCase()) ||
+      account.email?.toLowerCase().includes(searchText.toLowerCase()) ||
+      account.phone?.toLowerCase().includes(searchText.toLowerCase());
     const matchesRole = filterRole === 'all' || account.role === filterRole;
     const matchesStatus = filterStatus === 'all' || account.status === filterStatus;
     return matchesSearch && matchesRole && matchesStatus;
   });
 
   return (
-    <div style={{ padding: '24px' }}>
-      {/* Thanh tìm kiếm và lọc */}
-      <div style={{ marginBottom: '16px', display: 'flex', gap: '16px' }}>
-        <Input
-          placeholder="Tìm kiếm theo tên, email, số điện thoại"
-          prefix={<SearchOutlined />}
-          value={searchText}
-          onChange={(e) => handleSearch(e.target.value)}
-          style={{ width: '300px' }}
+    <div style={{ padding: 24 }}>
+        <div style={{ marginBottom: 16, display: 'flex', gap: 16 }}>
+          <Input
+            placeholder="Tìm kiếm theo tên, email, số điện thoại"
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={(e) => handleSearch(e.target.value)}
+            style={{ width: 300 }}
+            allowClear
+          />
+          <Select
+            defaultValue="all"
+            style={{ width: 150 }}
+            onChange={handleFilterRole}
+            placeholder="Lọc theo vai trò"
+          >
+            <Option value="all">Tất cả vai trò</Option>
+            <Option value="admin">Quản trị viên</Option>
+            <Option value="user">Người dùng</Option>
+          </Select>
+          <Select
+            defaultValue="all"
+            style={{ width: 150 }}
+            onChange={handleFilterStatus}
+            placeholder="Lọc theo trạng thái"
+          >
+            <Option value="all">Tất cả trạng thái</Option>
+            <Option value="active">Hoạt động</Option>
+            <Option value="locked">Bị khóa</Option>
+          </Select>
+          <Button 
+            type="primary" 
+            icon={<PlusOutlined />} 
+            onClick={showAddAccountModal}
+          >
+            Thêm tài khoản
+          </Button>
+        </div>
+
+        {/* Accounts table */}
+        <Table
+          dataSource={filteredAccounts}
+          columns={columns}
+          rowKey="_id"
+          pagination={{ 
+            pageSize: 10,
+            showSizeChanger: true,
+            pageSizeOptions: ['5', '10', '20', '50']
+          }}
+          loading={loading}
+          scroll={{ x: 1200 }}
         />
-        <Select
-          defaultValue="all"
-          style={{ width: '150px' }}
-          onChange={handleFilterRole}
-        >
-          <Option value="all">Tất cả vai trò</Option>
-          <Option value="admin">Quản trị viên</Option>
-          <Option value="user">Người dùng</Option>
-        </Select>
-        <Select
-          defaultValue="all"
-          style={{ width: '150px' }}
-          onChange={handleFilterStatus}
-        >
-          <Option value="all">Tất cả trạng thái</Option>
-          <Option value="active">Hoạt động</Option>
-          <Option value="locked">Bị khóa</Option>
-        </Select>
-        <Button type="primary" icon={<PlusOutlined />} onClick={showAddAccountModal}>
-          Thêm tài khoản
-        </Button>
-      </div>
-
-      {/* Bảng danh sách tài khoản */}
-      <Table
-        dataSource={filteredAccounts}
-        columns={columns}
-        rowKey="id"
-        pagination={{ pageSize: 5 }}
-      />
-
-      {/* Modal thêm tài khoản */}
+      {/* Add account modal */}
       <Modal
-        title="Thêm tài khoản"
+        title="Thêm tài khoản mới"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
+        destroyOnClose
       >
-        <Form form={form} onFinish={handleAddAccount}>
+        <Form 
+          form={form} 
+          onFinish={handleAddAccount} 
+          layout="vertical"
+          initialValues={{ role: 'user' }}
+        >
           <Form.Item
             label="Tên người dùng"
             name="name"
-            rules={[{ required: true, message: 'Vui lòng nhập tên người dùng' }]}
+            rules={[
+              { required: true, message: 'Vui lòng nhập tên người dùng' },
+              { min: 3, message: 'Tên phải có ít nhất 3 ký tự' }
+            ]}
           >
-            <Input />
+            <Input placeholder="Nhập tên người dùng" />
           </Form.Item>
           <Form.Item
             label="Số điện thoại"
             name="phone"
-            rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+            rules={[
+              { required: true, message: 'Vui lòng nhập số điện thoại' },
+              { pattern: /^[0-9]{10,11}$/, message: 'Số điện thoại không hợp lệ' }
+            ]}
           >
-            <Input />
+            <Input placeholder="Nhập số điện thoại" />
+          </Form.Item>
+          <Form.Item
+            label="Vai trò"
+            name="role"
+          >
+            <Select>
+              <Option value="user">Người dùng</Option>
+              <Option value="admin">Quản trị viên</Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+            rules={[
+              { required: true, message: 'Vui lòng nhập mật khẩu' },
+              { min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự' }
+            ]}
           >
-            <Input.Password />
+            <Input.Password placeholder="Nhập mật khẩu" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Lưu
-            </Button>
+            <Space>
+              <Button type="primary" htmlType="submit">
+                Lưu
+              </Button>
+              <Button onClick={handleCancel}>
+                Hủy
+              </Button>
+            </Space>
           </Form.Item>
         </Form>
+      </Modal>
+
+      {/* User detail modal */}
+      <Modal
+        title="Thông tin chi tiết tài khoản"
+        visible={isDetailModalVisible}
+        onCancel={handleDetailCancel}
+        footer={[
+          <Button key="close" onClick={handleDetailCancel}>
+            Đóng
+          </Button>
+        ]}
+        width={700}
+      >
+        {selectedUser && (
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: 24 }}>
+              <Avatar
+                size={64}
+                src={selectedUser.avatar || null}
+                icon={<UserOutlined />}
+              />
+              <div style={{ marginLeft: 16 }}>
+                <h2>{selectedUser.name}</h2>
+                <p>{selectedUser.email}</p>
+              </div>
+            </div>
+
+            <Descriptions bordered column={2}>
+              <Descriptions.Item label="Số điện thoại">{selectedUser.phone || 'Chưa cập nhật'}</Descriptions.Item>
+              <Descriptions.Item label="Vai trò">
+                <Tag color={selectedUser.role === 'admin' ? 'blue' : 'green'}>
+                  {selectedUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+                </Tag>
+              </Descriptions.Item>
+              <Descriptions.Item label="Trạng thái">
+                <Tag color={selectedUser.status === 'active' ? 'green' : 'red'}>
+                  {selectedUser.status === 'active' ? 'Hoạt động' : 'Bị khóa'}
+                </Tag>
+              </Descriptions.Item>
+              <Descriptions.Item label="Ngày tạo">
+                {dayjs(selectedUser.createdAt).format('DD/MM/YYYY HH:mm')}
+              </Descriptions.Item>
+              <Descriptions.Item label="Cập nhật lần cuối">
+                {dayjs(selectedUser.updatedAt).format('DD/MM/YYYY HH:mm')}
+              </Descriptions.Item>
+            </Descriptions>
+
+            <Divider orientation="left">Thống kê</Divider>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+              <Card>
+                <Statistic
+                  title="Số bài đăng"
+                  value={userStats.postCount}
+                  loading={detailLoading}
+                />
+              </Card>
+              <Card>
+                <Statistic
+                  title="Tổng doanh thu"
+                  value={userStats.revenue}
+                  formatter={value => formatCurrency(value)}
+                  loading={detailLoading}
+                />
+              </Card>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

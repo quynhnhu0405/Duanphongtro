@@ -38,6 +38,9 @@ import PostManagementPage from "./Pages/Admin/ManagePost";
 import AccountManagementPage from "./Pages/Admin/AccountManagementPage";
 import CategoryManagementPage from "./Pages/Admin/CategoryManagement";
 import PriceManagementPage from "./Pages/Admin/PricesManagement";
+import PaymentManagementPage from "./Pages/Admin/PaymentManagementPage";
+import AdminAccount from "./Pages/Admin/adminAccount";
+
 function App() {
   return (
     <BrowserRouter>
@@ -88,6 +91,8 @@ function App() {
           <Route path="users" element={<AccountManagementPage />} />
           <Route path="categories" element={<CategoryManagementPage />} />
           <Route path="prices" element={<PriceManagementPage />} />
+          <Route path="payment" element={<PaymentManagementPage />} />
+          <Route path="account" element={<AdminAccount/>} />
         </Route>
       </Routes>
     </BrowserRouter>

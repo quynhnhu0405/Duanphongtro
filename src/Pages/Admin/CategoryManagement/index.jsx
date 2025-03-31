@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Select, Button, Table, Tag, Dropdown, Menu, Popconfirm, message, Modal, Form } from 'antd';
 import { SearchOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
+
 
 const { Option } = Select;
 
@@ -12,21 +14,20 @@ const CategoryManagementPage = () => {
   const [editingCategory, setEditingCategory] = useState(null);
 
   // Dữ liệu mẫu danh sách danh mục
-  const [categories, setCategories] = useState([
-    { id: 1, name: 'Phòng trọ', postCount: 120, createdAt: '2023-10-01', status: 'active' },
-    { id: 2, name: 'Căn hộ', postCount: 80, createdAt: '2023-10-02', status: 'inactive' },
-    { id: 3, name: 'Ở ghép', postCount: 50, createdAt: '2023-10-03', status: 'active' },
-  ]);
+  const [categories, setCategories] = useState([]);
 
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/categories')
+      .then(response => {
+        setCategories(response.data);
+    })
+  })
   // Hàm xử lý tìm kiếm
   const handleSearch = (value) => {
     setSearchText(value);
   };
 
   // Hàm xử lý lọc theo trạng thái
-  const handleFilterStatus = (value) => {
-    setFilterStatus(value);
-  };
 
   // Hàm mở modal thêm/chỉnh sửa danh mục
   const showModal = (category = null) => {
@@ -54,26 +55,9 @@ const CategoryManagementPage = () => {
         cat.id === editingCategory.id ? { ...cat, ...values } : cat
       ));
       message.success('Cập nhật danh mục thành công');
-    } else {
-      // Thêm danh mục mới
-      const newCategory = {
-        id: categories.length + 1,
-        postCount: 0,
-        createdAt: new Date().toISOString().split('T')[0],
-        status: 'active',
-        ...values,
-      };
-      setCategories([...categories, newCategory]);
-      message.success('Thêm danh mục thành công');
     }
     setIsModalVisible(false);
     form.resetFields();
-  };
-
-  // Hàm xử lý xóa danh mục
-  const handleDelete = (id) => {
-    setCategories(categories.filter(cat => cat.id !== id));
-    message.error('Danh mục đã bị xóa');
   };
 
   // Cột cho bảng danh mục
@@ -94,16 +78,6 @@ const CategoryManagementPage = () => {
       key: 'createdAt',
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => (
-        <Tag color={status === 'active' ? 'green' : 'red'}>
-          {status === 'active' ? 'Hoạt động' : 'Không hoạt động'}
-        </Tag>
-      ),
-    },
-    {
       title: 'Thao tác',
       key: 'actions',
       render: (_, record) => (
@@ -112,16 +86,6 @@ const CategoryManagementPage = () => {
             <Menu>
               <Menu.Item key="edit" onClick={() => showModal(record)}>
                 Chỉnh sửa
-              </Menu.Item>
-              <Menu.Item key="delete">
-                <Popconfirm
-                  title="Bạn có chắc chắn muốn xóa danh mục này?"
-                  onConfirm={() => handleDelete(record.id)}
-                  okText="Xóa"
-                  cancelText="Hủy"
-                >
-                  <span style={{ color: 'red' }}>Xóa</span>
-                </Popconfirm>
               </Menu.Item>
             </Menu>
           }
@@ -151,18 +115,6 @@ const CategoryManagementPage = () => {
           onChange={(e) => handleSearch(e.target.value)}
           style={{ width: '300px' }}
         />
-        <Select
-          defaultValue="all"
-          style={{ width: '150px' }}
-          onChange={handleFilterStatus}
-        >
-          <Option value="all">Tất cả trạng thái</Option>
-          <Option value="active">Hoạt động</Option>
-          <Option value="inactive">Không hoạt động</Option>
-        </Select>
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => showModal()}>
-          Thêm danh mục
-        </Button>
       </div>
 
       {/* Bảng danh sách danh mục */}
@@ -187,16 +139,6 @@ const CategoryManagementPage = () => {
             rules={[{ required: true, message: 'Vui lòng nhập tên danh mục' }]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item
-            label="Trạng thái"
-            name="status"
-            rules={[{ required: true, message: 'Vui lòng chọn trạng thái' }]}
-          >
-            <Select>
-              <Option value="active">Hoạt động</Option>
-              <Option value="inactive">Không hoạt động</Option>
-            </Select>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
