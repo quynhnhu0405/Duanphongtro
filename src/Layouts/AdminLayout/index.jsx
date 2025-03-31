@@ -9,6 +9,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
   TagsOutlined,
+  EuroCircleOutlined,
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation, useMatch } from 'react-router';
 
@@ -21,17 +22,8 @@ const AdminLayout = () => {
   const matchUsers = useMatch('/admin/users');
   const matchCategories = useMatch('/admin/categories');
   const matchPrice = useMatch('/admin/prices');
-
-  const handleNotificationClick = () => {
-    notification.info({
-      message: 'Thông báo',
-      description: 'Bạn có 3 thông báo mới.',
-    });
-  };
-
   const avatarMenu = (
     <Menu>
-      <Menu.Item key="settings" icon={<SettingOutlined />}>Cài đặt tài khoản</Menu.Item>
       <Menu.Item key="logout" icon={<LogoutOutlined />}>Đăng xuất</Menu.Item>
     </Menu>
   );
@@ -88,6 +80,9 @@ const AdminLayout = () => {
           <Menu.Item key="/admin/categories" icon={<FolderOutlined />} className="!mb-3">
             <Link to="/admin/categories">Quản lý Danh Mục</Link>
           </Menu.Item>
+          <Menu.Item key="/admin/payment" icon={<EuroCircleOutlined />} className="!mb-3">
+            <Link to="/admin/payment">Quản lý Thanh Toán</Link>
+          </Menu.Item>
           <Menu.Item key="/admin/prices" icon={<TagsOutlined />} className="!mb-3">
             <Link to="/admin/prices">Bảng giá dịch vụ</Link>
           </Menu.Item>
@@ -98,9 +93,6 @@ const AdminLayout = () => {
         <Header className="!bg-white !h-[72px] shadow-md px-6 flex justify-between items-center fixed top-0 left-64 right-0 z-10">
           <div >{getBreadcrumb()}</div>
           <div className="flex items-center gap-4">
-            <Badge count={3} onClick={handleNotificationClick} className="cursor-pointer !mr-8">
-              <BellOutlined className="text-xl " />
-            </Badge>
             <Dropdown overlay={avatarMenu} trigger={['click']}>
               <div className="flex items-center gap-2 cursor-pointer mr-6">
                 <Avatar icon={<UserOutlined />} />

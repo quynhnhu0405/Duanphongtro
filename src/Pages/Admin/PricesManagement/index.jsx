@@ -1,89 +1,97 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Input, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const PriceManagementPage = () => {
-  const [prices, setPrices] = useState([
-    {
-      key: '1',
-      type: 'Tin VIP Nổi Bật ★★★★',
-      daily: '30.000đ',
-      weekly: '190.000đ',
-      monthly: '800.000đ',
-    },
-    {
-      key: '2',
-      type: 'Tin VIP 1 ★★★',
-      daily: '20.000đ',
-      weekly: '153.000đ',
-      monthly: '540.000đ',
-    },
-    {
-      key: '3',
-      type: 'Tin VIP 2 ★★★',
-      daily: '10.000đ',
-      weekly: '63.000đ',
-      monthly: '240.000đ',
-    },
-    {
-      key: '4',
-      type: 'Tin thường',
-      daily: '2.000đ',
-      weekly: '12.000đ',
-      monthly: '48.000đ',
-    },
-  ]);
-
+  const [prices, setPrices] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingPrice, setEditingPrice] = useState(null);
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
-  // Hàm mở modal chỉnh sửa giá
+  useEffect(() => {
+    fetchPrices();
+  }, []);
+
+  const fetchPrices = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get('http://localhost:5000/api/packages');
+      // Thêm key cho mỗi item nếu chưa có
+      const dataWithKeys = response.data.map(item => ({
+        ...item,
+        key: item._id || Math.random().toString(36).substr(2, 9)
+      }));
+      setPrices(dataWithKeys);
+    } catch (error) {
+      console.error('Error fetching prices:', error);
+      message.error('Lỗi khi tải dữ liệu giá');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const showEditModal = (price) => {
     setEditingPrice(price);
-    form.setFieldsValue(price);
+    form.setFieldsValue({
+      name: price.name,
+      priceday: price.priceday,
+      priceweek: price.priceweek,
+      pricemonth: price.pricemonth
+    });
     setIsModalVisible(true);
   };
 
-  // Hàm đóng modal
   const handleCancel = () => {
     setIsModalVisible(false);
     form.resetFields();
     setEditingPrice(null);
   };
 
-  // Hàm xử lý lưu thay đổi giá
-  const handleSave = (values) => {
-    const updatedPrices = prices.map((price) =>
-      price.key === editingPrice.key ? { ...price, ...values } : price
-    );
-    setPrices(updatedPrices);
-    message.success('Cập nhật giá thành công');
-    setIsModalVisible(false);
-    form.resetFields();
+  const handleSave = async (values) => {
+    try {
+      setLoading(true);
+      await axios.patch(`http://localhost:5000/api/packages/${editingPrice._id}`, {
+        priceday: values.priceday,
+        priceweek: values.priceweek,
+        pricemonth: values.pricemonth
+      });
+      
+      message.success('Cập nhật giá thành công');
+      fetchPrices();
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error('Error updating price:', error);
+      message.error('Cập nhật giá thất bại');
+    } finally {
+      setLoading(false);
+    }
   };
-
-  // Cột cho bảng giá
+  
   const columns = [
     {
       title: 'Loại tin',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: 'Giá ngày',
-      dataIndex: 'daily',
-      key: 'daily',
+      dataIndex: 'priceday',
+      key: 'priceday',
+      render: (value) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value),
     },
     {
       title: 'Giá tuần',
-      dataIndex: 'weekly',
-      key: 'weekly',
+      dataIndex: 'priceweek',
+      key: 'priceweek',
+      render: (value) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value),
     },
     {
       title: 'Giá tháng',
-      dataIndex: 'monthly',
-      key: 'monthly',
+      dataIndex: 'pricemonth',
+      key: 'pricemonth',
+      render: (value) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value),
     },
     {
       title: 'Thao tác',
@@ -102,51 +110,59 @@ const PriceManagementPage = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      {/* Bảng giá */}
       <Table
         dataSource={prices}
         columns={columns}
         pagination={false}
+        loading={loading}
       />
 
-      {/* Modal chỉnh sửa giá */}
       <Modal
         title="Chỉnh sửa giá"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
+        destroyOnClose
       >
-        <Form form={form} onFinish={handleSave}>
+        <Form form={form} onFinish={handleSave} layout="vertical">
           <Form.Item
             label="Loại tin"
-            name="type"
-            rules={[{ required: true, message: 'Vui lòng nhập loại tin' }]}
+            name="name"
           >
             <Input disabled />
           </Form.Item>
           <Form.Item
-            label="Giá ngày"
-            name="daily"
-            rules={[{ required: true, message: 'Vui lòng nhập giá 1 ngày' }]}
+            label="Giá ngày (VND)"
+            name="priceday"
+            rules={[
+              { required: true, message: 'Vui lòng nhập giá ngày' },
+              { pattern: /^[0-9]+$/, message: 'Vui lòng nhập số' }
+            ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Giá tuần"
-            name="weekly"
-            rules={[{ required: true, message: 'Vui lòng nhập giá 1 tuần' }]}
+            label="Giá tuần (VND)"
+            name="priceweek"
+            rules={[
+              { required: true, message: 'Vui lòng nhập giá tuần' },
+              { pattern: /^[0-9]+$/, message: 'Vui lòng nhập số' }
+            ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Giá tháng"
-            name="monthly"
-            rules={[{ required: true, message: 'Vui lòng nhập giá 1 tháng' }]}
+            label="Giá tháng (VND)"
+            name="pricemonth"
+            rules={[
+              { required: true, message: 'Vui lòng nhập giá tháng' },
+              { pattern: /^[0-9]+$/, message: 'Vui lòng nhập số' }
+            ]}
           >
             <Input />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Lưu
             </Button>
           </Form.Item>

@@ -1,12 +1,25 @@
+import { useEffect, useState } from "react";
 import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
 import { Col, Row } from "antd";
 import { Link } from "react-router";
 import { formatTimeAgo } from "../../Utils/dateUtil";
-const FeaturedPost = ({ item }) => {
+import slugify from "slugify";
 
-    return (
+const FeaturedPost = ({ item }) => {
+  const [landlord, setLandlord] = useState(null);
+
+  useEffect(() => {
+    if (item.landlordId) {
+      fetch(`http://localhost:5000/api/users/user/${item.landlordId}`)
+        .then((res) => res.json())
+        .then((data) => setLandlord(data))
+        .catch((error) => console.error("Lỗi lấy dữ liệu chủ nhà:", error));
+    }
+  }, [item.landlordId]);
+
+  return (
     <div className="roomCard mb-7">
-      <Link to={`/phong-tro/${item.title}`}>
+      <Link to={`/${slugify(item?.title, { lower: true, locale: "vi" })}`}>
         <div className="border-gray-200 border rounded-t-lg">
           <Row>
             <Col className="pr-2" xs={24} sm={24} md={12} lg={12}>
@@ -14,12 +27,8 @@ const FeaturedPost = ({ item }) => {
                 <Col span={14}>
                   <img
                     alt={item.title}
-                    src={item.images[0].url}
-                    style={{
-                      height: "210px",
-                      objectFit: "cover",
-                      paddingRight: "1px",
-                    }}
+                    src={item.images[0]}
+                    style={{ height: "210px", width: "100%", objectFit: "cover", paddingRight: "1px" }}
                     className="rounded-tl-lg"
                   />
                 </Col>
@@ -27,61 +36,38 @@ const FeaturedPost = ({ item }) => {
                   <Row>
                     <img
                       alt={item.title}
-                      src={item.images[1].url}
-                      style={{
-                        height: "120px",
-                        objectFit: "cover",
-                        padding: "0 0 1px 1px",
-                      }}
+                      src={item.images[1]}
+                      style={{ height: "120px",width: "100%", objectFit: "cover", padding: "0 0 1px 1px" }}
                     />
                   </Row>
                   <Row>
                     <Col span={12}>
                       <img
                         alt={item.title}
-                        src={item.images[2].url}
-                        style={{
-                          height: "90px",
-                          objectFit: "cover",
-                          padding: "1px 1px 0 1px",
-                        }}
+                        src={item.images[2]}
+                        style={{ height: "90px",width: "100%", objectFit: "cover", padding: "1px 1px 0 1px" }}
                       />
                     </Col>
                     <Col span={12}>
                       <img
                         alt={item.title}
-                        src={item.images[3].url}
-                        style={{
-                          height: "90px",
-                          objectFit: "cover",
-                          padding: "1px 0 0 1px",
-                        }}
+                        src={item.images[3]}
+                        style={{ height: "90px",width: "100%", objectFit: "cover", padding: "1px 0 0 1px" }}
                       />
                     </Col>
                   </Row>
                 </Col>
               </Row>
             </Col>
-            <Col
-              className="p-3 text-black"
-              xs={24}
-              sm={24}
-              md={12}
-              lg={12}
-            >
+            <Col className="p-3 text-black" xs={24} sm={24} md={12} lg={12}>
               <h1 className="uppercase font-bold text-base mb-2 text-orange-600 two-line-text">
                 {item.title}
               </h1>
-              <p className="text-base text-red-500 font-bold inline">
-                {item.price}
-              </p>
-              <p className="text-base text-blue-500 font-bold inline ml-10">
-                {item.acreage} m<sup>2</sup>
-              </p>
+              <p className="text-base text-red-500 font-bold inline">{item.price.toLocaleString("vi-VN")} VND</p>
+              <p className="text-base text-blue-500 font-bold inline ml-10">{item.area} m<sup>2</sup></p>
               <p className="text-sm mb-2 mt-1">⭐️⭐️⭐️⭐️</p>
               <p className="text-sm mb-2">
-                <EnvironmentOutlined /> {item.location.ward},{" "}
-                {item.location.city}
+                <EnvironmentOutlined /> {item.location.district}, {item.location.province}
               </p>
               <p className="text-sm two-line-text text-gray-700">{item.description}</p>
             </Col>
@@ -89,23 +75,24 @@ const FeaturedPost = ({ item }) => {
         </div>
       </Link>
       <div className="border-gray-200 border rounded-b-lg flex items-center justify-between p-3">
-        <div className=" flex items-center">
-          <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
-            <img src={item.host.avatar} className="w-7 rounded-3xl"></img>
-          </div>
-          <div className="ml-3 text-sm text-black leading-4">
-            <p className="font-bold">{item.host.name}</p>
-            <p className="text-gray-400">Đăng {formatTimeAgo(item.createdAt)}</p>
-          </div>
+        <div className="flex items-center">
+          {landlord && (
+            <>
+              <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
+                <img src={landlord?.avatar || "./src/assets/defaul-avt.png"}  className="w-7 rounded-3xl" alt="Avatar" />
+              </div>
+              <div className="ml-3 text-sm text-black leading-4">
+                <p className="font-bold">{landlord.name}</p>
+                <p className="text-gray-400">Đăng {formatTimeAgo(item.createdAt)}</p>
+              </div>
+            </>
+          )}
         </div>
-        <a
-          target="_blank"
-          rel="nofollow"
-          href={`tel:${item.host.phone}`}
-          className=" host-phone text-sm"
-        >
-          <PhoneOutlined /> {item.host.phone}
-        </a>
+        {landlord && (
+          <a target="_blank" rel="nofollow" href={`tel:${landlord.phone}`} className="host-phone text-sm">
+            <PhoneOutlined /> {landlord.phone}
+          </a>
+        )}
       </div>
     </div>
   );
