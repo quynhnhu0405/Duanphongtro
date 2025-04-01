@@ -289,7 +289,7 @@ const AccountManagementPage = () => {
     <div style={{ padding: 24 }}>
         <div style={{ marginBottom: 16, display: 'flex', gap: 16 }}>
           <Input
-            placeholder="Tìm kiếm theo tên, email, số điện thoại"
+            placeholder="Tìm kiếm theo tên, số điện thoại"
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => handleSearch(e.target.value)}
