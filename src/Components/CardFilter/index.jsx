@@ -1,7 +1,49 @@
 import { RightOutlined } from "@ant-design/icons";
 import { Card } from "antd";
+import { useLocation, useNavigate } from "react-router";
 
 const FilterCard = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Helper function to build and navigate to URL with filters
+  const navigateWithFilter = (params) => {
+    // Get current path
+    let path = location.pathname;
+    if (path === "/" || !path) {
+      // If on homepage, default to phong-tro
+      path = "/phong-tro";
+    }
+
+    // Create search params
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      searchParams.append(key, value);
+    });
+
+    // Navigate to filtered page
+    navigate({
+      pathname: path,
+      search: searchParams.toString(),
+    });
+  };
+
+  // Apply price filter
+  const applyPriceFilter = (min, max) => {
+    const params = {};
+    if (min !== null) params.priceMin = min;
+    if (max !== null) params.priceMax = max;
+    navigateWithFilter(params);
+  };
+
+  // Apply area filter
+  const applyAreaFilter = (min, max) => {
+    const params = {};
+    if (min !== null) params.areaMin = min;
+    if (max !== null) params.areaMax = max;
+    navigateWithFilter(params);
+  };
+
   return (
     <div className="filter-card">
       <Card title="Xem theo khoảng giá">
@@ -14,7 +56,11 @@ const FilterCard = () => {
           }}
         >
           <li className="col-6">
-            <a className="text-black" href="/gia_den=1000000">
+            <a
+              className="text-black"
+              onClick={() => applyPriceFilter(0, 1000000)}
+              style={{ cursor: "pointer" }}
+            >
               <RightOutlined className="icon" />
               Dưới 1 triệu
             </a>
@@ -22,7 +68,8 @@ const FilterCard = () => {
           <li className="col-6">
             <a
               className="text-black"
-              href="/gia_tu=1000000&amp;gia_den=2000000"
+              onClick={() => applyPriceFilter(1000000, 2000000)}
+              style={{ cursor: "pointer" }}
             >
               <RightOutlined className="icon" />
               Từ 1 - 2 triệu
@@ -31,7 +78,8 @@ const FilterCard = () => {
           <li className="col-6">
             <a
               className="text-black"
-              href="/gia_tu=2000000&amp;gia_den=3000000"
+              onClick={() => applyPriceFilter(2000000, 3000000)}
+              style={{ cursor: "pointer" }}
             >
               <RightOutlined className="icon" />
               Từ 2 - 3 triệu
@@ -40,7 +88,8 @@ const FilterCard = () => {
           <li className="col-6">
             <a
               className="text-black"
-              href="/gia_tu=3000000&amp;gia_den=5000000"
+              onClick={() => applyPriceFilter(3000000, 5000000)}
+              style={{ cursor: "pointer" }}
             >
               <RightOutlined className="icon" />
               Từ 3 - 5 triệu
@@ -49,7 +98,8 @@ const FilterCard = () => {
           <li className="col-6">
             <a
               className="text-black"
-              href="/gia_tu=5000000&amp;gia_den=7000000"
+              onClick={() => applyPriceFilter(5000000, 7000000)}
+              style={{ cursor: "pointer" }}
             >
               <RightOutlined className="icon" />
               Từ 5 - 7 triệu
@@ -58,7 +108,8 @@ const FilterCard = () => {
           <li className="col-6">
             <a
               className="text-black"
-              href="/gia_tu=7000000&amp;gia_den=10000000"
+              onClick={() => applyPriceFilter(7000000, 10000000)}
+              style={{ cursor: "pointer" }}
             >
               <RightOutlined className="icon" />
               Từ 7 - 10 triệu
@@ -67,14 +118,19 @@ const FilterCard = () => {
           <li className="col-6">
             <a
               className="text-black"
-              href="/gia_tu=10000000&amp;gia_den=15000000"
+              onClick={() => applyPriceFilter(10000000, 15000000)}
+              style={{ cursor: "pointer" }}
             >
               <RightOutlined className="icon" />
               Từ 10 - 15 triệu
             </a>
           </li>
           <li className="col-6">
-            <a className="text-black" href="/gia_tu=15000000">
+            <a
+              className="text-black"
+              onClick={() => applyPriceFilter(15000000, null)}
+              style={{ cursor: "pointer" }}
+            >
               <RightOutlined className="icon" />
               Trên 15 triệu
             </a>
@@ -92,7 +148,11 @@ const FilterCard = () => {
             }}
           >
             <li className="col-6">
-              <a className="text-black" href="/dien_tich_den=20">
+              <a
+                className="text-black"
+                onClick={() => applyAreaFilter(0, 20)}
+                style={{ cursor: "pointer" }}
+              >
                 <RightOutlined className="icon" />
                 Dưới 20 m<sup>2</sup>
               </a>
@@ -100,7 +160,8 @@ const FilterCard = () => {
             <li className="col-6">
               <a
                 className="text-black"
-                href="/dien_tich_tu=20&amp;dien_tich_den=30"
+                onClick={() => applyAreaFilter(20, 30)}
+                style={{ cursor: "pointer" }}
               >
                 <RightOutlined className="icon" />
                 Từ 20 - 30m<sup>2</sup>
@@ -109,7 +170,8 @@ const FilterCard = () => {
             <li className="col-6">
               <a
                 className="text-black"
-                href="/dien_tich_tu=30&amp;dien_tich_den=50"
+                onClick={() => applyAreaFilter(30, 50)}
+                style={{ cursor: "pointer" }}
               >
                 <RightOutlined className="icon" />
                 Từ 30 - 50m<sup>2</sup>
@@ -118,7 +180,8 @@ const FilterCard = () => {
             <li className="col-6">
               <a
                 className="text-black"
-                href="/dien_tich_tu=50&amp;dien_tich_den=70"
+                onClick={() => applyAreaFilter(50, 70)}
+                style={{ cursor: "pointer" }}
               >
                 <RightOutlined className="icon" />
                 Từ 50 - 70m<sup>2</sup>
@@ -127,14 +190,19 @@ const FilterCard = () => {
             <li className="col-6">
               <a
                 className="text-black"
-                href="/dien_tich_tu=70&amp;dien_tich_den=90"
+                onClick={() => applyAreaFilter(70, 90)}
+                style={{ cursor: "pointer" }}
               >
                 <RightOutlined className="icon" />
                 Từ 70 - 90m<sup>2</sup>
               </a>
             </li>
             <li className="col-6">
-              <a className="text-black" href="/dien_tich_tu=90">
+              <a
+                className="text-black"
+                onClick={() => applyAreaFilter(90, null)}
+                style={{ cursor: "pointer" }}
+              >
                 <RightOutlined className="icon" />
                 Trên 90m<sup>2</sup>
               </a>

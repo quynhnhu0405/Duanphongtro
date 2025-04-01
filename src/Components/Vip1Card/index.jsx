@@ -12,12 +12,14 @@ const Vip1Card = ({ item }) => {
       fetch(`http://localhost:5000/api/users/user/${item.landlordId}`)
         .then((res) => res.json())
         .then((data) => setLandlord(data))
-        .catch((error) => console.error("Lỗi lấy dữ liệu chủ nhà:", error))
+        .catch((error) => console.error("Lỗi lấy dữ liệu chủ nhà:", error));
     }
   }, [item.landlordId]);
   return (
     <div className="roomCard mb-7">
-      <Link to={`/${slugify(item?.title, { lower: true, locale: "vi" })}`}>
+      <Link
+        to={`/chi-tiet/${slugify(item?._id, { lower: true, locale: "vi" })}`}
+      >
         <div className="border-gray-200 border rounded-t-lg">
           <Row>
             <Col className="pr-2" xs={24} sm={24} md={10} lg={10}>

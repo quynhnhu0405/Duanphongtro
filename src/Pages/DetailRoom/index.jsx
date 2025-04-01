@@ -4,6 +4,9 @@ import HeaderTitle from "./Components/HeaderTitle";
 import DescriptionRoom from "./Components/Descriptions";
 import Extend from "./Components/Extend";
 import Note from "./Components/Note";
+import { useParams } from "react-router";
+import { postService } from "../../Utils/api";
+import { useEffect, useState } from "react";
 
 const item = {
   id: 1,
@@ -112,15 +115,25 @@ const item = {
   ],
 };
 const DetailRoom = () => {
+  const { id } = useParams();
+  const [post, setPost] = useState({});
+  const fetchPost = () => {
+    postService.getById(id).then((res) => {
+      setPost(res.data);
+    });
+  };
+  useEffect(() => {
+    fetchPost();
+  }, []);
   return (
     <div>
       <div className="braekcrumb"></div>
       <Card className="bg-white p-7  ">
-        <Carousels item={item} />
-        <HeaderTitle item={item} />
-        <DescriptionRoom item={item} />
-        <Extend room={item}/>
-        <Note/>
+        <Carousels item={post} />
+        <HeaderTitle item={post} />
+        <DescriptionRoom item={post} />
+        <Extend room={post} />
+        <Note />
       </Card>
     </div>
   );

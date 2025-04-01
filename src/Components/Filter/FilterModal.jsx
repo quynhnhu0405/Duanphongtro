@@ -25,13 +25,23 @@ export default function FilterModal({
   setIsAcreage,
   isCharacteristics,
   setIsCharacteristics,
+  onOk,
 }) {
+  const handleOk = () => {
+    if (onOk) {
+      onOk();
+    } else {
+      setFillerVisible(false);
+    }
+  };
+
   return (
     <Modal
       title="Bộ lọc"
       className="modal-filter"
       open={isFilterVisible}
       onCancel={() => setFillerVisible(false)}
+      onOk={handleOk}
       okText="Áp dụng"
       cancelText="Hủy"
     >
@@ -121,9 +131,15 @@ export default function FilterModal({
             type={
               isCharacteristics.includes(utility.name) ? "primary" : "default"
             }
-            onClick={() =>
-              setIsCharacteristics((prev) => [...prev, utility.name])
-            }
+            onClick={() => {
+              if (isCharacteristics.includes(utility.name)) {
+                setIsCharacteristics((prev) =>
+                  prev.filter((name) => name !== utility.name)
+                );
+              } else {
+                setIsCharacteristics((prev) => [...prev, utility.name]);
+              }
+            }}
           >
             {utility.name}
           </Button>
