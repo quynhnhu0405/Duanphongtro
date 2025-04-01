@@ -1,5 +1,5 @@
 const DescriptionRoom = ({ item }) => {
-  const description = item?.descriptions
+  const description = item?.description
     ?.split("\n")
     .map((line) => line.trim())
     .filter((line) => line !== "");

@@ -10,10 +10,7 @@ const Carousels = ({ item }) => {
       >
         {item?.images?.map((image, index) => (
           <div key={index}>
-            <Image
-              src={image.url}
-              style={{ width: "auto", maxHeight: "400px" }}
-            />
+            <Image src={image} style={{ width: "auto", maxHeight: "400px" }} />
           </div>
         ))}
       </Carousel>
