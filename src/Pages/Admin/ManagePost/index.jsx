@@ -257,6 +257,7 @@ const PostManagementPage = () => {
         rowKey="_id"
         pagination={{ pageSize: 10 }}
         loading={loading}
+        scroll={{ x: 1200 }}
       />
 
       {/* Modal xem chi tiết */}

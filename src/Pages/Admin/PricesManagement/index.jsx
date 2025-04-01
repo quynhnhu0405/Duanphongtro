@@ -18,7 +18,6 @@ const PriceManagementPage = () => {
     try {
       setLoading(true);
       const response = await axios.get('http://localhost:5000/api/packages');
-      // Thêm key cho mỗi item nếu chưa có
       const dataWithKeys = response.data.map(item => ({
         ...item,
         key: item._id || Math.random().toString(36).substr(2, 9)

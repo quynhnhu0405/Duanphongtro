@@ -39,7 +39,6 @@ const PaymentManagementPage = () => {
       console.error(error);
     }
   };
-
   const openModal = (payment) => {
     setCurrentPayment(payment);
     setStatus(payment.status);
@@ -117,7 +116,7 @@ const PaymentManagementPage = () => {
 
   return (
     <div style={{ padding: '24px' }}>
-      <Table columns={columns} dataSource={payments} rowKey="_id" loading={loading} />
+      <Table columns={columns} dataSource={payments} pagination={{ pageSize: 10 }} rowKey="_id" loading={loading} scroll={{ x: 1200 }} />
 
       <Modal
         title="Cập nhật trạng thái thanh toán"

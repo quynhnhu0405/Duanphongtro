@@ -331,9 +331,7 @@ const AccountManagementPage = () => {
           columns={columns}
           rowKey="_id"
           pagination={{ 
-            pageSize: 10,
-            showSizeChanger: true,
-            pageSizeOptions: ['5', '10', '20', '50']
+            pageSize: 10
           }}
           loading={loading}
           scroll={{ x: 1200 }}
