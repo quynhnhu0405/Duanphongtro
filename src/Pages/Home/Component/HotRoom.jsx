@@ -3,14 +3,11 @@ import ProductItem from '../../../Components/ProductCard'
 import { Link } from 'react-router'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react';
+import { postService } from '../../../Utils/api';
 const HotRoom = () => {
   const [room, setRoom] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/posts")
-    .then(res => res.json())
-    .then(data => {
-      setRoom(data)})
-    .catch(err => console.log(err));
+    postService.getMotelRooms().then(res => setRoom(res.data)).catch(err => console.log(err));
   },[])
   return (
     <div className="bg-white p-10 rounded-3xl list-room">
