@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Input, Select, Button, Table, Tag, Dropdown, Menu, Popconfirm, message, Modal, Form } from 'antd';
-import { SearchOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { Input, Button, Table, Dropdown, Menu, message, Modal, Form } from 'antd';
+import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
 import axios from 'axios';
-
-
-const { Option } = Select;
 
 const CategoryManagementPage = () => {
   const [searchText, setSearchText] = useState('');
@@ -74,26 +71,8 @@ const CategoryManagementPage = () => {
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-    },
-    {
-      title: 'Thao tác',
-      key: 'actions',
-      render: (_, record) => (
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="edit" onClick={() => showModal(record)}>
-                Chỉnh sửa
-              </Menu.Item>
-            </Menu>
-          }
-          trigger={['click']}
-        >
-          <Button type="text" icon={<MoreOutlined />} />
-        </Dropdown>
-      ),
+      dataIndex: 'createAt',
+      key: 'createAt',
     },
   ];
 
@@ -122,7 +101,8 @@ const CategoryManagementPage = () => {
         dataSource={filteredCategories}
         columns={columns}
         rowKey="id"
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 10 }}
+        scroll={{ x: 1200 }}
       />
 
       {/* Modal thêm/chỉnh sửa danh mục */}

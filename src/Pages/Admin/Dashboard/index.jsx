@@ -54,18 +54,19 @@ const DashboardPage = () => {
       });
   }, []);
   useEffect(() => {
-    axios.get("http://localhost:5000/api/categories")
-      .then(res => {
-        const formattedData = res.data.map(item => ({
+    axios
+      .get("http://localhost:5000/api/categories")
+      .then((res) => {
+        const formattedData = res.data.map((item) => ({
           ...item,
-          totalRevenue: new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND'
-          }).format(item.totalRevenue)
+          totalRevenue: new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(item.totalRevenue),
         }));
         setRevenueByCategory(formattedData);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, []);
   const quickStats = [
     {
@@ -106,25 +107,31 @@ const DashboardPage = () => {
   }, []);
   const [latestPosts, setLatestPosts] = useState([]);
 
-useEffect(() => {
-  const fetchLatestPosts = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/posts/latest-posts');
-      setLatestPosts(response.data);
-    } catch (error) {
-      console.error('Error fetching latest posts:', error);
-    }
-  };
+  useEffect(() => {
+    const fetchLatestPosts = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/posts/latest-posts"
+        );
+        setLatestPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching latest posts:", error);
+      }
+    };
 
-  fetchLatestPosts();
-}, []);
+    fetchLatestPosts();
+  }, []);
   const postColumns = [
     {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
       render: (text, record) => (
-        <a href={`/posts/${record._id}`} target="_blank" rel="noopener noreferrer">
+        <a
+          href={`/posts/${record._id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {text}
         </a>
       ),
@@ -133,39 +140,43 @@ useEffect(() => {
       title: "Ngày đăng",
       dataIndex: "createdAt",
       key: "createdAt",
-      render: (date) => new Date(date).toLocaleDateString('vi-VN'),
+      render: (date) => new Date(date).toLocaleDateString("vi-VN"),
     },
     {
       title: "Danh mục",
       key: "category",
-      render: (_, record) => record.category?.name || 'Không xác định',
+      render: (_, record) => record.category?.name || "Không xác định",
     },
     {
       title: "Người đăng",
       key: "landlord",
-      render: (_, record) => record.landlordId?.name || 'Không xác định',
+      render: (_, record) => record.landlordId?.name || "Không xác định",
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       render: (status, record) => {
-              const actualStatus =  record.status;
-              const colorMap = {
-                available: 'green',
-                expired: 'red',
-                waiting: 'orange',
-                rejected: 'gray'
-              };
-              return (
-                <Tag color={colorMap[actualStatus]}>
-                  {actualStatus === 'available' ? 'Đang hiển thị' : 
-                   actualStatus === 'expired' ? 'Hết hạn' : 
-                   actualStatus === 'waiting' ? 'Chờ duyệt' : 'Không duyệt'}
-                </Tag>
-              );
-            }
-    }
+        const actualStatus = record.status;
+        const colorMap = {
+          available: "green",
+          expired: "red",
+          waiting: "orange",
+          rejected: "gray",
+        };
+        return (
+          <Tag color={colorMap[actualStatus]}>
+            {actualStatus === "available"
+              ? "Đang hiển thị"
+              : actualStatus === "expired"
+              ? "Hết hạn"
+              : actualStatus === "waiting"
+              ? "Chờ duyệt"
+              : "Không duyệt"}
+          </Tag>
+        );
+      },
+    },
   ];
 
   const revenueColumns = [
@@ -194,15 +205,19 @@ useEffect(() => {
 
       <Card
         title="Doanh thu 6 tháng gần nhất"
-        className="!mt-9 shadow-lg rounded-lg"
+        className="!mt-9 shadow-lg rounded-lg" // Removed pl-10 from Card
       >
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={revenueData}>
+          <LineChart
+            data={revenueData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 20 }} // Added margin to provide space for labels
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis
-              dataKey="month"
+              dataKey="month" // or use "label" if you've formatted your data on the backend/front-end
               tick={{ fill: "#666" }}
               axisLine={{ stroke: "#d9d9d9" }}
+              padding={{ left: 10, right: 10 }} // Add padding so labels aren't clipped
             />
             <YAxis
               tickFormatter={(value) =>

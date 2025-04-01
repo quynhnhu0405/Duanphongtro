@@ -17,52 +17,22 @@ const PostManagementPage = () => {
 
 
   // Fetch posts from API
-  const checkPostExpiry = (post) => {
-    const now = dayjs();
-    const expiryDate = dayjs(post.expiryDate);
-    return now.isAfter(expiryDate) ? 'expired' : post.status;
-  };
-
-  // Fetch posts từ API
   const fetchPosts = async () => {
     setLoading(true);
     try {
       const response = await axios.get('http://localhost:5000/api/posts');
-      
-      // Kiểm tra và xử lý response.data
-      const postsData = Array.isArray(response?.data) ? response.data : [];
-      
-      // Cập nhật trạng thái bài đăng
-      const postsWithUpdatedStatus = postsData.map(post => ({
-        ...post,
-        status: checkPostExpiry(post)
-      }));
-      
-      setPosts(postsWithUpdatedStatus);
+      setPosts(response.data);
     } catch (error) {
-      console.error('Error fetching posts:', error);
       message.error('Không thể tải danh sách bài đăng');
+      console.error('Error fetching posts:', error);
     } finally {
       setLoading(false);
     }
   };
-  
-  // Gọi API kiểm tra bài đăng hết hạn khi component mount
+
   useEffect(() => {
     fetchPosts();
-    
-    // Kiểm tra mỗi giờ
-    const interval = setInterval(() => {
-      axios.patch('http://localhost:5000/api/posts/check-expired-posts')
-        .then(() => fetchPosts()) // Refresh data sau khi kiểm tra
-        .catch(error => {
-          console.error('Error checking expired posts:', error);
-          message.error('Cập nhật trạng thái thất bại');
-        });
-    }, 60 * 60 * 1000); // 1 giờ
-    
-    return () => clearInterval(interval);
-  }, []); // Empty dependency array
+  }, []);
   const fetchLandlord = async (landlordId) => {
     try {
       // Kiểm tra nếu đã fetch thông tin này rồi
@@ -177,8 +147,7 @@ const PostManagementPage = () => {
     {
       title: 'Trạng thái',
       dataIndex: 'status',
-      render: (status, record) => {
-        const actualStatus = checkPostExpiry(record);
+      render: (status) => {
         const colorMap = {
           available: 'green',
           expired: 'red',
@@ -186,10 +155,10 @@ const PostManagementPage = () => {
           rejected: 'gray'
         };
         return (
-          <Tag color={colorMap[actualStatus]}>
-            {actualStatus === 'available' ? 'Đang hiển thị' : 
-             actualStatus === 'expired' ? 'Hết hạn' : 
-             actualStatus === 'waiting' ? 'Chờ duyệt' : 'Không duyệt'}
+          <Tag color={colorMap[status]}>
+            {status === 'available' ? 'Đang hiển thị' : 
+             status === 'expired' ? 'Hết hạn' : 
+             status === 'waiting' ? 'Chờ duyệt' : 'Không duyệt'}
           </Tag>
         );
       }
@@ -288,6 +257,7 @@ const PostManagementPage = () => {
         rowKey="_id"
         pagination={{ pageSize: 10 }}
         loading={loading}
+        scroll={{ x: 1200 }}
       />
 
       {/* Modal xem chi tiết */}

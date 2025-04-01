@@ -11,7 +11,7 @@ import {
   TagsOutlined,
   EuroCircleOutlined,
 } from '@ant-design/icons';
-import { Link, Outlet, useLocation, useMatch } from 'react-router';
+import { Link, Outlet, useLocation, useMatch, useNavigate } from 'react-router';
 
 const { Header, Content, Sider } = Layout;
 
@@ -22,6 +22,7 @@ const AdminLayout = () => {
   const matchUsers = useMatch('/admin/users');
   const matchCategories = useMatch('/admin/categories');
   const matchPrice = useMatch('/admin/prices');
+  const nav = useNavigate();
   const avatarMenu = (
     <Menu>
       <Menu.Item key="logout" icon={<LogoutOutlined />}>Đăng xuất</Menu.Item>
@@ -59,8 +60,8 @@ const AdminLayout = () => {
   return (
     <Layout className="flex admin-layout ">
       <Sider collapsible className="bg-gray-900 !text-white !w-64 !h-screen !fixed !top-0 !bottom-0 !p-0">
-        <div className="flex items-center justify-center p-4">
-          <img src="../../src/assets/logo.png" alt="Logo" className="h-10" />
+        <div className="flex items-center justify-center p-4 " >
+          <img src="../../src/assets/logo.png" alt="Logo" onClick={() => nav('/')} className="h-10" />
         </div>
         <Menu
           theme="dark"
