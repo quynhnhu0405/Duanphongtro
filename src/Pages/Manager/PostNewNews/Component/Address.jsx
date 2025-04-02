@@ -1,7 +1,7 @@
 import { Card, Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
 
-const Address = ({ onValidate }) => {
+const Address = ({ onValidate, onAddressChange }) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -33,6 +33,7 @@ const Address = ({ onValidate }) => {
   const handleProvinceChange = (e) => {
     const selectedProvinceCode = parseInt(e.target.value);
     const province = provinces.find((p) => p.code === selectedProvinceCode);
+    onAddressChange({ province: province.name });
     setSelectedProvince(province);
     setDistricts(province?.districts || []);
     setSelectedDistrict(null);
@@ -50,6 +51,10 @@ const Address = ({ onValidate }) => {
     setSelectedWard(null);
     setStreet("");
     updateButtonText(district?.name, selectedProvince?.name);
+    onAddressChange({
+      province: selectedProvince.name,
+      district: district.name,
+    });
   };
 
   const handleWardChange = (e) => {
@@ -57,7 +62,16 @@ const Address = ({ onValidate }) => {
     const ward = wards.find((w) => w.code === selectedWardCode);
     setSelectedWard(ward);
     setStreet("");
-    updateButtonText(ward?.name, selectedDistrict?.name, selectedProvince?.name);
+    updateButtonText(
+      ward?.name,
+      selectedDistrict?.name,
+      selectedProvince?.name
+    );
+    onAddressChange({
+      province: selectedProvince.name,
+      district: selectedDistrict.name,
+      ward: ward.name,
+    });
   };
 
   const handleStreetChange = (e) => {
@@ -69,15 +83,33 @@ const Address = ({ onValidate }) => {
       selectedDistrict?.name,
       selectedProvince?.name
     );
+    onAddressChange({
+      province: selectedProvince.name,
+      district: selectedDistrict.name,
+      ward: selectedWard.name,
+      street: streetName,
+    });
   };
 
-  const updateButtonText = (street = "", ward = "", district = "", province = "") => {
+  const updateButtonText = (
+    street = "",
+    ward = "",
+    district = "",
+    province = ""
+  ) => {
     const addressParts = [street, ward, district, province].filter(Boolean);
-    setButtonText(addressParts.length > 0 ? addressParts.join(", ") : "Địa chỉ");
+    setButtonText(
+      addressParts.length > 0 ? addressParts.join(", ") : "Địa chỉ"
+    );
   };
 
   const validateAddress = () => {
-    if (!selectedProvince || !selectedDistrict || !selectedWard || !street.trim()) {
+    if (
+      !selectedProvince ||
+      !selectedDistrict ||
+      !selectedWard ||
+      !street.trim()
+    ) {
       return false;
     }
     return true;
@@ -87,7 +119,7 @@ const Address = ({ onValidate }) => {
     if (onValidate) {
       onValidate(validateAddress());
     }
-  }, [selectedProvince, selectedDistrict, selectedWard, street]);  
+  }, [selectedProvince, selectedDistrict, selectedWard, street]);
 
   return (
     <div className="!mb-6">
@@ -95,7 +127,9 @@ const Address = ({ onValidate }) => {
         <div className="text-xl font-black mb-3">Khu vực</div>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12}>
-            <label className="font-medium">Tỉnh/Thành phố <span className="text-red-500">(*)</span></label>
+            <label className="font-medium">
+              Tỉnh/Thành phố <span className="text-red-500">(*)</span>
+            </label>
             <select
               className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
               onChange={handleProvinceChange}
@@ -110,7 +144,9 @@ const Address = ({ onValidate }) => {
             </select>
           </Col>
           <Col xs={24} sm={12}>
-            <label className="font-medium">Quận/Huyện <span className="text-red-500">(*)</span></label>
+            <label className="font-medium">
+              Quận/Huyện <span className="text-red-500">(*)</span>
+            </label>
             <select
               className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
               onChange={handleDistrictChange}
@@ -126,7 +162,9 @@ const Address = ({ onValidate }) => {
             </select>
           </Col>
           <Col xs={24} sm={12}>
-            <label className="font-medium">Phường/Xã <span className="text-red-500">(*)</span></label>
+            <label className="font-medium">
+              Phường/Xã <span className="text-red-500">(*)</span>
+            </label>
             <select
               className="p-3 mt-2 w-full border border-gray-300 rounded-lg"
               onChange={handleWardChange}
@@ -142,7 +180,9 @@ const Address = ({ onValidate }) => {
             </select>
           </Col>
           <Col xs={24} sm={12}>
-            <label className="font-medium">Địa chỉ cụ thể <span className="text-red-500">(*)</span></label>
+            <label className="font-medium">
+              Địa chỉ cụ thể <span className="text-red-500">(*)</span>
+            </label>
             <input
               type="text"
               className="p-3 mt-2 w-full border border-gray-300 rounded-lg"

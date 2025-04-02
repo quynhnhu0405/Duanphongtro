@@ -1,9 +1,7 @@
 import { Card } from "antd";
 import { useState } from "react";
 
-const ImageUpload = ({ onValidate }) => {
-  const [images, setImages] = useState([]);
-
+const ImageUpload = ({ onValidate, images, setImages }) => {
   const ImgLimit = (files) => {
     if (files.length + images.length > 20) {
       alert("Bạn chỉ được tải lên tối đa 20 ảnh");
@@ -78,7 +76,8 @@ const ImageUpload = ({ onValidate }) => {
             className="hidden"
           />
           <p className="mt-2 text-sm text-gray-500">
-            Tải lên tối đa 20 ảnh, tối thiểu 4 ảnh, dung lượng mỗi ảnh tối đa 10MB
+            Tải lên tối đa 20 ảnh, tối thiểu 4 ảnh, dung lượng mỗi ảnh tối đa
+            10MB
           </p>
         </div>
 

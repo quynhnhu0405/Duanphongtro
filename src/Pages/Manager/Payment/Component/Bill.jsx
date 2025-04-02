@@ -1,13 +1,43 @@
 import { Card } from "antd";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { packageService } from "../../../../Utils/api";
 
-const Bill = ({ selectedPackage, packageType, totalDays, pricePerDay }) => {
-  // Map loại tin đăng
-  const packageMap = {
-    1: "Tin Nổi Bật",
-    2: "Tin VIP 1",
-    3: "Tin VIP 2",
-    4: "Tin Thường",
-  };
+const Bill = ({ selectedPackage, packageType, totalDays }) => {
+  const [packageInfo, setPackageInfo] = useState(null);
+  const [packageData, setPackageData] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    console.log("Package data:", packageData);
+    if (packageData && packageData.length > 0 && selectedPackage) {
+      console.log("Selected package:", selectedPackage, packageType, totalDays);
+      const foundPackage = packageData.find(
+        (pkg) => pkg.level == selectedPackage
+      );
+      console.log("Found package:", foundPackage);
+      setPackageInfo(foundPackage);
+      const priceKey =
+        packageType === "day"
+          ? "priceday"
+          : packageType === "week"
+          ? "priceweek"
+          : "pricemonth";
+      setTotalPrice(foundPackage[priceKey] * parseInt(totalDays));
+    }
+  }, [packageData, selectedPackage, packageType, totalDays]);
+
+  useEffect(() => {
+    const fetchPackageData = async () => {
+      try {
+        const response = await packageService.getAll();
+        console.log("Package data:", response.data);
+        setPackageData(response.data);
+      } catch (error) {
+        console.error("Error fetching package data:", error);
+      }
+    };
+
+    fetchPackageData();
+  }, []);
 
   // Map gói thời gian
   const timePackageMap = {
@@ -15,12 +45,13 @@ const Bill = ({ selectedPackage, packageType, totalDays, pricePerDay }) => {
     week: "Đăng theo tuần",
     month: "Đăng theo tháng",
   };
+
   const calculateExpirationDate = (totalDays) => {
     const today = new Date();
-    const [value, unit] = totalDays.split(" "); 
-  
-    let expirationDate = new Date(today); 
-  
+    const [value, unit] = totalDays.split(" ");
+
+    let expirationDate = new Date(today);
+
     switch (unit) {
       case "ngày":
         expirationDate.setDate(today.getDate() + parseInt(value, 10));
@@ -34,22 +65,18 @@ const Bill = ({ selectedPackage, packageType, totalDays, pricePerDay }) => {
       default:
         expirationDate = today; // Mặc định là ngày và giờ hiện tại
     }
-  
+
     // Định dạng ngày và giờ thành "dd/MM/yyyy HH:mm"
     const day = expirationDate.getDate().toString().padStart(2, "0");
     const month = (expirationDate.getMonth() + 1).toString().padStart(2, "0");
     const year = expirationDate.getFullYear();
     const hours = expirationDate.getHours().toString().padStart(2, "0");
     const minutes = expirationDate.getMinutes().toString().padStart(2, "0");
-  
+
     return `${hours}:${minutes} ${day}/${month}/${year} `;
   };
   // Tính ngày hết hạn
   const expirationDate = calculateExpirationDate(totalDays);
-
-  // Tính tổng tiền
-  const days = parseInt(totalDays);
-  const totalPrice = days * pricePerDay;
 
   return (
     <div className="mr-1 mb-6 sticky top-[150px]">
@@ -59,7 +86,7 @@ const Bill = ({ selectedPackage, packageType, totalDays, pricePerDay }) => {
           <tbody>
             <tr>
               <td>Loại tin:</td>
-              <td>{packageMap[selectedPackage]}</td>
+              <td>{packageInfo ? packageInfo.name : ""}</td>
             </tr>
             <tr>
               <td>Gói thời gian:</td>
@@ -67,7 +94,7 @@ const Bill = ({ selectedPackage, packageType, totalDays, pricePerDay }) => {
             </tr>
             <tr>
               <td>Đơn giá:</td>
-              <td>{pricePerDay.toLocaleString()}₫</td>
+              <td>{(totalPrice / parseInt(totalDays)).toLocaleString()}₫</td>
             </tr>
             <tr>
               <td>Số ngày đăng:</td>

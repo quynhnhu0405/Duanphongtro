@@ -1,8 +1,33 @@
 import { Col } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const Package = ({ packageType, onSelect, onPriceChange }) => {
+const Package = ({ packageType, onSelect, onPriceChange, packageData }) => {
   const [selectedPackage, setSelectedPackage] = useState("");
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    if (packageData && packageData.length > 0) {
+      // Sort packages by their level in descending order (4 to 1)
+      const sortedPackages = [...packageData].sort((a, b) => b.level - a.level);
+      setOptions(sortedPackages);
+
+      // If no package is selected yet, select the first one (typically the lowest tier)
+      if (!selectedPackage && sortedPackages.length > 0) {
+        const lowestTier = sortedPackages[sortedPackages.length - 1];
+        setSelectedPackage(lowestTier.level);
+        onSelect(lowestTier.level);
+
+        // Set the initial price
+        const priceKey =
+          packageType === "day"
+            ? "priceday"
+            : packageType === "week"
+            ? "priceweek"
+            : "pricemonth";
+        onPriceChange(lowestTier[priceKey]);
+      }
+    }
+  }, [packageData, packageType]);
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -10,26 +35,47 @@ const Package = ({ packageType, onSelect, onPriceChange }) => {
       setSelectedPackage(value);
       onSelect(value);
 
-      let price = 0;
-      switch (value) {
-        case "1":
-          price = packageType === "day" ? 30000 : packageType === "week" ? 190000 : 800000;
-          break;
-        case "2":
-          price = packageType === "day" ? 20000 : packageType === "week" ? 133000 : 540000;
-          break;
-        case "3":
-          price = packageType === "day" ? 10000 : packageType === "week" ? 63000 : 240000;
-          break;
-        case "4":
-          price = packageType === "day" ? 2000 : packageType === "week" ? 12000 : 48000;
-          break;
-        default:
-          price = 0;
+      if (packageData && packageData.length > 0) {
+        const selectedPkg = packageData.find((pkg) => pkg.level === value);
+        if (selectedPkg) {
+          let price = 0;
+          switch (packageType) {
+            case "day":
+              price = selectedPkg.priceday;
+              break;
+            case "week":
+              price = selectedPkg.priceweek;
+              break;
+            case "month":
+              price = selectedPkg.pricemonth;
+              break;
+            default:
+              price = 0;
+          }
+          onPriceChange(price);
+        }
       }
-
-      onPriceChange(price);
     }
+  };
+
+  const getFormattedPrice = (pkg) => {
+    if (!pkg) return "";
+
+    const priceKey =
+      packageType === "day"
+        ? "priceday"
+        : packageType === "week"
+        ? "priceweek"
+        : "pricemonth";
+    const price = pkg[priceKey];
+
+    const unit =
+      packageType === "day"
+        ? "ngày"
+        : packageType === "week"
+        ? "tuần"
+        : "tháng";
+    return `(${new Intl.NumberFormat("vi-VN").format(price)}/${unit})`;
   };
 
   return (
@@ -49,38 +95,11 @@ const Package = ({ packageType, onSelect, onPriceChange }) => {
           value={selectedPackage}
           onChange={handleChange}
         >
-          <option value="4">
-            Tin thường{" "}
-            {packageType === "day"
-              ? "(2.000/ngày)"
-              : packageType === "week"
-              ? "(12.000/tuần)"
-              : "(48.000/tháng)"}
-          </option>
-          <option value="3">
-            Tin VIP 2{" "}
-            {packageType === "day"
-              ? "(10.000/ngày)"
-              : packageType === "week"
-              ? "(63.000/tuần)"
-              : "(240.000/tháng)"}
-          </option>
-          <option value="2">
-            Tin VIP 1{" "}
-            {packageType === "day"
-              ? "(20.000/ngày)"
-              : packageType === "week"
-              ? "(133.000/tuần)"
-              : "(540.000/tháng)"}
-          </option>
-          <option value="1">
-            Tin VIP nổi bật{" "}
-            {packageType === "day"
-              ? "(30.000/ngày)"
-              : packageType === "week"
-              ? "(190.000/tuần)"
-              : "(800.000/tháng)"}
-          </option>
+          {options.map((pkg) => (
+            <option key={pkg._id} value={pkg.level}>
+              {pkg.name} {getFormattedPrice(pkg)}
+            </option>
+          ))}
         </select>
       </div>
     </Col>

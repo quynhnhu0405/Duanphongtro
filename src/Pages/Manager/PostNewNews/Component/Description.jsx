@@ -1,83 +1,125 @@
-import { Card } from "antd";
+import { Card, Input, InputNumber } from "antd";
 import { useEffect, useState } from "react";
 
-const Description = ({ onTitleValidate, onDescriptionValidate }) => {
+const { TextArea } = Input;
+
+const Description = ({
+  onDataChange,
+  onTitleValidate,
+  onDescriptionValidate,
+  onPriceValidate,
+  onAreaValidate,
+}) => {
   const [title, setTitle] = useState("");
-  const [titleCount, setTitleCount] = useState(0);
   const [description, setDescription] = useState("");
-  const [descriptionCount, setDescriptionCount] = useState(0);
+  const [price, setPrice] = useState(null);
+  const [area, setArea] = useState(null);
 
-  const handleTitleChange = (e) => {
-    const value = e.target.value;
-    setTitle(value);
-    setTitleCount(value.length);
-  };
-
-  const handleDescriptionChange = (e) => {
-    const value = e.target.value;
-    setDescription(value);
-    setDescriptionCount(value.length);
-  };
-
-  // Kiểm tra hợp lệ từng phần riêng lẻ
-  const validateTitle = () => titleCount >= 30 && titleCount <= 100;
-  const validateDescription = () => descriptionCount >= 50 && descriptionCount <= 5000;
-
-  // Cập nhật state hợp lệ để `PostNew.js` kiểm tra
+  // Validate title
   useEffect(() => {
-    onTitleValidate(validateTitle());
+    const isValid = title.length >= 30 && title.length <= 100;
+    onTitleValidate(isValid);
+
+    if (isValid) {
+      onDataChange("title", title);
+    }
   }, [title]);
 
+  // Validate description
   useEffect(() => {
-    onDescriptionValidate(validateDescription());
+    const isValid = description.length >= 50 && description.length <= 5000;
+    onDescriptionValidate(isValid);
+
+    if (isValid) {
+      onDataChange("description", description);
+    }
   }, [description]);
 
-  return (
-    <div className="!mb-6">
-      <Card className="bg-white w-full rounded-2xl mt-20 shadow-[0_1px_5px_rgba(0,0,0,0.3)] !p-4">
-        <div className="text-xl font-black mb-3">Thông tin mô tả</div>
-        
-        {/* Tiêu đề */}
-        <div>
-          <p className="mb-2">
-            Tiêu đề <span className="text-red-500">(*)</span>
-          </p>
-          <textarea
-            className="w-full border border-gray-300 rounded-2xl p-3 text-[15px]"
-            value={title}
-            onChange={handleTitleChange}
-          />
-          <div className="mt-2 text-sm text-gray-600">
-            {titleCount}/100 (Tối thiểu 30 ký tự, tối đa 100 ký tự)
-          </div>
-          {!validateTitle() && (
-            <div className="mt-2 text-xs text-red-500">
-              Vui lòng nhập từ 30 đến 100 ký tự.
-            </div>
-          )}
-        </div>
+  // Validate price
+  useEffect(() => {
+    const isValid = price && price > 0;
+    onPriceValidate(isValid);
 
-        {/* Nội dung mô tả */}
-        <div className="mt-5">
-          <p className="mb-2">
-            Nội dung mô tả <span className="text-red-500">(*)</span>
-          </p>
-          <textarea
-            className="w-full border border-gray-300 rounded-2xl p-3 h-40 text-[15px]"
-            value={description}
-            onChange={handleDescriptionChange}
-          />
-          <div className="mt-2 text-sm text-gray-600">
-            {descriptionCount}/5000 (Tối thiểu 50 ký tự, tối đa 5000 ký tự)
-          </div>
-          {!validateDescription() && (
-            <div className="mt-2 text-xs text-red-500">
-              Vui lòng nhập từ 50 đến 5000 ký tự.
-            </div>
-          )}
+    if (isValid) {
+      onDataChange("price", price);
+    }
+  }, [price]);
+
+  // Validate area
+  useEffect(() => {
+    const isValid = area && area > 0;
+    onAreaValidate(isValid);
+
+    if (isValid) {
+      onDataChange("area", area);
+    }
+  }, [area]);
+
+  return (
+    <Card className="bg-white w-full rounded-2xl mt-6 shadow-md">
+      <div className="text-xl font-black mb-3">Thông tin mô tả</div>
+
+      <div className="mb-4">
+        <label className="block mb-2 font-medium">
+          Tiêu đề <span className="text-red-500">(*)</span>
+        </label>
+        <Input
+          placeholder="Nhập tiêu đề tin đăng (30-100 ký tự)"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-2"
+        />
+        <div className="text-xs text-gray-500 mt-1">
+          {title.length}/100 ký tự (tối thiểu 30 ký tự)
         </div>
-      </Card>
-    </div>
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 font-medium">
+          Giá cho thuê (VNĐ/tháng) <span className="text-red-500">(*)</span>
+        </label>
+        <InputNumber
+          placeholder="Nhập giá cho thuê"
+          value={price}
+          onChange={(value) => setPrice(value)}
+          className="w-full p-2"
+          min={0}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 font-medium">
+          Diện tích (m²) <span className="text-red-500">(*)</span>
+        </label>
+        <InputNumber
+          placeholder="Nhập diện tích (m²)"
+          value={area}
+          onChange={(value) => setArea(value)}
+          className="w-full p-2"
+          min={0}
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 font-medium">
+          Mô tả <span className="text-red-500">(*)</span>
+        </label>
+        <TextArea
+          placeholder="Nhập mô tả chi tiết (50-5000 ký tự)"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={6}
+          className="w-full p-2"
+        />
+        <div className="text-xs text-gray-500 mt-1">
+          {description.length}/5000 ký tự (tối thiểu 50 ký tự)
+        </div>
+      </div>
+    </Card>
   );
 };
 

@@ -1,14 +1,32 @@
 import { Col } from "antd";
+import { useEffect } from "react";
 
-const PackageDay = ({  setTotalDays, setPricePerDay, selectedPackage, packageType, calculatePrice }) => {
+const PackageDay = ({
+  setTotalDays,
+  setPricePerDay,
+  selectedPackage,
+  packageType,
+  calculatePrice,
+  packageData,
+}) => {
+  // Initial setup
+  useEffect(() => {
+    if (selectedPackage && packageData && packageData.length > 0) {
+      setTotalDays("1 ngày");
+      const price = calculatePrice(selectedPackage, packageType);
+      setPricePerDay(price);
+    }
+  }, [selectedPackage, packageData]);
+
   const handleChange = (e) => {
     const days = parseInt(e.target.value, 10);
     setTotalDays(`${days} ngày`);
 
-    // Tính toán lại giá dựa trên loại tin và gói thời gian
+    // Calculate price based on the package type and level
     const price = calculatePrice(selectedPackage, packageType);
-    setPricePerDay(price);
+    setPricePerDay(price * days);
   };
+
   return (
     <Col lg={8} className="!pl-2">
       <div className="relative">

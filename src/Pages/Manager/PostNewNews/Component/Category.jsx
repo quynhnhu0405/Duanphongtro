@@ -1,54 +1,66 @@
-import { Card, Col, Row } from "antd";
+import { useState, useEffect } from "react";
+import { Card, Radio, Space } from "antd";
+import { categoryService } from "../../../../Utils/api";
 
-const Category = ({ onValidate }) => {
+const Category = ({ onCategoryChange, onValidate }) => {
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-  const handleValidation = () => {
-    const selectElement = document.getElementById("category");
-    if (!selectElement || !selectElement.value) {
-      onValidate(false);
-      return false;
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoading(true);
+        const response = await categoryService.getAll();
+        setCategories(response.data || []);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Call onValidate and onCategoryChange when selection changes
+  useEffect(() => {
+    const isValid = !!selectedCategoryId;
+    onValidate(isValid);
+
+    if (isValid) {
+      const selectedCategory = categories.find(
+        (cat) => cat._id === selectedCategoryId
+      );
+      onCategoryChange({
+        id: selectedCategory._id,
+        name: selectedCategory.name,
+      });
     }
-    onValidate(true);
-    return true;
+  }, [selectedCategoryId, categories]);
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategoryId(e.target.value);
   };
+
   return (
-    <div className="!mb-6 ">
-      <Card className="bg-white w-full rounded-2xl mt-20 shadow-[0_1px_5px_rgba(0,0,0,0.3)] !p-4">
-        <div className="text-xl font-black mb-3">Loại chuyên mục</div>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="mb-2">
-              <label
-                className="form-label mb-1 d-block text-base"
-                htmlFor="loai_chuyen_muc"
-              >
-                Loại chuyên mục <span className="text-red-500">(*)</span>
-              </label>
-              <br />
-              <Row>
-                <Col lg={12} md={12} sm={24} xs={24} className="pr-2">
-                  <select
-                    className="p-3 mt-3 w-full border border-gray-300 rounded-2xl focus:border-black focus:border-1"
-                    id="category"
-                    name="loai_chuyen_muc"
-                    required=""
-                    data-msg-required="Chưa chọn loại chuyên mục"
-                    onChange={handleValidation} 
-                  >
-                    <option value="" selected="">
-                      -- Chọn loại chuyên mục --
-                    </option>
-                    <option value="1">Phòng trọ, nhà trọ</option>
-                    <option value="3">Cho thuê căn hộ</option>
-                    <option value="4">Tìm người ở ghép</option>
-                  </select>
-                </Col>
-              </Row>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </div>
+    <Card className="bg-white w-full rounded-2xl mt-20 shadow-md">
+      <div className="text-xl font-black mb-3">Chọn chuyên mục đăng tin</div>
+      {loading ? (
+        <div>Đang tải danh mục...</div>
+      ) : (
+        <Radio.Group onChange={handleCategoryChange} value={selectedCategoryId}>
+          <Space direction="vertical">
+            {categories.map((category) => (
+              <Radio key={category._id} value={category._id}>
+                {category.name}
+              </Radio>
+            ))}
+          </Space>
+        </Radio.Group>
+      )}
+    </Card>
   );
 };
 
