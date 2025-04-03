@@ -131,7 +131,9 @@ const UserMenu = () => {
       >
         <Space style={{ color: "white" }}>
           <Avatar src="https://random.imagecdn.app/500/150"></Avatar>
-          <span>{user?.name || ""}</span>
+          <div className="w-[90px]">
+            <span className="block w-full truncate">{user?.name || ""}</span>
+          </div>
           <CaretDownOutlined />
         </Space>
       </Popover>

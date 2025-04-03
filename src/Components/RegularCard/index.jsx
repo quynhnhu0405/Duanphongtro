@@ -17,7 +17,7 @@ const RegularCard = ({ item }) => {
   }, [item.landlordId]);
   return (
     <div className="roomCard mb-7">
-      <Link to={`/${slugify(item?.title, { lower: true, locale: "vi" })}`}>
+      <Link to={`/chi-tiet/${slugify(item?._id, { lower: true, locale: "vi" })}`}>
         <div className="border-gray-200 border rounded-t-lg">
           <Row>
             <Col className="pr-2" xs={24} sm={24} md={6} lg={6}>
