@@ -415,7 +415,7 @@ const DefaultHeader = () => {
               <img src="/logo.png" alt="logo" />
             </a>
           </div>
-          <div>
+          <div className="flex justify-center h-10">
             <Input
               prefix={
                 <EnvironmentOutlined
@@ -450,16 +450,15 @@ const DefaultHeader = () => {
               handleConfirm={handleConfirm}
               onCancel={() => setVisible(false)}
             />
-          </div>
-          <div className="filter" style={{ display: "flex" }}>
             <Input.Search
+              className="search-text"
               placeholder="Tìm kiếm theo từ khóa..."
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onSearch={applyFilters}
-              style={{ width: "170px", marginRight: "8px" }}
             />
-            <Button onClick={() => setFillerVisible(true)}>
+          <div className="filter">
+            <Button  onClick={() => setFillerVisible(true)}>
               <FilterOutlined />
               <span>Filter</span>
             </Button>
@@ -489,6 +488,7 @@ const DefaultHeader = () => {
               setIsCharacteristics={setIsCharacteristics}
               onOk={handleApplyFilter}
             />
+            </div>
           </div>
         </div>
         <div className="header-right">

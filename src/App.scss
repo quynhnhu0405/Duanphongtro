@@ -11,17 +11,17 @@ body {
 .user,
 .post {
   margin-right: 10px;
-  font-size: 0.9rem;
+  font-size: 0.9rem !important;
 }
 .filter button,
 .manage,
 .user,
 .post {
-  border-radius: 20px;
+  border-radius: 20px !important;
 }
 .filter button,
 .post {
-  padding: 18px 15px;
+  padding: 18px 15px !important;
 }
 .logo img {
   width: 190px;
@@ -77,7 +77,7 @@ body {
   flex-wrap: wrap;
   margin-bottom: 5px;
   .search {
-    width: 20vw;
+    width: 12vw;
     border-radius: 20px;
   }
 }
@@ -534,5 +534,26 @@ tbody tr:not(:last-child) {
   .ant-layout-sider-trigger
   {
     width: 248px !important;
+  }
+}
+.search-text
+{
+  width: 12vw !important;
+  margin-right: 10px;
+  .ant-input 
+  {
+    padding: 7px 16px;
+    height: 40px;
+    font-size: 15px !important;
+    border-top-left-radius: 30px; 
+    border-bottom-left-radius: 30px; 
+    
+  }
+  .ant-btn 
+  {
+    height: 40px;
+    font-size: 16px !important;
+    border-top-right-radius: 30px; 
+    border-bottom-right-radius: 30px; 
   }
 }
