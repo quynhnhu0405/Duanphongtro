@@ -336,6 +336,13 @@ body {
   border-radius: 50px;
   margin-right: 10px;
 }
+.popover-user
+{
+  .ant-menu-item
+  {
+    padding: 0 !important;
+  }
+}
 .filter-card .icon
 {
    font-size: 8px;

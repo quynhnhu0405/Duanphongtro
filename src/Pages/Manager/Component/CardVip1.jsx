@@ -24,7 +24,7 @@ const CardVip1 = ({ item }) => {
                 <Row>
                   <img
                     alt={item.title}
-                    src={item.images[1]?.url}
+                    src={item.images[1]}
                     style={{
                       height: "105px",
                       objectFit: "cover",
@@ -35,7 +35,7 @@ const CardVip1 = ({ item }) => {
                 <Row>
                   <img
                     alt={item.title}
-                    src={item.images[1]?.url}
+                    src={item.images[2]}
                     style={{
                       height: "105px",
                       objectFit: "cover",
@@ -51,14 +51,14 @@ const CardVip1 = ({ item }) => {
               {item.title}
             </h1>
             <p className="text-base text-red-500 font-bold inline">
-              {item.price}
+              {item.price.toLocaleString("vi-VN")} VND
             </p>
             <p className="text-base text-blue-500 font-bold inline ml-10">
-              {item.acreage}m<sup>2</sup>
+            {item.area}m<sup>2</sup>
             </p>
             <p className="text-sm mb-2 mt-1">⭐️⭐️⭐️</p>
             <p className="text-sm mb-2">
-              <EnvironmentOutlined /> {item.location.ward}, {item.location.city}
+              <EnvironmentOutlined /> {item.location.ward}, {item.location.province}
             </p>
             <p className="text-sm two-line-text text-gray-700">
               {item.description}

@@ -84,7 +84,7 @@ const PaymentManagementPage = () => {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        let color = status === 'completed' ? 'green' : status === 'failed' ? 'red' : 'orange';
+        let color = status === 'completed' ? 'green' : status === 'unpaid' ? 'red' : 'blue';
         return <Tag color={color}>{status.toUpperCase()}</Tag>;
       },
     },
@@ -99,10 +99,10 @@ const PaymentManagementPage = () => {
                 Cập nhật trạng thái
               </Menu.Item>
               <Menu.Item key="complete" onClick={() => handleStatusUpdate(record._id, 'completed')}>
-                Duyệt (Hoàn thành)
+                Xác nhận thanh toán
               </Menu.Item>
-              <Menu.Item key="reject" onClick={() => handleStatusUpdate(record._id, 'failed')}>
-                Không duyệt (Thất bại)
+              <Menu.Item key="reject" onClick={() => handleStatusUpdate(record._id, 'unpaid')}>
+                Chưa thanh toán
               </Menu.Item>
             </Menu>
           }
@@ -142,7 +142,7 @@ const PaymentManagementPage = () => {
               <select value={status} onChange={(e) => setStatus(e.target.value)} style={{ padding: '4px 8px' }}>
                 <option value="pending">Đang chờ</option>
                 <option value="completed">Hoàn thành</option>
-                <option value="failed">Thất bại</option>
+                <option value="failed">Chưa thanh toán</option>
               </select>
             </div>
           </div>

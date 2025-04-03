@@ -43,6 +43,7 @@ export const postService = {
   updatePost: (id, postData) => api.put(`/posts/${id}`, postData),
   searchPosts: (params) => api.get("/posts/search", { params }),
   getLatestPosts: () => api.get("/posts/latest-posts"),
+  getByUserId: (userId) => api.get(`/posts/user/${userId}`),
 };
 
 // Payment services

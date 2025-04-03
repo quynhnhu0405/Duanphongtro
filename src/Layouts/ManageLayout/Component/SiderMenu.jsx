@@ -10,6 +10,7 @@ import {
 import { Avatar, Menu, Drawer, Button } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { useLocation } from "react-router";
+import { useAuth } from "../../../Utils/AuthContext";
 
 const items = [
   {
@@ -42,7 +43,7 @@ const SiderMenu = () => {
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-
+  const { user} = useAuth();
   const checkScreenSize = () => {
     setIsMobile(window.innerWidth <= 1220);
   };
@@ -81,16 +82,10 @@ const SiderMenu = () => {
         >
           <Sider className="manager-sider h-full">
             <div className="border-b border-b-gray-300 p-4 flex items-center">
-              <div className="p-1 border border-gray-400 rounded-full">
-                <Avatar
-                  src="https://random.imagecdn.app/500/150"
-                  className="!w-[60px] !h-[60px]"
-                />
-              </div>
+              <Avatar className="!w-15 !h-15 !p-1 !border !border-gray-300" src={user?.avatar || "/defaul-avt.png"}></Avatar>
               <div className="leading-5 ml-4">
-                <p>Phucs</p>
-                <p>0963767987</p>
-                <p>Mã tài khoản: 123</p>
+                <p>{user?.name}</p>
+                <p>{user?.phone}</p>
               </div>
             </div>
             <Menu mode="vertical" selectedKeys={[location.pathname]}>

@@ -45,20 +45,28 @@ const Category = ({ onCategoryChange, onValidate }) => {
   };
 
   return (
-    <Card className="bg-white w-full rounded-2xl mt-20 shadow-md">
-      <div className="text-xl font-black mb-3">Chọn chuyên mục đăng tin</div>
+    <Card className="bg-white w-full rounded-2xl mt-20 shadow-md !mb-6">
+      <div className="text-xl font-black mb-4">Chọn chuyên mục đăng tin</div>
       {loading ? (
         <div>Đang tải danh mục...</div>
       ) : (
-        <Radio.Group onChange={handleCategoryChange} value={selectedCategoryId}>
-          <Space direction="vertical">
-            {categories.map((category) => (
-              <Radio key={category._id} value={category._id}>
-                {category.name}
-              </Radio>
-            ))}
-          </Space>
-        </Radio.Group>
+          <Radio.Group
+            onChange={handleCategoryChange}
+            value={selectedCategoryId}
+
+          >
+            <Space direction="vertical" >
+                {categories.map((category) => (
+                  <Radio
+                    key={category._id}
+                    value={category._id}
+                    className="!mb-2 !text-base"
+                  >
+                    {category.name}
+                  </Radio>
+                ))}
+            </Space>
+          </Radio.Group>
       )}
     </Card>
   );

@@ -80,32 +80,25 @@ const UserMenu = () => {
       <Popover
         content={
           <div className="w-[350px] p-2 popover-user">
-            <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
-              <div className="w-[50px] h-[50px] p-1 border rounded-4xl">
-                <img
-                  src="https://random.imagecdn.app/500/150"
-                  className="w-full h-full rounded-4xl "
-                />
-              </div>
+            {isAuthenticated() ? (
+              <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
 
-              {isAuthenticated() ? (
-                <>
+                  <Avatar className="!w-15 !h-15 !p-1 !border !border-gray-300" src={user?.avatar || "/defaul-avt.png"}></Avatar>
                   <div className="ml-6  text-black leading-4">
                     <p className="font-bold text-base">{user?.name}</p>
                     <p className="text-gray-600 text-sm">{user?.phone}</p>
                   </div>
-                </>
-              ) : (
-                <span className="hidden sm:inline-block">Tài khoản</span>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div>
+              </div>
+            )}
             <div>
               <Menu>
                 {getItems().map((item) => {
                   if (item.type === "divider") {
                     return <Menu.Divider key={item.key} />;
                   }
-
                   return (
                     <Menu.Item
                       key={item.key}
@@ -130,9 +123,11 @@ const UserMenu = () => {
         onOpenChange={(open) => setOpen(open)}
       >
         <Space style={{ color: "white" }}>
-        <Avatar src={user?.avatar || "/defaul-avt.png"}></Avatar>
-          <div className="w-[90px]">
-            <span className="block w-full truncate">{user?.name || ""}</span>
+          <Avatar src={user?.avatar || "/defaul-avt.png"}></Avatar>
+          <div className="w-[70px]">
+            <span className="block w-full truncate">
+              {user?.name || "Đăng nhập"}
+            </span>
           </div>
           <CaretDownOutlined />
         </Space>
