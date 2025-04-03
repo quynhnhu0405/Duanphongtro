@@ -11,7 +11,6 @@ import { useLocation, useNavigate } from "react-router";
 import User from "./User";
 import { useAuth } from "../../../Utils/AuthContext";
 import { postService } from "../../../Utils/api";
-
 const menuItems = [
   { label: "Trang chủ", key: "/", path: "/" },
   { label: "Phòng trọ", key: "/phong-tro", path: "/phong-tro" },
@@ -413,7 +412,7 @@ const DefaultHeader = () => {
         <div className="header-left">
           <div className="logo">
             <a href="/">
-              <img src="./src/assets/logo.png" alt="logo" />
+              <img src="/logo.png" alt="logo" />
             </a>
           </div>
           <div>
@@ -494,7 +493,7 @@ const DefaultHeader = () => {
         </div>
         <div className="header-right">
           <div>
-            <a className="manage" href="/quan-ly/tin-dang">
+            <a className="manage" href="/quan-ly/danh-sach-tin-dang">
               Quản lý
             </a>
           </div>

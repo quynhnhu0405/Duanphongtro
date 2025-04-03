@@ -41,7 +41,9 @@ const HeaderTitle = ({ item }) => {
           {item?.location?.district}, {item?.location?.province}
         </p>
         <div className="flex mt-3 items-end w-[370px] justify-between mb-4">
-          <p className="text-lg text-green-600 font-black ">{item.price} đ</p>
+          <p className="text-lg text-green-600 font-black">
+          {item.price && !isNaN(item.price) ? item.price.toLocaleString() : "0"} đ
+          </p>
           <span className="w-1 h-1 rounded-4xl bg-gray-400 mb-2"></span>
           <p className="text-sm">
             {item.area} m <sup>2</sup>

@@ -10,10 +10,10 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu, Popover, Space } from "antd";
 import { Link } from "react-router";
-import { useAuth } from "../Utils/AuthContext";
+import { useAuth } from "../../../Utils/AuthContext";
 import { useState } from "react";
 
-const UserMenu = () => {
+const UserMenu1 = () => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
   const getItems = () => {
@@ -130,15 +130,15 @@ const UserMenu = () => {
         onOpenChange={(open) => setOpen(open)}
       >
         <Space style={{ color: "white" }}>
-        <Avatar src={user?.avatar || "/defaul-avt.png"}></Avatar>
+          <Avatar src={user?.avatar || "/defaul-avt.png"}></Avatar>
           <div className="w-[90px]">
-            <span className="block w-full truncate">{user?.name || ""}</span>
+            <span className="block w-full truncate !text-white">{user?.name || ""}</span>
           </div>
-          <CaretDownOutlined />
+          <CaretDownOutlined className="!text-white"/>
         </Space>
       </Popover>
     </div>
   );
 };
 
-export default UserMenu;
+export default UserMenu1;

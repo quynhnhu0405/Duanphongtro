@@ -42,6 +42,7 @@ export const postService = {
   createPost: (postData) => api.post("/posts", postData),
   updatePost: (id, postData) => api.put(`/posts/${id}`, postData),
   searchPosts: (params) => api.get("/posts/search", { params }),
+  getLatestPosts: () => api.get("/posts/latest-posts"),
 };
 
 // Payment services
@@ -71,5 +72,10 @@ export const adminService = {
   approvePost: (id, data) => api.patch(`/posts/admin/${id}/approve`, data),
   getAllUsers: () => api.get("/users"),
 };
+
+// User services
+export const userService = {
+  getUser: (id) => api.get(`/users/user/${id}`), 
+}
 
 export default api;
