@@ -51,7 +51,6 @@ export const paymentService = {
   createPayment: (paymentData) => api.post("/payments", paymentData),
   completePayment: (id) => api.patch(`/payments/${id}/complete`),
   getUserPayments: () => api.get("/payments/my-payments"),
-  getPaymentByUserId: (userId) => api.get(`/payments/${userId}`),
 };
 
 // Category services

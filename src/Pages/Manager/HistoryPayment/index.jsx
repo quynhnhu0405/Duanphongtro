@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 import { Table, Spin, Tag, Input, Pagination } from "antd";
-import { useAuth } from "../../../Utils/AuthContext";
 import { paymentService } from "../../../Utils/api";
 import dayjs from "dayjs";
 import emptyImage from "../../../assets/empty.jpeg";
@@ -8,7 +7,6 @@ import emptyImage from "../../../assets/empty.jpeg";
 const HistoryPayment = () => {
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
-  const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchText, setSearchText] = useState("");
   const pageSize = 10;
@@ -16,8 +14,8 @@ const HistoryPayment = () => {
   const fetchPayments = async () => {
     try {
       setLoading(true);
-      const response = await paymentService.getPaymentByUserId(user?.id);
-      setList(response?.data?.data || []);
+      const response = await paymentService.getUserPayments();
+      setList(response?.data || []);
     } catch (error) {
       console.error("Error fetching payments:", error);
       setList([]);
@@ -25,16 +23,17 @@ const HistoryPayment = () => {
       setLoading(false);
     }
   };
+  console.log(list);
 
   useEffect(() => {
-    if (user?.id) fetchPayments();
-  }, [user?.id]);
+    fetchPayments();
+  }, []);
 
   const filteredList = useMemo(() => {
     if (!Array.isArray(list)) return [];
     return list.filter((item) =>
-      item?.postId?.title?.toLowerCase().includes(searchText.toLowerCase())
-    );
+      item?.PostId?.title?.toLowerCase().includes(searchText.toLowerCase())
+    );    
   }, [list, searchText]);
 
   const paginatedList = useMemo(() => {
@@ -59,10 +58,10 @@ const HistoryPayment = () => {
     },
     {
       title: "Bài đăng",
-      key: "postId.title",
+      key: "PostId.title",
       ellipsis: true,
-      render: (_, record) => record.postId?.title || "Không xác định",
-    },
+      render: (_, record) => record.PostId?.title || "Không xác định",
+    },    
     {
       title: "Tổng tiền",
       render: (_, record) =>
@@ -107,7 +106,6 @@ const HistoryPayment = () => {
           />
         </div>
       </div>
-
       <div className="w-[90%] mx-auto bg-white p-5 rounded-2xl shadow-sm mt-12">
         {loading ? (
           <div className="flex justify-center py-10">
