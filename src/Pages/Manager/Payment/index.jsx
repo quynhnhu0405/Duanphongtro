@@ -4,7 +4,7 @@ import Bill from "./Component/Bill";
 import { useState } from "react";
 import MethodPayment from "./Component/MethodPayment";
 import { useNavigate } from "react-router";
-import {  postService } from "../../../Utils/api";
+import { postService } from "../../../Utils/api";
 
 const { Step } = Steps;
 
@@ -49,28 +49,42 @@ const Payment = () => {
     try {
       setIsSubmitting(true);
 
+      // Format package data according to the new schema
+      const packageData = {
+        id: paymentData.package[0], // Package ID reference
+        period: packageType, // "day", "week", or "month"
+        quantity: getQuantityFromTotalDays(totalDays),
+      };
+
       // Gọi API xác nhận thanh toán
       let response;
       if (paymentData._id) {
+        // For existing posts - renew
         response = await postService.renewPost({
-          // postId: paymentData._id,
-          // packageId: paymentData.package[0],
-          // expiryDate: paymentData.expiryDate,
+          postId: paymentData._id,
+          package: [packageData], // Send as array of package objects
+          expiryDate: paymentData.expiryDate,
         });
-        message.success("Gia hạn tin thành công!");
-      } else {
-        const images = paymentData.images;
-        response = await postService.createPost({ ...paymentData, images: [] });
-        console.log(response.data);
 
-        if (response.data._id) {
-          await postService.updatePost(response.data._id, {
-            ...response.data,
-            images: images,
-          });
-        }
-        message.success("Đăng tin mới thành công!");
+        message.success(
+          "Gia hạn tin thành công! Thanh toán đang chờ xác nhận."
+        );
+      } else {
+        // Create post with updated package structure and total price
+        const postDataWithPackage = {
+          ...paymentData,
+          package: [packageData], // Send as array of package objects
+        };
+
+        response = await postService.createPost(postDataWithPackage);
+        console.log(response.data);
+        message.success("Tạo tin thành công! Thanh toán đang chờ xác nhận.");
+
+        message.success(
+          "Đăng tin mới thành công! Thanh toán đang chờ xác nhận."
+        );
       }
+
       setPaymentConfirmed(true);
       setTimeout(() => {
         navigate("/quan-ly/danh-sach-tin-dang");
@@ -82,6 +96,13 @@ const Payment = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Helper function to convert totalDays string to quantity number
+  const getQuantityFromTotalDays = (totalDays) => {
+    const [value] = totalDays.split(" ");
+    return parseInt(value, 10);
+  };
+
   const steps = [
     {
       title: "Chọn gói đăng tin",
@@ -187,8 +208,9 @@ const Payment = () => {
         >
           <div className="text-center py-4">
             <p className="text-green-500 text-lg mb-4">
-              Thanh toán thành công!
+              Thông tin đã được gửi thành công!
             </p>
+            <p>Thanh toán của bạn đang chờ xác nhận từ quản trị viên.</p>
             <p>Bạn sẽ được chuyển về trang quản lý tin đăng...</p>
           </div>
         </Modal>

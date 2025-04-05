@@ -44,6 +44,8 @@ export const postService = {
   searchPosts: (params) => api.get("/posts/search", { params }),
   getLatestPosts: () => api.get("/posts/latest-posts"),
   getByUserId: (userId) => api.get(`/posts/user/${userId}`),
+  renewPost: (renewData) => api.post("/posts/renew", renewData),
+  createPayment: (paymentData) => api.post("/payments", paymentData),
 };
 
 // Payment services
@@ -76,7 +78,7 @@ export const adminService = {
 
 // User services
 export const userService = {
-  getUser: (id) => api.get(`/users/user/${id}`), 
-}
+  getUser: (id) => api.get(`/users/user/${id}`),
+};
 
 export default api;

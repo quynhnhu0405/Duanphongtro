@@ -114,9 +114,10 @@ const SelectPackage = ({
     const packageId = getPackageIdByLevel(selectedPackage);
     const currentPrice = calculatePrice(selectedPackage, packageType);
 
+    // Format data to match the new schema
     const preparedData = {
       ...postData,
-      package: packageId ? [packageId] : [],
+      package: packageId ? [packageId] : [], // Keep this format for backward compatibility
       packageType,
       expiryDate: expiryDate.toISOString(),
       totalPrice: currentPrice,
