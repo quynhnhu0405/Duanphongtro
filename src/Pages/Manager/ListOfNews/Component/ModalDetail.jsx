@@ -6,7 +6,8 @@ import CardVip2 from "../../Component/CardVip2";
 import CardRegular from "../../Component/CardRegular";
 import dayjs from "dayjs";
 
-const ModalDetail = ({ isModalOpen, handleOk, selectedPost, handleCancel }) => {
+const ModalDetail = ({ isModalOpen, handleOk, selectedPost, handleCancel, handleDelete, fetchPosts }) => {
+
   const getPostType = (packageDetails) => {
     return packageDetails?.[0]?.name || 'Không xác định';
   };
@@ -45,6 +46,9 @@ const ModalDetail = ({ isModalOpen, handleOk, selectedPost, handleCancel }) => {
       open={isModalOpen}
       onCancel={handleCancel}
       footer={[
+        <Button key="Delete" type="danger" onClick={() => handleDelete(selectedPost._id)}>
+          Xóa bài
+        </Button>,
         <Button key="Đóng" type="primary" onClick={handleOk}>
           Đóng
         </Button>,

@@ -46,7 +46,10 @@ export const postService = {
   getByUserId: (userId) => api.get(`/posts/user/${userId}`),
   renewPost: (renewData) => api.post("/posts/renew", renewData),
   createPayment: (paymentData) => api.post("/payments", paymentData),
+  updatePostStatus: (id, status) => api.patch(`/posts/admin/${id}/status`, { status }),
+  hiddenPost: (id) => api.delete(`/posts/${id}`),
 };
+  
 
 // Payment services
 export const paymentService = {

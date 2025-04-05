@@ -1,4 +1,4 @@
-import { Button, Input, Pagination, Table, Spin, Tag } from "antd";
+import { Button, Input, Pagination, Table, Spin, Tag, message } from "antd";
 import ModalDetail from "./Component/ModalDetail";
 import { useEffect, useState, useMemo } from "react";
 import { postService } from "../../../Utils/api";
@@ -56,7 +56,21 @@ const ListPosts = () => {
   useEffect(() => {
     fetchPosts();
   }, [user?.id]);
-
+  //Xóa bài đăng
+  const handleDelete = async (id) => {
+    try {
+      const response = await postService.hiddenPost(id);
+      if (response.status === 200) {
+        message.success("Tin đăng đã được ẩn.");
+        await fetchPosts(); // Cập nhật lại danh sách bài đăng
+      } else {
+        message.error("Không thể ẩn tin đăng.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi ẩn tin đăng:", error);
+      message.error("Có lỗi xảy ra khi ẩn tin đăng.");
+    }
+  };
   const showModal = (post) => {
     setSelectedPost(post);
     setIsModalOpen(true);
@@ -231,6 +245,8 @@ const ListPosts = () => {
           handleOk={handleCloseModal}
           selectedPost={selectedPost}
           handleCancel={handleCloseModal}
+          handleDelete={handleDelete}
+          fetchPosts={fetchPosts}
         />
       </div>
     </div>
