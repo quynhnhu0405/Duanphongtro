@@ -61,7 +61,7 @@ const AdminLayout = () => {
     <Layout className="flex admin-layout ">
       <Sider collapsible className="bg-gray-900 !text-white !w-64 !h-screen !fixed !top-0 !bottom-0 !p-0">
         <div className="flex items-center justify-center p-4 " >
-          <img src="../../src/assets/logo.png" alt="Logo" onClick={() => nav('/')} className="h-10" />
+          <img src="/logo.png" alt="Logo" onClick={() => nav('/')} className="h-10" />
         </div>
         <Menu
           theme="dark"

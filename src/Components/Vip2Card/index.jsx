@@ -62,7 +62,7 @@ const Vip2Card = ({ item }) => {
             <>
               <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
                 <img
-                  src={landlord?.avatar || "./src/assets/defaul-avt.png"}
+                  src={landlord?.avatar || "/defaul-avt.png"}
                   className="w-7 rounded-3xl"
                   alt="Avatar"
                 />

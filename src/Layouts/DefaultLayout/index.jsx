@@ -11,17 +11,18 @@ const DefaultLayout = () => {
     <Layout>
       <DefaultHeader />
       <Layout.Content className="mx-auto w-full">
-        <div className="flex justify-between bodypage">
-          <Row>
-            <Col className="p-4" sm={24} md={16} lg={16}>
+        <div className="flex justify-between w-full min-h-screen bodypage">
+          <Row className="w-full flex-1">
+            <Col className="p-4 w-full min-w-[300px]" sm={24} md={16} lg={16}>
               <Outlet />
             </Col>
-            <Col className="p-4" sm={24} md={8} lg={8}>
+            <Col className="p-4 w-full min-w-[300px]" sm={24} md={8} lg={8}>
               <FilterCard />
               <NewPost />
             </Col>
           </Row>
         </div>
+
         <div className="bodypage p-4">
           <Contact />
         </div>

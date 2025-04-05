@@ -21,7 +21,11 @@ const Bill = ({ selectedPackage, packageType, totalDays }) => {
           : packageType === "week"
           ? "priceweek"
           : "pricemonth";
-      setTotalPrice(foundPackage[priceKey] * parseInt(totalDays));
+
+      // Extract quantity from totalDays
+      const quantity = parseInt(totalDays.split(" ")[0], 10) || 1;
+
+      setTotalPrice(foundPackage[priceKey] * quantity);
     }
   }, [packageData, selectedPackage, packageType, totalDays]);
 

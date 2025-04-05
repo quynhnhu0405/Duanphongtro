@@ -85,13 +85,12 @@ const PostNew = () => {
       console.log("images", images);
       alert("Vui lòng tải lên ít nhất 4 hình ảnh!");
       return;
-    } else {
-      // handleDataChange("images", images);
-    }
+    } 
 
     // Prepare final data with default values for missing fields
     const finalPostData = {
       ...postData,
+      images: images,
       status: "waiting", // Set default status
       expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Default 30 days from now
     };

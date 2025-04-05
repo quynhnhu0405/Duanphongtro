@@ -6,7 +6,7 @@ import slugify from "slugify";
 const ProductItem = ({ item }) => {
   return (
     <Link
-      to={`/${slugify(item?.title, { lower: true, locale: "vi" })}`}
+      to={`/chi-tiet/${slugify(item?._id, { lower: true, locale: "vi" })}`}
       style={{ textDecoration: "none" }}
     >
       <Card

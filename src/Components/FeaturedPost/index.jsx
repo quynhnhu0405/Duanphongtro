@@ -79,7 +79,7 @@ const FeaturedPost = ({ item }) => {
           {landlord && (
             <>
               <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
-                <img src={landlord?.avatar || "./src/assets/defaul-avt.png"}  className="w-7 rounded-3xl" alt="Avatar" />
+                <img src={landlord?.avatar || "/defaul-avt.png"}  className="w-7 rounded-3xl" alt="Avatar" />
               </div>
               <div className="ml-3 text-sm text-black leading-4">
                 <p className="font-bold">{landlord.name}</p>

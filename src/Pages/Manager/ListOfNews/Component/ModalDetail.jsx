@@ -1,29 +1,44 @@
-import { Button, Modal } from "antd";
-import React, { useState } from "react";
+import { Button, Modal, Image, Tag } from "antd";
+import React from "react";
 import CardFeature from "../../Component/CardFeature";
 import CardVip1 from "../../Component/CardVip1";
 import CardVip2 from "../../Component/CardVip2";
 import CardRegular from "../../Component/CardRegular";
+import dayjs from "dayjs";
 
 const ModalDetail = ({ isModalOpen, handleOk, selectedPost, handleCancel }) => {
-    const getPostType = (item) => {
-        return item === 1
-          ? "Tin VIP nổi bật"
-          : item === 2
-          ? "Tin VIP 1"
-          : item === 3
-          ? "Tin VIP 2"
-          : "Tin thường";
-      };
-    const display = (item) => {
-        return item.package === 1
-          ? <CardFeature item={item} />
-          : item.package === 2
-          ? <CardVip1 item={item} />
-          : item.package === 3
-          ? <CardVip2 item={item} />
-          : <CardRegular item={item} />;
-      };
+  const getPostType = (packageDetails) => {
+    return packageDetails?.[0]?.name || 'Không xác định';
+  };
+
+  const getStatusTag = (status) => {
+    switch(status) {
+      case "available":
+        return <Tag color="green">Còn hạn</Tag>;
+      case "expired":
+        return <Tag color="red">Hết hạn</Tag>;
+      case "waiting":
+        return <Tag color="gray">Chờ duyệt</Tag>;
+      default:
+        return <Tag>{status}</Tag>; 
+    }
+  };
+
+  const displayCard = (post) => {
+    const packageType = post.packageDetails?.[0]?.name;
+    
+    switch(packageType) {
+      case "Tin VIP nổi bật":
+        return <CardFeature item={post} />;
+      case "Tin VIP 1": // VIP 1
+        return <CardVip1 item={post} />;
+      case "Tin VIP 2": // VIP 2
+        return <CardVip2 item={post} />;
+      default:
+        return <CardRegular item={post} />;
+    }
+  };
+
   return (
     <Modal
       title="Chi tiết bài đăng"
@@ -31,57 +46,83 @@ const ModalDetail = ({ isModalOpen, handleOk, selectedPost, handleCancel }) => {
       onCancel={handleCancel}
       footer={[
         <Button key="Đóng" type="primary" onClick={handleOk}>
-          OK
+          Đóng
         </Button>,
       ]}
-      className="!w-1/2 modal-list-post"
+      width={800}
     >
       {selectedPost && (
-        <div>
-          <p>
-            <strong>Tiêu đề: </strong>&nbsp; &nbsp;&nbsp; &nbsp;{selectedPost.title}
-          </p>
-          <p>
-            <strong>Giá:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.price}
-          </p>
-          <p>
-            <strong>Diện tích:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.acreage} m²
-          </p>
-          <p>
-            <strong>Địa chỉ:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.location.street}, {selectedPost.location.ward}, {selectedPost.location.city}
-          </p>
-          <p>
-            <strong>Loại tin:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.type}
-          </p>
-          <p>
-            <strong>Ngày đăng:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.createAt}
-          </p>
-          <p>
-            <strong>Ngày hết hạn:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.expdate}
-          </p>
-          <p>
-            <strong>Mô tả:  </strong>&nbsp; &nbsp;&nbsp; &nbsp; {selectedPost.description}
-          </p>
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p><strong>Tiêu đề:</strong> {selectedPost.title}</p>
+              <p><strong>Giá:</strong> {selectedPost.price.toLocaleString()} VNĐ/tháng</p>
+              <p><strong>Diện tích:</strong> {selectedPost.area} m²</p>
+            </div>
+            <div>
+              <p><strong>Loại tin:</strong> {selectedPost.category?.name}</p>
+              <p><strong>Tình trạng:</strong> {getStatusTag(selectedPost.status)}</p>
+              <p><strong>Gói đăng ký:</strong> {getPostType(selectedPost.packageDetails)}</p>
+            </div>
+          </div>
+
           <div>
-            <strong>Hình ảnh:</strong>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              {selectedPost.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={image.url}
-                  alt={`Ảnh ${index + 1}`}
-                  style={{ width: "100px", height: "auto" }}
-                />
+            <p><strong>Địa chỉ:</strong> {[
+              selectedPost.location?.street,
+              selectedPost.location?.ward,
+              selectedPost.location?.district,
+              selectedPost.location?.province
+            ].filter(Boolean).join(', ')}</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p><strong>Ngày đăng:</strong> {dayjs(selectedPost.createdAt).format('DD/MM/YYYY HH:mm')}</p>
+            </div>
+            <div>
+              <p><strong>Ngày hết hạn:</strong> {dayjs(selectedPost.expiryDate).format('DD/MM/YYYY HH:mm')}</p>
+            </div>
+          </div>
+
+          <div>
+            <p><strong>Mô tả:</strong></p>
+            <div className="p-3 bg-gray-50 rounded">
+              {selectedPost.description}
+            </div>
+          </div>
+
+          <div>
+            <p><strong>Tiện ích:</strong></p>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {selectedPost.utilityDetails?.map(utility => (
+                <Tag key={utility._id}>{utility.name}</Tag>
               ))}
             </div>
           </div>
-          <div className="mt-5">
-            <strong>Hiển thị gói tin:</strong>&nbsp; &nbsp;&nbsp; &nbsp;{getPostType(selectedPost.package)}
-            <div className="mt-2">
-                {display(selectedPost)}
+
+          <div>
+            <p><strong>Hình ảnh:</strong></p>
+            <div className="flex flex-wrap gap-4 mt-2">
+              <Image.PreviewGroup>
+                {selectedPost.images?.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image}
+                    alt={`Ảnh ${index + 1}`}
+                    width={120}
+                    height={80}
+                    className="rounded object-cover"
+                  />
+                ))}
+              </Image.PreviewGroup>
             </div>
-              
-            
+          </div>
+
+          <div className="mt-6">
+            <p><strong>Xem trước hiển thị:</strong></p>
+            <div className="mt-3 border rounded p-4">
+              {displayCard(selectedPost)}
+            </div>
           </div>
         </div>
       )}

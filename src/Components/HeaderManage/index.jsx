@@ -1,9 +1,9 @@
 import { CloudUploadOutlined } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
-import logo from "../../assets/logo2.png";
 import { useNavigate } from "react-router";
-import User from "./Component/User";
 import Sider from "../../Layouts/ManageLayout/Component/SiderMenu";
+import UserMenu1 from "./Component/UserMenu";
+
 const menuItems = [
   { label: "Trang chủ", key: "/", path: "/" },
   { label: "Phòng trọ", key: "/phong-tro", path: "/phong-tro" },
@@ -28,7 +28,9 @@ const HeaderManage = () => {
       <div className="flex justify-between">
         <div className="header-left">
           <div className="logo">
-            <a href="/"><img src={logo} alt="logo" /></a>
+            <a href="/">
+              <img src="/logo2.png" alt="logo" />
+            </a>
           </div>
           <div className="w-[500px] ">
             <Menu
@@ -45,12 +47,12 @@ const HeaderManage = () => {
 
         <div className="header-right">
           <div>
-            <a className="text-white mr-15" href="/quan-ly/tin-dang">
+            <a className="text-white mr-15" href="/quan-ly/danh-sach-tin-dang">
               Quản lý
             </a>
           </div>
           <div className="user">
-            <User/>
+            <UserMenu1/>
           </div>
           <div style={{ display: "flex" }}>
             <Button className="post" href="/quan-ly/dang-bai-moi">

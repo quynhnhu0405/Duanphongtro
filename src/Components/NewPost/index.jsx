@@ -1,60 +1,29 @@
 import { Card } from "antd";
 import { formatTimeAgo } from "../../Utils/dateUtil";
-const post = [
-  {
-    id: 1,
-    title:
-      "Cho thuê nhà trọ giá rẻ sát Chợ Thành Nam, an ninh, chỉ 800k/tháng (có nhà ngay)",
-    image: "./src/assets/1.jpg",
-    createdAt: "2025-03-11 17:00",
-    price: "4.5 triệu/tháng",
-  },
-  {
-    id: 2,
-    title:
-      "Cho thuê nhà trọ giá rẻ sát Chợ Thành Nam, an ninh, chỉ 800k/tháng (có nhà ngay)",
-    image: "./src/assets/1.jpg",
-    createdAt: "2025-03-11 17:00",
-    price: "4.5 triệu/tháng",
-  },
-  {
-    id: 3,
-    title:
-      "Cho thuê nhà trọ giá rẻ sát Chợ Thành Nam, an ninh, chỉ 800k/tháng (có nhà ngay)",
-    image: "./src/assets/1.jpg",
-    createdAt: "2025-03-11 17:00",
-    price: "4.5 triệu/tháng",
-  },
-  {
-    id: 4,
-    title:
-      "Cho thuê nhà trọ giá rẻ sát Chợ Thành Nam, an ninh, chỉ 800k/tháng (có nhà ngay)",
-    image: "./src/assets/1.jpg",
-    createdAt: "2025-03-11 17:00",
-    price: "4.5 triệu/tháng",
-  },
-  {
-    id: 5,
-    title:
-      "Cho thuê nhà trọ giá rẻ sát Chợ Thành Nam, an ninh, chỉ 800k/tháng (có nhà ngay)",
-    image: "./src/assets/1.jpg",
-    createdAt: "2025-03-11 17:00",
-    price: "4.5 triệu/tháng",
-  },
-];
+import { useEffect, useState } from "react";
+import { postService } from "../../Utils/api";
 const NewPost = () => {
+  const [post, setPost] = useState([]);
+  useEffect(() => {
+    postService.getLatestPosts()
+      .then(response => {
+        console.log("Dữ liệu từ API:", response.data);
+        setPost(response.data);
+      })
+      .catch(error => console.error("Lỗi API:", error));
+  }, []);
   return (
     <Card title="Tin mới đăng" className="new-post">
       <div>
         <ul>
-          {post.map((item) => (
+          {post.slice(0, 8).map((item) => (
             <li key={item.id} >
               <a
                 className="flex items-center"
                 href={`/${item.title}`}
               >
                 <img
-                  src={item.image}
+                  src={item.images[0]}
                   alt=""
                   className="w-20 rounded-2xl h-20"
                 />
