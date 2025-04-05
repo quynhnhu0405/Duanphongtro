@@ -51,6 +51,7 @@ const SelectPackage = ({
   useEffect(() => {
     if (location.state?.postData) {
       setPostData(location.state.postData);
+      console.log("Post data:", location.state.postData);
     }
   }, [location.state]);
 
@@ -144,6 +145,7 @@ const SelectPackage = ({
           }`,
         },
         description: postData.description.substring(0, 100) + "...",
+        tempImages: postData.tempImages,
       }
     : null;
   console.log("Preview item:", previewItem);

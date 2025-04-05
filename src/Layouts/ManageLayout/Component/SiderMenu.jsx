@@ -6,6 +6,7 @@ import {
   TagsOutlined,
   UserOutlined,
   MenuOutlined,
+  PayCircleOutlined,
 } from "@ant-design/icons";
 import { Avatar, Menu, Drawer, Button } from "antd";
 import Sider from "antd/es/layout/Sider";
@@ -24,6 +25,12 @@ const items = [
     key: "/quan-ly/danh-sach-tin-dang",
     icon: <ProfileOutlined />,
     path: "/quan-ly/danh-sach-tin-dang",
+  },
+  {
+    label: "Lịch sử thanh toán",
+    key: "/quan-ly/lich-su-thanh-toan",
+    icon: <PayCircleOutlined />,
+    path: "/quan-ly/lich-su-thanh-toan",
   },
   {
     label: "Bảng giá dịch vụ",

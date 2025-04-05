@@ -1,4 +1,4 @@
-import { Button, Input, Pagination, Table, Spin } from "antd";
+import { Button, Input, Pagination, Table, Spin, Tag } from "antd";
 import ModalDetail from "./Component/ModalDetail";
 import { useEffect, useState, useMemo } from "react";
 import { postService } from "../../../Utils/api";
@@ -89,22 +89,22 @@ const ListPosts = () => {
     {
       title: "STT",
       key: "index",
+      width: 60,
       render: (_, __, index) => (currentPage - 1) * pageSize + index + 1,
     },
-    {
-      title: "Mã tin",
-      dataIndex: "_id",
-      key: "_id",
-      render: (id) => id.slice(-6).toUpperCase(), // Show last 6 chars of ID
-    },
+
     {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
-    },
+      width: 180,
+      ellipsis: true
+    },    
     {
       title: "Địa chỉ",
       key: "address",
+      width: 180,
+      ellipsis: true,
       render: (_, record) =>
         `${record.location?.street || ""}, ${record.location?.ward || ""}, ${
           record.location?.district || ""
@@ -123,12 +123,15 @@ const ListPosts = () => {
     {
       title: "Tình trạng",
       key: "status",
-      render: (_, record) =>
-        record.status === "available" ? (
-          <span className="text-green-500">Còn hạn</span>
-        ) : (
-          <span>
-            <span className="text-red-500">Hết hạn</span>
+      width: 150,
+      render: (_, record) =>{
+        switch (record.status) {
+          case "available":
+            return <Tag color='green'>Còn hạn</Tag>;
+          case "expired":
+            return (
+              <span>
+            <Tag color='red'>Hết hạn</Tag>
             <Button
               type="link"
               onClick={() => navigateToRenewPage(record)}
@@ -137,18 +140,25 @@ const ListPosts = () => {
               (Gia hạn)
             </Button>
           </span>
-        ),
+            );
+          default:
+            return <Tag color='gray'>Chờ xác nhận</Tag>;
+          }
+      }
+        
     },
     {
       title: "Ngày đăng",
       dataIndex: "createdAt",
       key: "createdAt",
+      width: 110,
       render: (date) => dayjs(date).format("DD/MM/YYYY"),
     },
     {
       title: "Ngày hết hạn",
       dataIndex: "expiryDate",
       key: "expiryDate",
+      width: 120,
       render: (date) => dayjs(date).format("DD/MM/YYYY"),
     },
     {
@@ -188,6 +198,7 @@ const ListPosts = () => {
               columns={columns}
               dataSource={paginatedList}
               rowKey="_id"
+              scroll={{ x: 1200 }}
               pagination={false}
               locale={{
                 emptyText: (

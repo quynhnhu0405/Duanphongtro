@@ -4,7 +4,7 @@ import Bill from "./Component/Bill";
 import { useState } from "react";
 import MethodPayment from "./Component/MethodPayment";
 import { useNavigate } from "react-router";
-import { postService } from "../../../Utils/api";
+import {  postService } from "../../../Utils/api";
 
 const { Step } = Steps;
 
@@ -20,8 +20,6 @@ const Payment = () => {
   const [qrValue, setQrValue] = useState("");
   const navigate = useNavigate();
 
-  
-
   const handlePayment = async () => {
     if (!paymentData) {
       message.error("Vui lòng chọn gói đăng tin");
@@ -30,14 +28,15 @@ const Payment = () => {
 
     try {
       setIsSubmitting(true);
-      
+
       // Tạo mã QR tạm thời (trong thực tế sẽ nhận từ API thanh toán)
       const transactionId = `TRX-${Date.now()}`;
-      setQrValue(`https://payment-gateway.com/pay?amount=${paymentData.totalPrice}&id=${transactionId}`);
-      
+      setQrValue(
+        `https://payment-gateway.com/pay?amount=${paymentData.totalPrice}&id=${transactionId}`
+      );
+
       // Chuyển sang bước 2
       setCurrentStep(1);
-      
     } catch (error) {
       console.error("Payment error:", error);
       message.error("Có lỗi khi tạo mã thanh toán");
@@ -49,26 +48,33 @@ const Payment = () => {
   const handlePaymentConfirmation = async () => {
     try {
       setIsSubmitting(true);
-      
+
       // Gọi API xác nhận thanh toán
       let response;
       if (paymentData._id) {
         response = await postService.renewPost({
-          postId: paymentData._id,
-          packageId: paymentData.package[0],
-          expiryDate: paymentData.expiryDate,
+          // postId: paymentData._id,
+          // packageId: paymentData.package[0],
+          // expiryDate: paymentData.expiryDate,
         });
         message.success("Gia hạn tin thành công!");
       } else {
-        response = await postService.createPost(paymentData);
+        const images = paymentData.images;
+        response = await postService.createPost({ ...paymentData, images: [] });
+        console.log(response.data);
+
+        if (response.data._id) {
+          await postService.updatePost(response.data._id, {
+            ...response.data,
+            images: images,
+          });
+        }
         message.success("Đăng tin mới thành công!");
       }
-
       setPaymentConfirmed(true);
       setTimeout(() => {
         navigate("/quan-ly/danh-sach-tin-dang");
       }, 1500);
-      
     } catch (error) {
       console.error("Payment confirmation error:", error);
       message.error(error.message || "Xác nhận thanh toán thất bại");
@@ -78,7 +84,7 @@ const Payment = () => {
   };
   const steps = [
     {
-      title: 'Chọn gói đăng tin',
+      title: "Chọn gói đăng tin",
       content: (
         <>
           <Row>
@@ -120,30 +126,32 @@ const Payment = () => {
       ),
     },
     {
-      title: 'Quét mã thanh toán',
+      title: "Quét mã thanh toán",
       content: (
         <div className="flex flex-col items-center justify-center p-8 bg-white shadow-[0_1px_5px_rgba(0,0,0,0.3)]">
           <div className="mb-6 text-center">
             <h2 className="text-xl font-bold mb-2">Quét mã để thanh toán</h2>
-            <p className="text-gray-600">Số tiền: {paymentData?.totalPrice?.toLocaleString()} VNĐ</p>
+            <p className="text-gray-600">
+              Số tiền: {paymentData?.totalPrice?.toLocaleString()} VNĐ
+            </p>
           </div>
-          
-          <QRCode 
-            value={qrValue || "https://example.com/payment"} 
-            size={256} 
+
+          <QRCode
+            value={qrValue || "https://example.com/payment"}
+            size={256}
             className="!mb-10"
           />
-          
+
           <Space>
-            <Button 
-              type="default" 
+            <Button
+              type="default"
               size="large"
               onClick={() => setCurrentStep(0)} // Quay lại bước 1
             >
               Quay lại
             </Button>
-            <Button 
-              type="primary" 
+            <Button
+              type="primary"
               size="large"
               className="!bg-green-500"
               onClick={handlePaymentConfirmation}
@@ -161,17 +169,15 @@ const Payment = () => {
       <div className="fixed w-full z-30 bg-white shadow-[0_1px_5px_rgba(0,0,0,0.3)] top-[60px] pt-5 pb-5 pl-15">
         <h1 className="text-2xl font-bold">Thanh toán dịch vụ đăng tin</h1>
       </div>
-      
+
       <div className="max-w-[1000px] m-auto mt-25">
         <Steps current={currentStep} className="!mb-8 !w-1/2 !m-auto">
           {steps.map((item) => (
             <Step key={item.title} title={item.title} />
           ))}
         </Steps>
-        
-        <div>
-          {steps[currentStep].content}
-        </div>
+
+        <div>{steps[currentStep].content}</div>
 
         <Modal
           title="Thành công"
@@ -180,7 +186,9 @@ const Payment = () => {
           closable={false}
         >
           <div className="text-center py-4">
-            <p className="text-green-500 text-lg mb-4">Thanh toán thành công!</p>
+            <p className="text-green-500 text-lg mb-4">
+              Thanh toán thành công!
+            </p>
             <p>Bạn sẽ được chuyển về trang quản lý tin đăng...</p>
           </div>
         </Modal>
