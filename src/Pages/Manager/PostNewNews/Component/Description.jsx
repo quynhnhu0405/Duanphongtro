@@ -82,7 +82,7 @@ const Description = ({
           placeholder="Nhập giá cho thuê"
           value={price}
           onChange={(value) => setPrice(value)}
-          className="w-full p-2"
+          className="!w-1/3 p-2"
           min={0}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -99,9 +99,10 @@ const Description = ({
           placeholder="Nhập diện tích (m²)"
           value={area}
           onChange={(value) => setArea(value)}
-          className="w-full p-2"
+          className="!w-1/3 p-2"
           min={0}
         />
+        
       </div>
 
       <div className="mb-4">

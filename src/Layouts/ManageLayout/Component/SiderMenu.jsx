@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Menu, Drawer, Button } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "../../../Utils/AuthContext";
 
 const items = [
@@ -51,6 +51,7 @@ const SiderMenu = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const { user} = useAuth();
+  const nav = useNavigate();
   const checkScreenSize = () => {
     setIsMobile(window.innerWidth <= 1220);
   };
@@ -97,10 +98,14 @@ const SiderMenu = () => {
             </div>
             <Menu mode="vertical" selectedKeys={[location.pathname]}>
               {items.map((item) => (
-                <Menu.Item key={item.key} icon={item.icon}>
-                  <a href={item.path}>{item.label}</a>
-                </Menu.Item>
-              ))}
+                <Menu.Item
+                key={item.key}
+                icon={item.icon}
+                onClick={() => nav(item.path)}
+              >
+                {item.label}
+              </Menu.Item>
+              ))} 
               <Menu.Item key="logout" icon={<LogoutOutlined />} danger>
                 Đăng xuất
               </Menu.Item>

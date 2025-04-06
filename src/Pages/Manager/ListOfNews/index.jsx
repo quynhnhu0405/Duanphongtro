@@ -42,7 +42,7 @@ const ListPosts = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const response = await postService.getByUserId(user?.id);
+      const response = await postService.getMyPosts();
       // Ensure we have the data array
       setList(response?.data?.data || []);
     } catch (error) {
@@ -55,14 +55,14 @@ const ListPosts = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, [user?.id]);
+  }, []);
   //Xóa bài đăng
   const handleDelete = async (id) => {
     try {
       const response = await postService.hiddenPost(id);
       if (response.status === 200) {
         message.success("Tin đăng đã được ẩn.");
-        await fetchPosts(); // Cập nhật lại danh sách bài đăng
+        await fetchPosts();
       } else {
         message.error("Không thể ẩn tin đăng.");
       }
@@ -184,6 +184,15 @@ const ListPosts = () => {
         </Button>
       ),
     },
+    {
+      title: "Xóa",
+      key: "delete",
+      render: (_, record) => (
+        <Button type="link" danger onClick={() => handleDelete(record._id)}>
+          Xóa
+        </Button>
+      ),
+    }
   ];
 
   return (

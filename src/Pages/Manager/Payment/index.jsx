@@ -1,9 +1,9 @@
 import { Button, Col, message, Row, Modal, QRCode, Space, Steps } from "antd";
 import SelectPackage from "./Component/SelectPackage";
 import Bill from "./Component/Bill";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MethodPayment from "./Component/MethodPayment";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { postService } from "../../../Utils/api";
 
 const { Step } = Steps;
@@ -19,7 +19,8 @@ const Payment = () => {
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [qrValue, setQrValue] = useState("");
   const navigate = useNavigate();
-
+  const [postData, setPostData] = useState(null);
+  const location = useLocation();
   const handlePayment = async () => {
     if (!paymentData) {
       message.error("Vui lòng chọn gói đăng tin");
@@ -44,24 +45,27 @@ const Payment = () => {
       setIsSubmitting(false);
     }
   };
-
+  useEffect(() => {
+      if (location.state?.postData) {
+        setPostData(location.state.postData);
+      }
+    }, [location.state]);
   const handlePaymentConfirmation = async () => {
     try {
       setIsSubmitting(true);
 
       // Format package data according to the new schema
       const packageData = {
-        id: paymentData.package[0], // Package ID reference
+        id: paymentData.package?.[0], // Package ID reference
         period: packageType, // "day", "week", or "month"
         quantity: getQuantityFromTotalDays(totalDays),
       };
-
       // Gọi API xác nhận thanh toán
       let response;
-      if (paymentData._id) {
+      if (postData._id) {
         // For existing posts - renew
-        response = await postService.renewPost({
-          postId: paymentData._id,
+        response = await postService.renewPost(postData._id,{
+          postId: paymentData.id,
           package: [packageData], // Send as array of package objects
           expiryDate: paymentData.expiryDate,
         });

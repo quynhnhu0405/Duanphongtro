@@ -43,11 +43,12 @@ export const postService = {
   updatePost: (id, postData) => api.put(`/posts/${id}`, postData),
   searchPosts: (params) => api.get("/posts/search", { params }),
   getLatestPosts: () => api.get("/posts/latest-posts"),
-  getByUserId: (userId) => api.get(`/posts/user/${userId}`),
-  renewPost: (renewData) => api.post("/posts/renew", renewData),
+  getMyPosts: () => api.get(`/posts/my-posts`),
   createPayment: (paymentData) => api.post("/payments", paymentData),
   updatePostStatus: (id, status) => api.patch(`/posts/admin/${id}/status`, { status }),
   hiddenPost: (id) => api.delete(`/posts/${id}`),
+  renewPost: (postId,postData) => api.put(`/posts/${postId}/renew`, postData),
+  getPostByUserId: (userId) => api.get(`/posts/${userId}`),
 };
   
 

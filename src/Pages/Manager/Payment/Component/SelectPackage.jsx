@@ -51,7 +51,6 @@ const SelectPackage = ({
   useEffect(() => {
     if (location.state?.postData) {
       setPostData(location.state.postData);
-      console.log("Post data:", location.state.postData);
     }
   }, [location.state]);
 

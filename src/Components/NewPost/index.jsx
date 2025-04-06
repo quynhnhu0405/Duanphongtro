@@ -2,6 +2,7 @@ import { Card } from "antd";
 import { formatTimeAgo } from "../../Utils/dateUtil";
 import { useEffect, useState } from "react";
 import { postService } from "../../Utils/api";
+import slugify from "slugify";
 const NewPost = () => {
   const [post, setPost] = useState([]);
   useEffect(() => {
@@ -17,10 +18,10 @@ const NewPost = () => {
       <div>
         <ul>
           {post.slice(0, 8).map((item) => (
-            <li key={item.id} >
+            <li key={item._id} >
               <a
                 className="flex items-center"
-                href={`/${item.title}`}
+                href={`/chi-tiet/${slugify(item?._id, { lower: true, locale: "vi" })}`}
               >
                 <img
                   src={item.images[0]}

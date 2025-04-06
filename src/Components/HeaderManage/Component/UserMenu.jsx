@@ -81,12 +81,7 @@ const UserMenu1 = () => {
         content={
           <div className="w-[350px] p-2 popover-user">
             <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
-              <div className="w-[50px] h-[50px] p-1 border rounded-4xl">
-                <img
-                  src="https://random.imagecdn.app/500/150"
-                  className="w-full h-full rounded-4xl "
-                />
-              </div>
+              <Avatar src={user?.avatar || "/defaul-avt.png"} className="!w-[50px] !h-[50px] !p-1 !border !border-gray-400 !rounded-4xl"></Avatar>
 
               {isAuthenticated() ? (
                 <>

@@ -4,7 +4,8 @@ import { Outlet, useLocation, useNavigate } from "react-router";
 
 const Account = () => {
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+   
 
   const getSelectedKey = () => {
     if (location.pathname.endsWith("/doi-mat-khau")) {

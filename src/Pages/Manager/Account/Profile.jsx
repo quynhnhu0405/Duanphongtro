@@ -1,69 +1,67 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Button, Modal, Form, Input, Upload, message } from "antd";
 import { ExclamationCircleTwoTone, UploadOutlined } from "@ant-design/icons";
+import { useAuth } from "../../../Utils/AuthContext";
+import { postService } from "../../../Utils/api";
 
 const Profile = () => {
-  const [userInfo, setUserInfo] = useState({
-    name: "Nguyễn Văn A",
-    phone: "0123456789",
-    postCount: 10,
-    avatar: "https://random.imagecdn.app/500/150",
-  });
-
+  const { user } = useAuth();
+  const [post, setPost] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
   const handleEditProfile = () => {
     setIsModalVisible(true);
     form.setFieldsValue({
-      name: userInfo.name,
-      phone: userInfo.phone,
+      name: user.name,
+      phone: user.phone,
     });
   };
-
+  useEffect(() => {
+    postService.getPostByUserId(user.id)
+        .then(response => {
+          console.log("Dữ liệu từ API:", response.data);
+          setPost(response.data);
+        })
+        .catch(error => console.error("Lỗi API:", error));
+    }, []);
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  const handleSubmit = (values) => {
-    setUserInfo((prev) => ({
-      ...prev,
-      name: values.name,
-      phone: values.phone,
-      avatar: values.avatar || prev.avatar,
-    }));
-    message.success("Cập nhật thông tin thành công!");
-    setIsModalVisible(false);
-  };
+  // const handleSubmit = (values) => {
+  //   setUserInfo((prev) => ({
+  //     ...prev,
+  //     name: values.name,
+  //     phone: values.phone,
+  //     avatar: values.avatar || prev.avatar,
+  //   }));
+  //   message.success("Cập nhật thông tin thành công!");
+  //   setIsModalVisible(false);
+  // };
 
   const handleUpload = (info) => {
     if (info.file.status === "done") {
       // Giả sử API trả về URL của ảnh đã tải lên
-      const imageUrl = info.file.response.url;
-      setUserInfo((prev) => ({ ...prev, avatar: imageUrl }));
+      // const imageUrl = info.file.response.url;
+      // setUserInfo((prev) => ({ ...prev, avatar: imageUrl }));
       message.success("Tải lên avatar thành công!");
     } else if (info.file.status === "error") {
       message.error("Tải lên avatar thất bại!");
     }
   };
 
-  // Custom request để giả lập việc tải lên ảnh
-  const customRequest = ({ file, onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok"); // Giả lập thành công
-    }, 1000);
-  };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <div className="w-fit m-auto p-2 border border-black rounded-full">
-        <Avatar src={userInfo.avatar} className="!w-[120px] !h-[120px]" />
+        <Avatar src={user?.avatar || "/defaul-avt.png"} className="!w-[120px] !h-[120px]" />
       </div>
       <div className="text-center mt-6">
-        <h2 className="text-xl font-bold mb-3">{userInfo.name}</h2>
-        <p className="text-gray-600 text-base mb-3">{userInfo.phone}</p>
+        <h2 className="text-xl font-bold mb-3">{user.name}</h2>
+        <p className="text-gray-600 text-base mb-3">{user.phone}</p>
         <p className="text-gray-600 text-base">
-          Số tin đăng: {userInfo.postCount}
+          Số tin đăng: {post}
         </p>
       </div>
       <div className="mt-5 w-fit m-auto mb-3">
@@ -84,8 +82,8 @@ const Profile = () => {
       >
         <Form
           form={form}
-          initialValues={{ name: userInfo.name, phone: userInfo.phone }}
-          onFinish={handleSubmit}
+          initialValues={{ name: user.name, phone: user.phone }}
+          // onFinish={handleSubmit}
           layout="vertical"
         >
           <Form.Item label="Avatar">
@@ -93,12 +91,12 @@ const Profile = () => {
               name="avatar"
               listType="picture"
               showUploadList={false}
-              customRequest={customRequest}
+              // customRequest={customRequest}
               onChange={handleUpload}
             >
               <div className="flex items-center space-x-4">
                 <img
-                  src={userInfo.avatar}
+                  src={user.avatar}
                   alt="Avatar"
                   className="w-16 h-16 rounded-full object-cover"
                 />

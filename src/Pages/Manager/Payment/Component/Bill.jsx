@@ -1,39 +1,16 @@
 import { Card } from "antd";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { packageService } from "../../../../Utils/api";
 
-const Bill = ({ selectedPackage, packageType, totalDays }) => {
+const Bill = ({ selectedPackage, packageType, totalDays, postData }) => {
   const [packageInfo, setPackageInfo] = useState(null);
   const [packageData, setPackageData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  useEffect(() => {
-    console.log("Package data:", packageData);
-    if (packageData && packageData.length > 0 && selectedPackage) {
-      console.log("Selected package:", selectedPackage, packageType, totalDays);
-      const foundPackage = packageData.find(
-        (pkg) => pkg.level == selectedPackage
-      );
-      console.log("Found package:", foundPackage);
-      setPackageInfo(foundPackage);
-      const priceKey =
-        packageType === "day"
-          ? "priceday"
-          : packageType === "week"
-          ? "priceweek"
-          : "pricemonth";
-
-      // Extract quantity from totalDays
-      const quantity = parseInt(totalDays.split(" ")[0], 10) || 1;
-
-      setTotalPrice(foundPackage[priceKey] * quantity);
-    }
-  }, [packageData, selectedPackage, packageType, totalDays]);
 
   useEffect(() => {
     const fetchPackageData = async () => {
       try {
         const response = await packageService.getAll();
-        console.log("Package data:", response.data);
         setPackageData(response.data);
       } catch (error) {
         console.error("Error fetching package data:", error);
@@ -43,7 +20,43 @@ const Bill = ({ selectedPackage, packageType, totalDays }) => {
     fetchPackageData();
   }, []);
 
-  // Map gói thời gian
+  useEffect(() => {
+    if (packageData.length > 0 && selectedPackage) {
+      const foundPackage = packageData.find(
+        (pkg) => pkg.level == selectedPackage
+      );
+      setPackageInfo(foundPackage);
+
+      const priceKey =
+        packageType === "day"
+          ? "priceday"
+          : packageType === "week"
+          ? "priceweek"
+          : "pricemonth";
+
+      const quantity = parseInt(totalDays.split(" ")[0], 10) || 1;
+      const price = foundPackage[priceKey] * quantity;
+      setTotalPrice(price);
+
+      const expirationDate = calculateExpirationDate(totalDays);
+
+      // Truyền dữ liệu ra ngoài thông qua postData
+      if (typeof postData === "function") {
+        const pricePerUnit = foundPackage[priceKey];
+        const totalPrice = pricePerUnit * quantity;
+      
+        postData({
+          selectedPackage: foundPackage,
+          pricePerUnit,
+          quantity,
+          totalPrice,
+          expirationDate,
+          packageType,
+        });
+      }
+    }
+  }, [packageData, selectedPackage, packageType, totalDays]);
+
   const timePackageMap = {
     day: "Đăng theo ngày",
     week: "Đăng theo tuần",
@@ -53,7 +66,6 @@ const Bill = ({ selectedPackage, packageType, totalDays }) => {
   const calculateExpirationDate = (totalDays) => {
     const today = new Date();
     const [value, unit] = totalDays.split(" ");
-
     let expirationDate = new Date(today);
 
     switch (unit) {
@@ -67,19 +79,18 @@ const Bill = ({ selectedPackage, packageType, totalDays }) => {
         expirationDate.setMonth(today.getMonth() + parseInt(value, 10));
         break;
       default:
-        expirationDate = today; // Mặc định là ngày và giờ hiện tại
+        expirationDate = today;
     }
 
-    // Định dạng ngày và giờ thành "dd/MM/yyyy HH:mm"
     const day = expirationDate.getDate().toString().padStart(2, "0");
     const month = (expirationDate.getMonth() + 1).toString().padStart(2, "0");
     const year = expirationDate.getFullYear();
     const hours = expirationDate.getHours().toString().padStart(2, "0");
     const minutes = expirationDate.getMinutes().toString().padStart(2, "0");
 
-    return `${hours}:${minutes} ${day}/${month}/${year} `;
+    return `${hours}:${minutes} ${day}/${month}/${year}`;
   };
-  // Tính ngày hết hạn
+
   const expirationDate = calculateExpirationDate(totalDays);
 
   return (
