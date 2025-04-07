@@ -48,7 +48,7 @@ export const postService = {
   updatePostStatus: (id, status) => api.patch(`/posts/admin/${id}/status`, { status }),
   hiddenPost: (id) => api.delete(`/posts/${id}`),
   renewPost: (postId,postData) => api.put(`/posts/${postId}/renew`, postData),
-  getPostByUserId: (userId) => api.get(`/posts/${userId}`),
+  getPostByUserId: (userId) => api.get(`/posts/count/${userId}`),
 };
   
 
@@ -83,6 +83,9 @@ export const adminService = {
 // User services
 export const userService = {
   getUser: (id) => api.get(`/users/user/${id}`),
+  updateProfile: (id, data) => api.put(`/users/${id}`, data),
+  getMyProfile: () => api.get("/users/my-profile"),
+  changePassword: (data) => api.post("/users/change-password", data),
 };
 
 export default api;

@@ -81,8 +81,12 @@ const UserMenu1 = () => {
         content={
           <div className="w-[350px] p-2 popover-user">
             <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
-              <Avatar src={user?.avatar || "/defaul-avt.png"} className="!w-[50px] !h-[50px] !p-1 !border !border-gray-400 !rounded-4xl"></Avatar>
-
+              <div className="w-fit p-1 border border-black rounded-full">
+                <Avatar
+                  className="!w-12 !h-12"
+                  src={user?.avatar || "/defaul-avt.png"}
+                ></Avatar>
+              </div>
               {isAuthenticated() ? (
                 <>
                   <div className="ml-6  text-black leading-4">
@@ -127,9 +131,11 @@ const UserMenu1 = () => {
         <Space style={{ color: "white" }}>
           <Avatar src={user?.avatar || "/defaul-avt.png"}></Avatar>
           <div className="w-[90px]">
-            <span className="block w-full truncate !text-white">{user?.name || ""}</span>
+            <span className="block w-full truncate !text-white">
+              {user?.name || ""}
+            </span>
           </div>
-          <CaretDownOutlined className="!text-white"/>
+          <CaretDownOutlined className="!text-white" />
         </Space>
       </Popover>
     </div>

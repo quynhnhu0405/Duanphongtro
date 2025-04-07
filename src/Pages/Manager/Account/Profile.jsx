@@ -2,67 +2,117 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Button, Modal, Form, Input, Upload, message } from "antd";
 import { ExclamationCircleTwoTone, UploadOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../Utils/AuthContext";
-import { postService } from "../../../Utils/api";
+import { postService, userService } from "../../../Utils/api";
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [post, setPost] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [form] = Form.useForm();
-
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState("");
+  console.log(user);
+  useEffect(() => {
+    postService
+      .getPostByUserId(user.id)
+      .then((response) => {
+        setPost(response.data);
+      })
+      .catch((error) => console.error("Lỗi API:", error));
+  }, [user.id]);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await userService.getMyProfile(); 
+        updateUser(response.data); 
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin người dùng:", error);
+      }
+    };
+  
+    fetchUserInfo();
+  
+    postService
+      .getPostByUserId(user.id)
+      .then((response) => {
+        setPost(response.data);
+      })
+      .catch((error) => console.error("Lỗi API:", error));
+  }, []);
   const handleEditProfile = () => {
     setIsModalVisible(true);
+    setAvatarPreview(user.avatar || "");
     form.setFieldsValue({
       name: user.name,
       phone: user.phone,
     });
   };
-  useEffect(() => {
-    postService.getPostByUserId(user.id)
-        .then(response => {
-          console.log("Dữ liệu từ API:", response.data);
-          setPost(response.data);
-        })
-        .catch(error => console.error("Lỗi API:", error));
-    }, []);
+
   const handleCancel = () => {
     setIsModalVisible(false);
+    setAvatarFile(null);
+    setAvatarPreview("");
   };
 
-  // const handleSubmit = (values) => {
-  //   setUserInfo((prev) => ({
-  //     ...prev,
-  //     name: values.name,
-  //     phone: values.phone,
-  //     avatar: values.avatar || prev.avatar,
-  //   }));
-  //   message.success("Cập nhật thông tin thành công!");
-  //   setIsModalVisible(false);
-  // };
+  const beforeUpload = (file) => {
+    const isImage = file.type.startsWith("image/");
+    if (!isImage) {
+      message.error("Bạn chỉ có thể tải lên file ảnh!");
+      return false;
+    }
 
-  const handleUpload = (info) => {
-    if (info.file.status === "done") {
-      // Giả sử API trả về URL của ảnh đã tải lên
-      // const imageUrl = info.file.response.url;
-      // setUserInfo((prev) => ({ ...prev, avatar: imageUrl }));
-      message.success("Tải lên avatar thành công!");
-    } else if (info.file.status === "error") {
-      message.error("Tải lên avatar thất bại!");
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      setAvatarPreview(reader.result);
+    };
+    setAvatarFile(file);
+    return false; // Prevent automatic upload
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("phone", values.phone);
+      formData.append("avatar", avatarPreview);
+
+      const response = await userService.updateProfile(user.id, formData);
+      message.success("Cập nhật thành công!");
+      setIsModalVisible(false);
+      setIsSuccessModalVisible(true);
+      // Update user in context
+      updateUser({
+        ...user,
+        name: values.name,
+        phone: values.phone,
+        avatar: response.data.avatar || user.avatar,
+      });
+
+      // Reset states
+      setAvatarFile(null);
+      setAvatarPreview("");
+    } catch (err) {
+      console.error("Lỗi khi gửi dữ liệu:", err);
+      message.error("Cập nhật thất bại!");
     }
   };
-
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
       <div className="w-fit m-auto p-2 border border-black rounded-full">
-        <Avatar src={user?.avatar || "/defaul-avt.png"} className="!w-[120px] !h-[120px]" />
+        <Avatar
+          src={user?.avatar || "/defaul-avt.png"}
+          className="!w-[120px] !h-[120px]"
+        />
       </div>
       <div className="text-center mt-6">
-        <h2 className="text-xl font-bold mb-3">{user.name}</h2>
-        <p className="text-gray-600 text-base mb-3">{user.phone}</p>
-        <p className="text-gray-600 text-base">
-          Số tin đăng: {post}
-        </p>
+        <h2 className="text-xl font-bold mb-3">{user?.name}</h2>
+        <p className="text-gray-600 text-base mb-3">{user?.phone}</p>
+        <p className="text-gray-600 text-base">Số tin đăng: {post.count}</p>
       </div>
       <div className="mt-5 w-fit m-auto mb-3">
         <Button
@@ -82,24 +132,25 @@ const Profile = () => {
       >
         <Form
           form={form}
-          initialValues={{ name: user.name, phone: user.phone }}
-          // onFinish={handleSubmit}
           layout="vertical"
+          initialValues={{
+            name: user.name,
+            phone: user.phone,
+          }}
         >
           <Form.Item label="Avatar">
             <Upload
-              name="avatar"
-              listType="picture"
+              beforeUpload={beforeUpload}
               showUploadList={false}
-              // customRequest={customRequest}
-              onChange={handleUpload}
+              accept="image/*"
             >
               <div className="flex items-center space-x-4">
-                <img
-                  src={user.avatar}
+                <Avatar
+                  src={avatarPreview || user?.avatar || "/defaul-avt.png"}
                   alt="Avatar"
-                  className="w-16 h-16 rounded-full object-cover"
+                  className="!w-16 !h-16 rounded-full object-cover"
                 />
+                {console.log(avatarPreview)}
                 <Button icon={<UploadOutlined />}>Tải lên avatar mới</Button>
               </div>
             </Upload>
@@ -110,8 +161,12 @@ const Profile = () => {
             name="name"
             rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
-            <Input placeholder="Nhập tên" className="!p-2 rounded-2xl !text-base" />
+            <Input
+              placeholder="Nhập tên"
+              className="!p-2 rounded-2xl !text-base"
+            />
           </Form.Item>
+
           <Form.Item
             label="Số điện thoại"
             name="phone"
@@ -123,8 +178,12 @@ const Profile = () => {
               },
             ]}
           >
-            <Input placeholder="Nhập số điện thoại" className="!p-2 rounded-2xl !text-[15px]"/>
+            <Input
+              placeholder="Nhập số điện thoại"
+              className="!p-2 rounded-2xl !text-[15px]"
+            />
           </Form.Item>
+
           <p className="-mt-4 mb-4 text-xs text-red-500 flex items-center">
             <ExclamationCircleTwoTone twoToneColor="#eb2f96" className="mr-2" />
             (Lưu ý: đổi sđt sẽ đổi luôn sđt đăng nhập tài khoản và hiển thị lên
@@ -132,11 +191,37 @@ const Profile = () => {
           </p>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" block className="!text-[15px] !p-5 !rounded-xl !bg-green-600">
+            <Button
+              type="primary"
+              block
+              className="!text-[15px] !p-5 !rounded-xl !bg-green-600"
+              onClick={handleSubmit}
+            >
               Lưu thay đổi
             </Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        title="Thành công"
+        visible={isSuccessModalVisible}
+        onCancel={() => setIsSuccessModalVisible(false)}
+        footer={[
+          <Button
+            key="ok"
+            type="primary"
+            onClick={() => setIsSuccessModalVisible(false)}
+          >
+            OK
+          </Button>,
+        ]}
+      >
+        <div className="text-center py-4">
+          <p className="text-green-500 text-lg mb-4">
+            Cập nhật thông tin thành công!
+          </p>
+        </div>
       </Modal>
     </div>
   );

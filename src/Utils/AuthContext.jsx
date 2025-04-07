@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Check for existing authentication on mount
+  // Load user & token từ localStorage khi app mount
   useEffect(() => {
     const storedToken = localStorage.getItem("userToken");
     const storedUser = localStorage.getItem("userData");
@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
         setUser(JSON.parse(storedUser));
       } catch (error) {
         console.error("Error parsing stored user data:", error);
-        // Clear invalid data
         localStorage.removeItem("userToken");
         localStorage.removeItem("userData");
       }
@@ -30,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // Login function
+  // Đăng nhập
   const login = (userData, authToken) => {
     setUser(userData);
     setToken(authToken);
@@ -38,7 +37,13 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("userData", JSON.stringify(userData));
   };
 
-  // Logout function
+  // Cập nhật user sau khi chỉnh sửa profile
+  const updateUser = (updatedUserData) => {
+    setUser(updatedUserData);
+    localStorage.setItem("userData", JSON.stringify(updatedUserData));
+  };
+
+  // Đăng xuất
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -48,15 +53,11 @@ export const AuthProvider = ({ children }) => {
     navigate("/dang-nhap");
   };
 
-  // Check if user is authenticated
-  const isAuthenticated = () => {
-    return !!token;
-  };
+  // Kiểm tra đã đăng nhập chưa
+  const isAuthenticated = () => !!token;
 
-  // Check if user is admin
-  const isAdmin = () => {
-    return user?.role === "admin";
-  };
+  // Kiểm tra quyền admin
+  const isAdmin = () => user?.role === "admin";
 
   const value = {
     user,
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     logout,
+    updateUser,     
     isAuthenticated,
     isAdmin,
   };
@@ -71,7 +73,7 @@ export const AuthProvider = ({ children }) => {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook to use the auth context
+// Hook sử dụng AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

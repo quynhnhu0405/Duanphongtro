@@ -82,16 +82,19 @@ const UserMenu = () => {
           <div className="w-[350px] p-2 popover-user">
             {isAuthenticated() ? (
               <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
-
-                  <Avatar className="!w-15 !h-15 !p-1 !border !border-gray-300" src={user?.avatar || "/defaul-avt.png"}></Avatar>
-                  <div className="ml-6  text-black leading-4">
-                    <p className="font-bold text-base">{user?.name}</p>
-                    <p className="text-gray-600 text-sm">{user?.phone}</p>
-                  </div>
+                <div className="w-fit p-1 border border-black rounded-full">
+                  <Avatar
+                    className="!w-12 !h-12"
+                    src={user?.avatar || "/defaul-avt.png"}
+                  ></Avatar>
+                </div>
+                <div className="ml-6  text-black leading-4">
+                  <p className="font-bold text-base">{user?.name}</p>
+                  <p className="text-gray-600 text-sm">{user?.phone}</p>
+                </div>
               </div>
             ) : (
-              <div>
-              </div>
+              <div></div>
             )}
             <div>
               <Menu>

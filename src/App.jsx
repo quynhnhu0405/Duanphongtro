@@ -95,7 +95,7 @@ function App() {
                 <Route index element={<Profile />} />
                 <Route path="doi-mat-khau" element={<ChangePassword />} />
                 <Route
-                  path="doi-mat-khau/quen-mat-khau"
+                  path="quen-mat-khau"
                   element={<ForgotPasswordAccount />}
                 />
               </Route>

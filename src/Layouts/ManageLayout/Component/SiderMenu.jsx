@@ -90,8 +90,10 @@ const SiderMenu = () => {
         >
           <Sider className="manager-sider h-full">
             <div className="border-b border-b-gray-300 p-4 flex items-center">
-              <Avatar className="!w-15 !h-15 !p-1 !border !border-gray-300" src={user?.avatar || "/defaul-avt.png"}></Avatar>
-              <div className="leading-5 ml-4">
+              <div className="w-fit m-auto p-1 border border-black rounded-full">
+              <Avatar className="!w-15 !h-15" src={user?.avatar || "/defaul-avt.png"}></Avatar>
+              </div>
+              <div className="leading-5 ml-2">
                 <p>{user?.name}</p>
                 <p>{user?.phone}</p>
               </div>
