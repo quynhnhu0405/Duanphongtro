@@ -12,15 +12,16 @@ const Profile = () => {
   const [form] = Form.useForm();
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState("");
-  console.log(user);
+  console.log("user", user);
   useEffect(() => {
     postService
-      .getPostByUserId(user.id)
+      .getPostByUserId(user._id)
       .then((response) => {
         setPost(response.data);
       })
       .catch((error) => console.error("Lỗi API:", error));
-  }, [user.id]);
+  }, [user._id]);
+  console.log("post", post);
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -150,8 +151,7 @@ const Profile = () => {
                   alt="Avatar"
                   className="!w-16 !h-16 rounded-full object-cover"
                 />
-                {console.log(avatarPreview)}
-                <Button icon={<UploadOutlined />}>Tải lên avatar mới</Button>
+                <Button icon={<UploadOutlined />} className="!ml-6">Tải lên avatar mới</Button>
               </div>
             </Upload>
           </Form.Item>
