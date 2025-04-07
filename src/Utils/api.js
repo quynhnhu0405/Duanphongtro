@@ -42,7 +42,15 @@ export const postService = {
   createPost: (postData) => api.post("/posts", postData),
   updatePost: (id, postData) => api.put(`/posts/${id}`, postData),
   searchPosts: (params) => api.get("/posts/search", { params }),
+  getLatestPosts: () => api.get("/posts/latest-posts"),
+  getMyPosts: () => api.get(`/posts/my-posts`),
+  createPayment: (paymentData) => api.post("/payments", paymentData),
+  updatePostStatus: (id, status) => api.patch(`/posts/admin/${id}/status`, { status }),
+  hiddenPost: (id) => api.delete(`/posts/${id}`),
+  renewPost: (postId,postData) => api.put(`/posts/${postId}/renew`, postData),
+  getPostByUserId: (userId) => api.get(`/posts/count/${userId}`),
 };
+  
 
 // Payment services
 export const paymentService = {
@@ -70,6 +78,14 @@ export const packageService = {
 export const adminService = {
   approvePost: (id, data) => api.patch(`/posts/admin/${id}/approve`, data),
   getAllUsers: () => api.get("/users"),
+};
+
+// User services
+export const userService = {
+  getUser: (id) => api.get(`/users/user/${id}`),
+  updateProfile: (id, data) => api.put(`/users/${id}`, data),
+  getMyProfile: () => api.get("/users/my-profile"),
+  changePassword: (data) => api.post("/users/change-password", data),
 };
 
 export default api;

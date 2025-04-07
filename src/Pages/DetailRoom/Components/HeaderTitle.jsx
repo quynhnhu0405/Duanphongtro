@@ -5,7 +5,7 @@ const HeaderTitle = ({ item }) => {
   return (
     <div>
       <div className="border-b border-gray-300">
-        {item?.packageDetails?.level == 1 && (
+        {item?.packageDetails?.[0]?.level == 1 && (
           <div>
             <p className="p-1 pl-2 pr-2 bg-red-500 text-white text-xs w-fit rounded-lg mt-5">
               ⭐️⭐️⭐️⭐️ TIN VIP NỔI BẬT
@@ -15,7 +15,7 @@ const HeaderTitle = ({ item }) => {
             </h1>{" "}
           </div>
         )}
-        {item.packageDetails?.level == 2 && (
+        {item?.packageDetails?.[0]?.level == 2 && (
           <div>
             <p className="p-1 pl-2 pr-2 bg-blue-800 text-white text-xs w-fit rounded-lg mt-5">
               ⭐️⭐️⭐️ TIN VIP 1
@@ -25,12 +25,22 @@ const HeaderTitle = ({ item }) => {
             </h1>
           </div>
         )}
-        {item.packageDetails?.level == 3 && (
+        {item?.packageDetails?.[0]?.level == 3 && (
           <div>
             <p className="p-1 pl-2 pr-2 bg-pink-800 text-white text-xs w-fit rounded-lg mt-5">
               ⭐️⭐️ TIN VIP 2
             </p>{" "}
             <h1 className=" uppercase font-bold text-lg mb-2 text-pink-800 two-line-text mt-3">
+              {item.title}
+            </h1>{" "}
+          </div>
+        )}
+        {item?.packageDetails?.[0]?.level == 4 && (
+          <div>
+            <p className="p-1 pl-2 pr-2 bg-blue-500 text-white text-xs w-fit rounded-lg mt-5">
+              Tin thường
+            </p>{" "}
+            <h1 className=" uppercase font-bold text-lg mb-2 bg-blue-500 two-line-text mt-3">
               {item.title}
             </h1>{" "}
           </div>
@@ -41,7 +51,9 @@ const HeaderTitle = ({ item }) => {
           {item?.location?.district}, {item?.location?.province}
         </p>
         <div className="flex mt-3 items-end w-[370px] justify-between mb-4">
-          <p className="text-lg text-green-600 font-black ">{item.price} đ</p>
+          <p className="text-lg text-green-600 font-black">
+          {item.price && !isNaN(item.price) ? item.price.toLocaleString() : "0"} đ
+          </p>
           <span className="w-1 h-1 rounded-4xl bg-gray-400 mb-2"></span>
           <p className="text-sm">
             {item.area} m <sup>2</sup>

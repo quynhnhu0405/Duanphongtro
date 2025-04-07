@@ -1,4 +1,4 @@
-import { Card, Row, Button } from "antd";
+import { Card, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import NoteFeaturedPackage from "./noteFeatured";
@@ -14,9 +14,7 @@ import CardFeature from "../../Component/CardFeature";
 import CardVip1 from "../../Component/CardVip1";
 import CardVip2 from "../../Component/CardVip2";
 import CardRegular from "../../Component/CardRegular";
-import { postService } from "../../../../Utils/api";
 import { packageService } from "../../../../Utils/api";
-import Bill from "./Bill";
 
 const SelectPackage = ({
   selectedPackage,
@@ -27,10 +25,10 @@ const SelectPackage = ({
   setTotalDays,
   pricePerDay,
   setPricePerDay,
+  onDataReady,
 }) => {
   const location = useLocation();
   const [postData, setPostData] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [packageData, setPackageData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,15 +44,13 @@ const SelectPackage = ({
         setLoading(false);
       }
     };
-
     fetchPackageData();
   }, []);
 
   // Get post data from location state
   useEffect(() => {
-    if (location.state && location.state.postData) {
+    if (location.state?.postData) {
       setPostData(location.state.postData);
-      console.log("Received post data:", location.state.postData);
     }
   }, [location.state]);
 
@@ -94,26 +90,65 @@ const SelectPackage = ({
     }
   }, [packageType, setTotalDays]);
 
+  // Prepare data to send to parent component
+  useEffect(() => {
+    if (!postData || !packageData.length) return;
+
+    // Calculate expiry date
+    let daysValue = 1;
+    switch (packageType) {
+      case "week":
+        daysValue = 7;
+        break;
+      case "month":
+        daysValue = 30;
+        break;
+      default:
+        daysValue = 1;
+    }
+
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + daysValue);
+
+    const packageId = getPackageIdByLevel(selectedPackage);
+    const currentPrice = calculatePrice(selectedPackage, packageType);
+
+    // Format data to match the new schema
+    const preparedData = {
+      ...postData,
+      package: packageId ? [packageId] : [], // Keep this format for backward compatibility
+      packageType,
+      expiryDate: expiryDate.toISOString(),
+      totalPrice: currentPrice,
+      duration: daysValue,
+    };
+
+    if (onDataReady) {
+      onDataReady(preparedData);
+    }
+  }, [postData, selectedPackage, packageType, packageData]);
+
   // Update preview item based on received postData
   const previewItem = postData
     ? {
         title: postData.title,
-        images: postData.images.map((url, index) => ({ id: index, url })),
+        images: postData.images,
         price: `${new Intl.NumberFormat("vi-VN").format(
           postData.price
         )} đồng/tháng`,
-        acreage: postData.area.toString(),
+        area: postData.area.toString(),
         location: {
-          city: postData.location.province,
+          province: postData.location.province,
           ward: postData.location.district,
           street: `${postData.location.street || ""}, ${
             postData.location.ward
           }`,
         },
         description: postData.description.substring(0, 100) + "...",
+        tempImages: postData.tempImages,
       }
     : null;
-
+  console.log("Preview item:", previewItem);
   // Mapping gói đăng tin
   const packageComponents = {
     day: { component: PackageDay, label: "ngày" },
@@ -123,7 +158,7 @@ const SelectPackage = ({
   const SelectedPackageComponent =
     packageComponents[packageType]?.component || PackageDay;
 
-  // Cập nhật giá khi packageType hoặc selectedPackage thay đổi
+  // Update price when packageType or selectedPackage changes
   useEffect(() => {
     const newPrice = calculatePrice(selectedPackage, packageType);
     setPricePerDay(newPrice);
@@ -153,61 +188,6 @@ const SelectPackage = ({
     if (!packageData.length || !level) return null;
     const packageInfo = packageData.find((pkg) => pkg.level === level);
     return packageInfo ? packageInfo._id : null;
-  };
-
-  // Handle post creation on submit
-  const handleSubmitPost = async () => {
-    if (!postData) {
-      console.error("No post data available");
-      return;
-    }
-
-    // Calculate expiry date based on package type
-    let daysValue = 1;
-    switch (packageType) {
-      case "week":
-        daysValue = 7;
-        break;
-      case "month":
-        daysValue = 30;
-        break;
-      default:
-        daysValue = 1;
-    }
-
-    // Create the expiry date directly as a Date object
-    const expiryDate = new Date();
-    expiryDate.setDate(expiryDate.getDate() + daysValue);
-
-    try {
-      setIsSubmitting(true);
-
-      // Get the package _id instead of level
-      const packageId = getPackageIdByLevel(selectedPackage);
-
-      // Add package and other details to the post data
-      const finalPostData = {
-        ...postData,
-        package: packageId ? [packageId] : [], // Using the _id instead of level
-        expiryDate: expiryDate.toISOString(), // Convert to ISO string format
-        // Add any other fields needed by your API
-      };
-
-      console.log("Submitting post with data:", finalPostData);
-
-      // Submit the post to the API
-      const response = await postService.createPost(finalPostData);
-      console.log("Post created successfully:", response.data);
-
-      // Handle success - redirect or show success message
-      alert("Đăng tin thành công!");
-      // Redirect logic here if needed
-    } catch (error) {
-      console.error("Error creating post:", error);
-      alert("Đăng tin thất bại. Vui lòng thử lại!");
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   return (
@@ -246,18 +226,6 @@ const SelectPackage = ({
 
         {/* Hiển thị thông tin gói tin */}
         <SelectedNoteComponent />
-
-        {/* Submit button */}
-        <Button
-          type="primary"
-          danger
-          className="w-full mt-6 !font-bold !text-base !p-5 !bg-red-600 !rounded-3xl"
-          onClick={handleSubmitPost}
-          loading={isSubmitting || loading}
-          disabled={!postData || isSubmitting || loading}
-        >
-          Đăng tin ngay
-        </Button>
       </Card>
     </div>
   );

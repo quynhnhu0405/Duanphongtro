@@ -6,10 +6,12 @@ import {
   TagsOutlined,
   UserOutlined,
   MenuOutlined,
+  PayCircleOutlined,
 } from "@ant-design/icons";
 import { Avatar, Menu, Drawer, Button } from "antd";
 import Sider from "antd/es/layout/Sider";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { useAuth } from "../../../Utils/AuthContext";
 
 const items = [
   {
@@ -23,6 +25,12 @@ const items = [
     key: "/quan-ly/danh-sach-tin-dang",
     icon: <ProfileOutlined />,
     path: "/quan-ly/danh-sach-tin-dang",
+  },
+  {
+    label: "Lịch sử thanh toán",
+    key: "/quan-ly/lich-su-thanh-toan",
+    icon: <PayCircleOutlined />,
+    path: "/quan-ly/lich-su-thanh-toan",
   },
   {
     label: "Bảng giá dịch vụ",
@@ -42,7 +50,8 @@ const SiderMenu = () => {
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(false);
   const [drawerVisible, setDrawerVisible] = useState(false);
-
+  const { user} = useAuth();
+  const nav = useNavigate();
   const checkScreenSize = () => {
     setIsMobile(window.innerWidth <= 1220);
   };
@@ -81,24 +90,24 @@ const SiderMenu = () => {
         >
           <Sider className="manager-sider h-full">
             <div className="border-b border-b-gray-300 p-4 flex items-center">
-              <div className="p-1 border border-gray-400 rounded-full">
-                <Avatar
-                  src="https://random.imagecdn.app/500/150"
-                  className="!w-[60px] !h-[60px]"
-                />
+              <div className="w-fit m-auto p-1 border border-black rounded-full">
+              <Avatar className="!w-15 !h-15" src={user?.avatar || "/defaul-avt.png"}></Avatar>
               </div>
-              <div className="leading-5 ml-4">
-                <p>Phucs</p>
-                <p>0963767987</p>
-                <p>Mã tài khoản: 123</p>
+              <div className="leading-5 ml-2">
+                <p>{user?.name}</p>
+                <p>{user?.phone}</p>
               </div>
             </div>
             <Menu mode="vertical" selectedKeys={[location.pathname]}>
               {items.map((item) => (
-                <Menu.Item key={item.key} icon={item.icon}>
-                  <a href={item.path}>{item.label}</a>
-                </Menu.Item>
-              ))}
+                <Menu.Item
+                key={item.key}
+                icon={item.icon}
+                onClick={() => nav(item.path)}
+              >
+                {item.label}
+              </Menu.Item>
+              ))} 
               <Menu.Item key="logout" icon={<LogoutOutlined />} danger>
                 Đăng xuất
               </Menu.Item>

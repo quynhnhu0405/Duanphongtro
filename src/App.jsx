@@ -1,6 +1,6 @@
 import "./App.scss";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import DefaultLayout from "./Layouts/DefaultLayout";
 import PostingRegulation from "./Pages/PostingRegulations";
 import Introduce from "./Pages/Introduce";
@@ -46,6 +46,7 @@ import {
   AdminRoute,
   PublicRoute,
 } from "./Utils/ProtectedRoute";
+import HistoryPayment from "./Pages/Manager/HistoryPayment";
 
 function App() {
   return (
@@ -84,14 +85,17 @@ function App() {
           {/* Protected routes for authenticated users */}
           <Route element={<ProtectedRoute />}>
             <Route path="quan-ly" element={<ManageLayout />}>
-              <Route path="dang-bai-moi" element={<PostNew />} />
-              <Route path="dang-bai-moi/thanh-toan" element={<Payment />} />
+              <Route path="dang-bai-moi" element={<Outlet />}>
+                <Route index element={<PostNew />} />
+                <Route path="thanh-toan" element={<Payment />} />
+              </Route>
+              <Route path="lich-su-thanh-toan" element={<HistoryPayment />} />
               <Route path="danh-sach-tin-dang" element={<ListPosts />} />
               <Route path="quan-ly-tai-khoan" element={<Account />}>
                 <Route index element={<Profile />} />
                 <Route path="doi-mat-khau" element={<ChangePassword />} />
                 <Route
-                  path="doi-mat-khau/quen-mat-khau"
+                  path="quen-mat-khau"
                   element={<ForgotPasswordAccount />}
                 />
               </Route>

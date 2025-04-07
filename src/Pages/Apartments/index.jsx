@@ -79,7 +79,7 @@ const Apartments = () => {
           {!loading &&
             !error &&
             room.map((item) => {
-              const packageLevel = Number(item?.packageDetails?.level);
+              const packageLevel = Number(item?.packageDetails?.[0]?.level);
               if (packageLevel === 1) {
                 return <FeaturedPost key={item._id} item={item} />;
               } else if (packageLevel === 2) {

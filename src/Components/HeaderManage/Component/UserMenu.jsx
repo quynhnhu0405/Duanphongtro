@@ -10,10 +10,10 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Menu, Popover, Space } from "antd";
 import { Link } from "react-router";
-import { useAuth } from "../Utils/AuthContext";
+import { useAuth } from "../../../Utils/AuthContext";
 import { useState } from "react";
 
-const UserMenu = () => {
+const UserMenu1 = () => {
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const [open, setOpen] = useState(false);
   const getItems = () => {
@@ -80,28 +80,31 @@ const UserMenu = () => {
       <Popover
         content={
           <div className="w-[350px] p-2 popover-user">
-            {isAuthenticated() ? (
-              <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
-                <div className="w-fit p-1 border border-black rounded-full">
-                  <Avatar
-                    className="!w-12 !h-12"
-                    src={user?.avatar || "/defaul-avt.png"}
-                  ></Avatar>
-                </div>
-                <div className="ml-6  text-black leading-4">
-                  <p className="font-bold text-base">{user?.name}</p>
-                  <p className="text-gray-600 text-sm">{user?.phone}</p>
-                </div>
+            <div className="flex items-center mb-4 border-b border-b-gray-300 pb-3 ">
+              <div className="w-fit p-1 border border-black rounded-full">
+                <Avatar
+                  className="!w-12 !h-12"
+                  src={user?.avatar || "/defaul-avt.png"}
+                ></Avatar>
               </div>
-            ) : (
-              <div></div>
-            )}
+              {isAuthenticated() ? (
+                <>
+                  <div className="ml-6  text-black leading-4">
+                    <p className="font-bold text-base">{user?.name}</p>
+                    <p className="text-gray-600 text-sm">{user?.phone}</p>
+                  </div>
+                </>
+              ) : (
+                <span className="hidden sm:inline-block">Tài khoản</span>
+              )}
+            </div>
             <div>
               <Menu>
                 {getItems().map((item) => {
                   if (item.type === "divider") {
                     return <Menu.Divider key={item.key} />;
                   }
+
                   return (
                     <Menu.Item
                       key={item.key}
@@ -127,16 +130,16 @@ const UserMenu = () => {
       >
         <Space style={{ color: "white" }}>
           <Avatar src={user?.avatar || "/defaul-avt.png"}></Avatar>
-          <div className="w-[70px]">
-            <span className="block w-full truncate">
-              {user?.name || "Đăng nhập"}
+          <div className="w-[90px]">
+            <span className="block w-full truncate !text-white">
+              {user?.name || ""}
             </span>
           </div>
-          <CaretDownOutlined />
+          <CaretDownOutlined className="!text-white" />
         </Space>
       </Popover>
     </div>
   );
 };
 
-export default UserMenu;
+export default UserMenu1;

@@ -11,7 +11,6 @@ import { useLocation, useNavigate } from "react-router";
 import User from "./User";
 import { useAuth } from "../../../Utils/AuthContext";
 import { postService } from "../../../Utils/api";
-
 const menuItems = [
   { label: "Trang chủ", key: "/", path: "/" },
   { label: "Phòng trọ", key: "/phong-tro", path: "/phong-tro" },
@@ -413,10 +412,10 @@ const DefaultHeader = () => {
         <div className="header-left">
           <div className="logo">
             <a href="/">
-              <img src="./src/assets/logo.png" alt="logo" />
+              <img src="/logo.png" alt="logo" />
             </a>
           </div>
-          <div>
+          <div className="flex justify-center h-10">
             <Input
               prefix={
                 <EnvironmentOutlined
@@ -451,16 +450,15 @@ const DefaultHeader = () => {
               handleConfirm={handleConfirm}
               onCancel={() => setVisible(false)}
             />
-          </div>
-          <div className="filter" style={{ display: "flex" }}>
             <Input.Search
+              className="search-text"
               placeholder="Tìm kiếm theo từ khóa..."
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onSearch={applyFilters}
-              style={{ width: "170px", marginRight: "8px" }}
             />
-            <Button onClick={() => setFillerVisible(true)}>
+          <div className="filter">
+            <Button  onClick={() => setFillerVisible(true)}>
               <FilterOutlined />
               <span>Filter</span>
             </Button>
@@ -490,11 +488,12 @@ const DefaultHeader = () => {
               setIsCharacteristics={setIsCharacteristics}
               onOk={handleApplyFilter}
             />
+            </div>
           </div>
         </div>
         <div className="header-right">
           <div>
-            <a className="manage" href="/quan-ly/tin-dang">
+            <a className="manage" href="/quan-ly/danh-sach-tin-dang">
               Quản lý
             </a>
           </div>

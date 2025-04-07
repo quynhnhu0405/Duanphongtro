@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Button, Input } from "antd";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../../Utils/AuthContext";
 
 const ForgotPasswordAccount = () => {
   const [step, setStep] = useState(1);
-  const [phoneNumber, setPhoneNumber] = useState("0123456789");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const {user} = useAuth();
   const navigate = useNavigate();
   // Xử lý khi nhấn nút "Gửi mã"
   const handleSendOtp = () => {
@@ -71,7 +72,7 @@ const ForgotPasswordAccount = () => {
       {step === 1 && (
         <div>
           <p className="mb-4">
-            Mã sẽ gửi về số điện thoại <strong>{phoneNumber}</strong>.
+            Mã sẽ gửi về số điện thoại <strong>{user.phone}</strong>.
           </p>
           <Button
             type="primary"
