@@ -129,16 +129,16 @@ const PaymentManagementPage = () => {
     },
     {
       title: "Trạng thái",
-      dataIndex: "status",
       key: "status",
-      render: (status) => {
-        let color =
-          status === "completed"
-            ? "green"
-            : status === "unpaid"
-            ? "red"
-            : "blue";
-        return <Tag color={color}>{status.toUpperCase()}</Tag>;
+      render: (_, record) => {
+        switch (record.status) {
+          case "completed":
+            return <Tag color="green">Đã thanh toán</Tag>;
+          case "unpaid":
+            return <Tag color="red">Chưa thanh toán</Tag>;
+          default:
+            return <Tag color="gray">Chờ xác nhận</Tag>;
+        }
       },
     },
     {
