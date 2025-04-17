@@ -1,16 +1,17 @@
 import { MessageFilled, PhoneFilled } from "@ant-design/icons";
-import { Card, Image } from "antd";
+import { Avatar, Card, Image } from "antd";
 
 const InformationHost = ({ post }) => {
   return (
     <div className="mb-4">
       <Card className="bg-white">
         <div className="w-30 h-30 m-auto p-1 border border-gray-200 rounded-full">
-          <Image 
+          <Avatar 
             src={post.landlordId?.avatar || "/defaul-avt.png"} 
-            className="rounded-full" 
+            className="rounded-full !w-full !h-full !object-cover" 
             alt="User Avatar" 
             preview={false}
+            
           />
         </div>
         <p className="text-center m-2 font-black text-lg">{post.landlordId?.name}</p>

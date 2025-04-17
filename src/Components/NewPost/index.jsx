@@ -26,7 +26,7 @@ const NewPost = () => {
                 <img
                   src={item.images[0]}
                   alt=""
-                  className="w-20 rounded-2xl h-20"
+                  className="!w-20 rounded-2xl h-20"
                 />
                 <div className="ml-4">
                   <p className="two-line-text text-blue-700 text-[15px] font-bold">

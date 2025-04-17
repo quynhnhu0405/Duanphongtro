@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
-import { Col, Row } from "antd";
+import { Avatar, Col, Row } from "antd";
 import { Link } from "react-router";
 import { formatTimeAgo } from "../../Utils/dateUtil";
 import slugify from "slugify";
+import { userService } from "../../Utils/api";
 
 const FeaturedPost = ({ item }) => {
   const [landlord, setLandlord] = useState(null);
 
-  useEffect(() => {
+ useEffect(() => {
     if (item.landlordId) {
-      fetch(`http://localhost:5000/api/users/user/${item.landlordId}`)
-        .then((res) => res.json())
+      userService.getUser(item.landlordId)
         .then((data) => setLandlord(data))
-        .catch((error) => console.error("Lỗi lấy dữ liệu chủ nhà:", error));
+        .catch((error) => console.error("Failed to fetch landlord:", error));
     }
   }, [item.landlordId]);
 
@@ -79,18 +79,18 @@ const FeaturedPost = ({ item }) => {
           {landlord && (
             <>
               <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
-                <img src={landlord?.avatar || "/defaul-avt.png"}  className="w-7 rounded-3xl" alt="Avatar" />
+                <Avatar src={landlord?.data?.avatar || "/defaul-avt.png"}  className="w-7 rounded-3xl" alt="Avatar" />
               </div>
               <div className="ml-3 text-sm text-black leading-4">
-                <p className="font-bold">{landlord.name}</p>
+                <p className="font-bold">{landlord?.data?.name}</p>
                 <p className="text-gray-400">Đăng {formatTimeAgo(item.createdAt)}</p>
               </div>
             </>
           )}
         </div>
         {landlord && (
-          <a target="_blank" rel="nofollow" href={`tel:${landlord.phone}`} className="host-phone text-sm">
-            <PhoneOutlined /> {landlord.phone}
+          <a target="_blank" rel="nofollow" href={`tel:${landlord?.data?.phone}`} className="host-phone text-sm">
+            <PhoneOutlined /> {landlord?.data?.phone}
           </a>
         )}
       </div>
