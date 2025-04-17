@@ -1,23 +1,25 @@
 import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
-import { Col, Row } from "antd";
+import { Avatar, Col, Row } from "antd";
 import { Link } from "react-router";
 import { formatTimeAgo } from "../../Utils/dateUtil";
 import { useEffect, useState } from "react";
 import slugify from "slugify";
+import { userService } from "../../Utils/api";
 const RegularCard = ({ item }) => {
   const [landlord, setLandlord] = useState(null);
-
   useEffect(() => {
     if (item.landlordId) {
-      fetch(`http://localhost:5000/api/users/user/${item.landlordId}`)
-        .then((res) => res.json())
+      userService
+        .getUser(item.landlordId)
         .then((data) => setLandlord(data))
-        .catch((error) => console.error("Lỗi lấy dữ liệu chủ nhà:", error));
+        .catch((error) => console.error("Failed to fetch landlord:", error));
     }
   }, [item.landlordId]);
   return (
     <div className="roomCard mb-7">
-      <Link to={`/chi-tiet/${slugify(item?._id, { lower: true, locale: "vi" })}`}>
+      <Link
+        to={`/chi-tiet/${slugify(item?._id, { lower: true, locale: "vi" })}`}
+      >
         <div className="border-gray-200 border rounded-t-lg">
           <Row>
             <Col className="pr-2" xs={24} sm={24} md={6} lg={6}>
@@ -38,7 +40,7 @@ const RegularCard = ({ item }) => {
                 {item.title}
               </h1>
               <p className="text-base text-red-500 font-bold inline">
-              {item.price.toLocaleString("vi-VN")} VND
+                {item.price.toLocaleString("vi-VN")} VND
               </p>
               <p className="text-base text-blue-500 font-bold inline ml-10">
                 {item.area}m<sup>2</sup>
@@ -59,14 +61,14 @@ const RegularCard = ({ item }) => {
           {landlord && (
             <>
               <div className="p-1 border border-gray-400 rounded-3xl w-fit h-fit">
-                <img
-                  src={landlord?.avatar || "/defaul-avt.png"}
+                <Avatar
+                  src={landlord?.data?.avatar || "/defaul-avt.png"}
                   className="w-7 rounded-3xl"
                   alt="Avatar"
                 />
               </div>
               <div className="ml-3 text-sm text-black leading-4">
-                <p className="font-bold">{landlord.name}</p>
+                <p className="font-bold">{landlord?.data?.name}</p>
                 <p className="text-gray-400">
                   Đăng {formatTimeAgo(item.createdAt)}
                 </p>

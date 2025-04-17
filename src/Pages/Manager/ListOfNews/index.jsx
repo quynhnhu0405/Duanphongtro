@@ -155,6 +155,8 @@ const ListPosts = () => {
             </Button>
           </span>
             );
+          case "unpaid":
+              return <Tag color='blue'>Chưa thanh toán</Tag>;
           default:
             return <Tag color='gray'>Chờ xác nhận</Tag>;
           }
