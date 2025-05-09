@@ -11,6 +11,7 @@ const Login = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isBanned, setIsBanned] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
   const [messageApi, contextHolder] = message.useMessage();
@@ -27,7 +28,14 @@ const Login = () => {
       return;
     }
 
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phone)) {
+      messageApi.error("Số điện thoại phải có 10 chữ số!");
+      return;
+    }
+
     setLoading(true);
+    setIsBanned(false);
 
     try {
       const response = await authService.login({ phone, password });
@@ -42,9 +50,26 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       console.error("Lỗi đăng nhập:", error);
-      messageApi.error(
-        error.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại"
-      );
+      
+      if (error.response) {
+        const errorMessage = error.response.data.message;
+        
+        if (errorMessage.includes("liên hệ")) {
+          setIsBanned(true);
+          messageApi.error(errorMessage);
+        } 
+        else if (errorMessage.includes("còn")) {
+          const attempts = errorMessage.match(/\d+/)[0];
+          messageApi.error(`Sai mật khẩu. Bạn còn ${attempts} lần thử`);
+        }
+        else {
+          messageApi.error(errorMessage || "Đăng nhập thất bại");
+        }
+      } else if (error.request) {
+        messageApi.error("Không thể kết nối đến server");
+      } else {
+        messageApi.error("Đăng nhập thất bại, vui lòng thử lại");
+      }
     } finally {
       setLoading(false);
     }
@@ -116,10 +141,15 @@ const Login = () => {
               {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
             </button>
           </div>
+          {isBanned && (
+            <div className="mt-2 text-red-600 text-sm">
+              Tài khoản của bạn đã bị khóa. Vui lòng liên hệ tới 0396504803 để biết chi tiết
+            </div>
+          )}
           <button
             type="submit"
             className="w-full mt-5 mb-3 bg-red-500 text-white p-2 font-black text-lg rounded-3xl hover:bg-red-600"
-            disabled={loading}
+            disabled={loading || isBanned}
           >
             {loading ? "Đang xử lý..." : "Đăng nhập"}
           </button>
