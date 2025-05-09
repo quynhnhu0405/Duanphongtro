@@ -47,7 +47,7 @@ export default function FilterModal({
     >
       <h3>Danh mục cho thuê</h3>
       <Space wrap>
-        {categories.map((category) => (
+        {categories.length>0 &&categories.map((category) => (
           <Button
             key={category._id}
             type={selectedCategory === category.name ? "primary" : "default"}

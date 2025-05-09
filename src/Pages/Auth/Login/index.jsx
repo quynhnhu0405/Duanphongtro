@@ -1,9 +1,10 @@
 import { EyeInvisibleOutlined, EyeOutlined } from "@ant-design/icons";
 import { Card, message } from "antd";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router";
 import { authService } from "../../../Utils/api";
 import { useAuth } from "../../../Utils/AuthContext";
+import { Link, useNavigate } from "react-router";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -21,7 +23,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!phone || !password) {
-      message.error("Vui lòng nhập số điện thoại và mật khẩu");
+      messageApi.error("Số điện thoại hoặc mật khẩu không được để trống!");
       return;
     }
 
@@ -29,17 +31,18 @@ const Login = () => {
 
     try {
       const response = await authService.login({ phone, password });
-
-      // Use the login function from AuthContext
       login(response.data.user, response.data.token);
-
-      message.success("Đăng nhập thành công");
-
-      // Chuyển hướng đến trang chủ
+    
+      await messageApi.open({
+        type: "success",
+        content: "Đăng nhập thành công!",
+        duration: 2,
+      });
+    
       navigate("/");
     } catch (error) {
       console.error("Lỗi đăng nhập:", error);
-      message.error(
+      messageApi.error(
         error.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại"
       );
     } finally {
@@ -49,12 +52,12 @@ const Login = () => {
 
   return (
     <div className="w-[600px] m-auto mt-15 h-full">
+      {contextHolder}
       <Card className="bg-white !p-7 ">
         <div className="flex justify-between !text-black border-b border-gray-300 mb-6">
           <Link
             to="/dang-nhap"
-            className="text-2xl font-black w-1/2 text-center !text-black border-b-3 border-red-600 pb-4 "
-            placeholder=" "
+            className="text-2xl font-black w-1/2 text-center !text-black border-b-3 border-red-600 pb-4"
           >
             Đăng nhập
           </Link>
@@ -126,8 +129,7 @@ const Login = () => {
           <p className="text-xs mt-3">
             Qua việc đăng nhập hoặc tạo tài khoản, bạn đồng ý với các{" "}
             <Link to="/quy-dinh-su-dung">quy định sử dụng</Link> cũng như{" "}
-            <Link to="/chinh-sach-bao-mat">chính sách bảo mật</Link> của chúng
-            tôi
+            <Link to="/chinh-sach-bao-mat">chính sách bảo mật</Link> của chúng tôi
           </p>
         </form>
       </Card>

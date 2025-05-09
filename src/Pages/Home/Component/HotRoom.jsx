@@ -3,10 +3,11 @@ import ProductItem from "../../../Components/ProductCard";
 import { Link } from "react-router";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { postService } from "../../../Utils/api";
 const HotRoom = () => {
   const [room, setRoom] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/posts//phong-tro")
+    postService.getMotelRooms({ limit: 8 })
       .then((res) => res.json())
       .then((data) => {
         setRoom(data);
