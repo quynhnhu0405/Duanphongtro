@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Row, Skeleton } from "antd";
 import ProductItem from "../../../Components/ProductCard";
 import { Link } from "react-router";
 import { ArrowRightOutlined } from "@ant-design/icons";
@@ -6,13 +6,17 @@ import { useEffect, useState } from "react";
 import { postService } from "../../../Utils/api";
 const HotRoom = () => {
   const [room, setRoom] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     postService.getMotelRooms({ limit: 8 })
-      .then((res) => res.json())
-      .then((data) => {
-        setRoom(data);
+      .then((res) => {
+        setRoom(res.data); // axios trả về dữ liệu ở res.data
+        setLoading(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   }, []);
   return (
     <div className="bg-white p-10 rounded-3xl list-room">
@@ -20,11 +24,18 @@ const HotRoom = () => {
         PHÒNG TRỌ HOT NHẤT
       </h2>
       <Row gutter={[16, 16]}>
-        {room.slice(0, 8).map((item) => (
-          <Col xs={24} sm={12} md={12} lg={6} key={item.id}>
-            <ProductItem item={item} />
-          </Col>
-        ))}
+        {loading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Col xs={24} sm={12} md={12} lg={6} key={i}>
+                <Skeleton active paragraph={{ rows: 4 }} />
+              </Col>
+            ))
+          : room &&
+            room.slice(0, 8).map((item) => (
+              <Col xs={24} sm={12} md={12} lg={6} key={item._id || item.id}>
+                <ProductItem item={item} />
+              </Col>
+            ))}
       </Row>
 
       <div className="mt-10 flex justify-center btn-action">

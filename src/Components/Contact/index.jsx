@@ -5,7 +5,7 @@ const Contact = () => {
   return (
     <Card >
       <div className="lg:flex items-center">
-        <img src="./src/assets/contact.jpg" className="w-1/2"></img>
+        <img src="contact.jpg" className="w-1/2"></img>
         <div className="text-center leading-10 w-1/2">
         <CustomerServiceOutlined style={{ fontSize: "40px" }}/>
         <h3 className="text-3xl font-semibold mt-2 mb-2">Hỗ trợ chủ nhà đăng tin</h3>
