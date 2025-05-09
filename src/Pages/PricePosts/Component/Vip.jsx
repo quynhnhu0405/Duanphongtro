@@ -9,7 +9,7 @@ const Vip = () => {
         to và nhiều hình hơn các tin khác. Nằm trên tất cả các tin khác, được
         hưởng nhiều ưu tiên và hiệu quả giao dịch cao nhất.
       </p>
-      <img src="public/vip.png" alt="" className="w-1/2 m-auto mt-5"/>
+      <img src="vip.png" alt="" className="w-1/2 m-auto mt-5"/>
     </div>
   );
 };

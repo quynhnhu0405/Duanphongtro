@@ -71,7 +71,7 @@ const MotelRoom = () => {
 
           {room.length === 0 && (
             <div className="flex flex-col items-center">
-              <img src="/src/assets/empty.jpeg" alt="" className="w-1/4" />
+              <img src="empty.jpeg" alt="" className="w-1/4" />
               <p className="text-base">Không có bài đăng nào !!!</p>
             </div>
           )}

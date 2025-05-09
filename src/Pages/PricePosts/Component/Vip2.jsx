@@ -9,7 +9,7 @@ const Vip2 = () => {
         gắn biểu tượng 2 ngôi sao màu vàng ở tiêu đề tin đăng. Hiển thị sau tin
         VIP Nổi Bật, Tin VIP 1 và trên các tin khác.
       </p>
-      <img src="public/vip2.png" alt="" className="w-1/2 m-auto mt-5" />
+      <img src="vip2.png" alt="" className="w-1/2 m-auto mt-5" />
     </div>
   );
 };

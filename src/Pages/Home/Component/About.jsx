@@ -10,13 +10,13 @@ const About = () => {
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={8} md={8} lg={8}>
             <div className="p-5">
-              <img src="public/mang-luoi.svg"></img>
+              <img src="mang-luoi.svg"></img>
               <p>Hệ thống đăng và quản lý trọ cho thuê hiện đại nhất</p>
             </div>
           </Col>
           <Col xs={24} sm={8} md={8} lg={8}>
             <div className="p-5">
-              <img src="public/nguoi-thue.svg"></img>
+              <img src="nguoi-thue.svg"></img>
               <p>
                 Hơn 5.000 trọ mới từ khắp các tỉnh thành được cập nhật mỗi tháng
               </p>
@@ -24,7 +24,7 @@ const About = () => {
           </Col>
           <Col xs={24} sm={8} md={8} lg={8}>
             <div className="p-5">
-              <img src="public/quang-cao.svg"></img>
+              <img src="quang-cao.svg"></img>
               <p>
                 Đăng trọ của bạn lên website của chúng tôi và cho thuê nhanh
                 chóng
