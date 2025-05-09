@@ -63,6 +63,7 @@ const Apartments = () => {
             </div>
           )}
 
+
           {error && (
             <div className="flex justify-center p-10">
               <p className="text-red-500">{error}</p>

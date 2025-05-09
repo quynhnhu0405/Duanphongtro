@@ -57,19 +57,20 @@ const MotelRoom = () => {
         <FilterProvince />
         <TabMenu />
         <div>
-          {loading ? (
+          {loading && (
             <div className="flex justify-center p-10">
               <p>Đang tải dữ liệu...</p>
             </div>
-          ) : (
-            error && (
-              <div className="flex justify-center p-10">
-                <p className="text-red-500">{error}</p>
-              </div>
-            )
           )}
 
-          {room.length === 0 && (
+
+          {error && (
+            <div className="flex justify-center p-10">
+              <p className="text-red-500">{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && room.length === 0 && (
             <div className="flex flex-col items-center">
               <img src="empty.jpeg" alt="" className="w-1/4" />
               <p className="text-base">Không có bài đăng nào !!!</p>
