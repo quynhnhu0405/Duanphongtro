@@ -224,8 +224,8 @@ const AccountManagementPage = () => {
     },
     {
       title: 'Ngày tạo',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      dataIndex: 'createAt',
+      key: 'createAt',
       render: (date) => dayjs(date).format('DD/MM/YYYY'),
     },
     {

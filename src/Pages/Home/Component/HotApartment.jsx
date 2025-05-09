@@ -3,10 +3,11 @@ import ProductItem from "../../../Components/ProductCard";
 import { Link } from "react-router";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { postService } from "../../../Utils/api";
 const HotApartment = () => {
   const [room, setRoom] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/posts/can-ho")
+    postService.getApartments({ limit: 8 })
       .then((res) => res.json())
       .then((data) => {
         setRoom(data);
@@ -21,7 +22,7 @@ const HotApartment = () => {
       </h2>
 
       <Row gutter={[16, 16]}>
-        {room.slice(0, 8).map((item) => (
+        {room && room.slice(0, 8).map((item) => (
           <Col xs={24} sm={12} md={12} lg={6} key={item.id}>
             <ProductItem item={item} />
           </Col>
