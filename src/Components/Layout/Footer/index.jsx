@@ -49,23 +49,11 @@ const DefaultFooter = () => {
             <h3 className="font-bold mb-2 text-lg">PHƯƠNG THỨC THANH TOÁN</h3>
             <div style={{ display: "flex" }}>
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/MoMo_Logo.png/1024px-MoMo_Logo.png"
+                src="momo.png"
                 className="w-12 h-8"
               />
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/1200px-Visa.svg.png"
-                className="w-12 h-8"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png"
-                className="w-12 h-8"
-              />
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/6/64/JCB_logo.svg"
-                className="w-12 h-8"
-              />
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/1007/1007914.png"
+                src="bank.png"
                 className="w-12 h-8"
               />
             </div>
