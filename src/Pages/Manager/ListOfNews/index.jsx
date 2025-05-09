@@ -3,7 +3,7 @@ import ModalDetail from "./Component/ModalDetail";
 import { useEffect, useState, useMemo } from "react";
 import { postService } from "../../../Utils/api";
 import { useAuth } from "../../../Utils/AuthContext";
-import emptyImage from "../../../assets/empty.jpeg";
+import emptyImage from "public/empty.jpeg";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
 
