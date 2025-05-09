@@ -1,8 +1,19 @@
-const DescriptionRoom = ({ item }) => {
+import { Spin } from "antd";
+
+const DescriptionRoom = ({ item, loading }) => {
   const description = item?.description
     ?.split("\n")
     .map((line) => line.trim())
     .filter((line) => line !== "");
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center" style={{ height: "200px" }}>
+        <Spin size="large" />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="mt-4 pb-4 border-b border-gray-300">
