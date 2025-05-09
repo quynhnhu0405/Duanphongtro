@@ -2,8 +2,6 @@ import { useEffect, useState, useMemo } from "react";
 import { Table, Spin, Tag, Input, Pagination } from "antd";
 import { paymentService } from "../../../Utils/api";
 import dayjs from "dayjs";
-import emptyImage from "../../../assets/empty.jpeg";
-
 const HistoryPayment = () => {
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
@@ -123,7 +121,7 @@ const HistoryPayment = () => {
                 emptyText: (
                   <div className="py-10">
                     <img
-                      src={emptyImage}
+                      src="public/empty.jpeg"
                       alt="No data"
                       className="w-1/5 mx-auto"
                     />

@@ -3,7 +3,6 @@ import ModalDetail from "./Component/ModalDetail";
 import { useEffect, useState, useMemo } from "react";
 import { postService } from "../../../Utils/api";
 import { useAuth } from "../../../Utils/AuthContext";
-import emptyImage from "public/empty.jpeg";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router";
 
@@ -229,7 +228,7 @@ const ListPosts = () => {
                 emptyText: (
                   <div className="py-10">
                     <img
-                      src={emptyImage}
+                      src="public/empty.jpeg"
                       alt="No data"
                       className="w-1/5 mx-auto"
                     />
