@@ -13,7 +13,7 @@ const FamousProvince = () => {
               { name: "Hồ Chí Minh", img: "https://tromoi.com/frontend/home/images/province/hcm.jpg" },
               { name: "Hà Nội", img: "https://tromoi.com/frontend/home/images/province/ha_noi.jpg" },
               { name: "Đà Nẵng", img: "https://tromoi.com/frontend/home/images/province/da_nang.jpg" },
-              { name: "Bình Dương", img: "../../src/assets/binhduong.png" },
+              { name: "Bình Dương", img: "public/binhduong.png" },
             ].map((province, index) => (
               <Col xs={12} sm={12} md={6} lg={6} key={index}>
                 <div className="province-item text-center border-amber-950 border p-2 rounded-lg">

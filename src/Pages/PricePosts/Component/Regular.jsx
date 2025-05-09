@@ -9,7 +9,7 @@ const Regular = () => {
 
 
       </p>
-      <img src="./src/assets/vip.png" alt="" className="w-1/2 m-auto mt-5"/>
+      <img src="public/vip.png" alt="" className="w-1/2 m-auto mt-5"/>
     </div>
   )
 }

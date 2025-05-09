@@ -8,7 +8,7 @@ const HomeLayout = () => {
     <Layout>
       <DefaultHeader />
       <div className="banner">
-        <img src="./src/assets/banner.png" className="w-screen"></img>
+        <img src="public/banner.png" className="w-screen"></img>
       </div>
       <Layout.Content className="mx-auto">
         <div className="flex justify-between bodypage">
