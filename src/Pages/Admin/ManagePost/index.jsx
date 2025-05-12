@@ -16,7 +16,7 @@ import {
 import { SearchOutlined, MoreOutlined, EyeOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import axios from "axios";
-import { postService } from "../../../Utils/api";
+import { postService, userService } from "../../../Utils/api";
 
 const { Option } = Select;
 
@@ -33,7 +33,7 @@ const PostManagementPage = () => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/posts");
+       const response = await postService.getAll();
       setPosts(response.data);
     } catch (error) {
       message.error("Không thể tải danh sách bài đăng");
@@ -51,9 +51,7 @@ const PostManagementPage = () => {
       // Kiểm tra nếu đã fetch thông tin này rồi
       if (landlords[landlordId]) return;
 
-      const response = await axios.get(
-        `http://localhost:5000/api/users/user/${landlordId}`
-      );
+      const response = await userService.getUser(landlordId);
       setLandlords((prev) => ({
         ...prev,
         [landlordId]: response.data,

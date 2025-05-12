@@ -31,7 +31,7 @@ const MethodPayment = () => {
             />
             <div className="flex justify-between w-full">
               <span className="text-gray-700">Thanh toán qua Momo</span>
-              <img src="public/momo.png" alt="" className="w-7 h-7" />
+              <img src="/momo.png" alt="" className="w-7 h-7" />
             </div>
           </label>
         </div>
@@ -51,7 +51,7 @@ const MethodPayment = () => {
 
             <div className="flex justify-between w-full">
               <span className="text-gray-700">Thanh toán qua Ngân hàng</span>{" "}
-              <img src="public/bank.png" alt="" className="w-7 h-7" />
+              <img src="/bank.png" alt="" className="w-7 h-7" />
             </div>
           </label>
         </div>

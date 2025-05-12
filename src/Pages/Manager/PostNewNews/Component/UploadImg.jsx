@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import { useState } from "react";
+import imageCompression from "browser-image-compression";
 
 const ImageUpload = ({ onValidate, images, setImages }) => {
   const ImgLimit = (files) => {
@@ -22,7 +22,7 @@ const ImageUpload = ({ onValidate, images, setImages }) => {
     onValidate(newImages.length >= 4);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
 
     if (!ImgLimit(files)) return;
@@ -30,21 +30,29 @@ const ImageUpload = ({ onValidate, images, setImages }) => {
     const validFiles = files.filter(SizeLimit);
     if (validFiles.length === 0) return;
 
-    Promise.all(
-      validFiles.map(
-        (file) =>
-          new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.readAsDataURL(file);
-          })
-      )
-    ).then((newImages) => {
-      setImages((prev) => {
-        const updatedImages = [...prev, ...newImages];
-        updateValidation(updatedImages);
-        return updatedImages;
-      });
+    const compressedImages = await Promise.all(
+      validFiles.map(async (file) => {
+        try {
+          const options = {
+            maxSizeMB: 1, 
+            maxWidthOrHeight: 1024,
+            useWebWorker: true,
+          };
+          const compressedFile = await imageCompression(file, options);
+          return await imageCompression.getDataUrlFromFile(compressedFile);
+        } catch (error) {
+          console.error("Compression error:", error);
+          return null;
+        }
+      })
+    );
+
+    const filteredImages = compressedImages.filter((img) => img !== null);
+
+    setImages((prev) => {
+      const updatedImages = [...prev, ...filteredImages];
+      updateValidation(updatedImages);
+      return updatedImages;
     });
   };
 
@@ -76,8 +84,7 @@ const ImageUpload = ({ onValidate, images, setImages }) => {
             className="hidden"
           />
           <p className="mt-2 text-sm text-gray-500">
-            Tải lên tối đa 20 ảnh, tối thiểu 4 ảnh, dung lượng mỗi ảnh tối đa
-            10MB
+            Tải lên tối đa 20 ảnh, tối thiểu 4 ảnh, dung lượng mỗi ảnh tối đa 10MB
           </p>
         </div>
 

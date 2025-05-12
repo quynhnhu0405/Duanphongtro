@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Table, List, Avatar, Tag } from "antd";
+import { Card, Row, Col, Table, Tag } from "antd";
 import {
   FileTextOutlined,
   UserOutlined,
   DollarOutlined,
-  BellOutlined,
 } from "@ant-design/icons";
 import {
   LineChart,
@@ -16,58 +15,75 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import axios from "axios";
+import { categoryService, paymentService, postService, userService } from "../../../Utils/api";
 
 const DashboardPage = () => {
   const [countPost, setCountPost] = useState(0);
   const [countUser, setCountUser] = useState(0);
   const [totalPayment, setTotalPayment] = useState(0);
   const [revenueByCategory, setRevenueByCategory] = useState(0);
+  const [latestPosts, setLatestPosts] = useState([]);
+
+
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/posts/count")
-      .then((res) => {
+    const fetchCountPost = async () => {
+      try {
+        const res = await postService.countAll();
         setCountPost(res.data.total);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Lỗi khi lấy số bài đăng:", err);
-      });
+      }
+    };
+    fetchCountPost();
   }, []);
+
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/users/count")
-      .then((res) => {
+    const fetchCountUser = async () => {
+      try {
+        const res = await userService.countAll();
         setCountUser(res.data.total);
-      })
-      .catch((err) => {
-        console.error("Lỗi khi lấy số bài đăng:", err);
-      });
+      } catch (err) {
+        console.error("Lỗi khi lấy số người dùng:", err);
+      }
+    };
+    fetchCountUser();
   }, []);
+
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/payments/completed-total")
-      .then((res) => {
+    const fetchTotalPayment = async () => {
+      try {
+        const res = await paymentService.getTotalCompleted();
         setTotalPayment(res.data.total);
-      })
-      .catch((err) => {
-        console.error("Lỗi khi lấy số bài đăng:", err);
-      });
+      } catch (err) {
+        console.error("Lỗi khi lấy doanh thu:", err);
+      }
+    };
+    fetchTotalPayment();
   }, []);
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/categories")
-      .then((res) => {
-        const formattedData = res.data.map((item) => ({
+    const fetchRevenueByCategory = async () => {
+      try {
+        const res = await categoryService.getAll();
+        const formatted = res.data.map((item) => ({
           ...item,
           totalRevenue: new Intl.NumberFormat("vi-VN", {
             style: "currency",
             currency: "VND",
           }).format(item.totalRevenue),
         }));
-        setRevenueByCategory(formattedData);
-      })
-      .catch((err) => console.error(err));
+        setRevenueByCategory(formatted);
+      } catch (err) {
+        console.error("Lỗi khi lấy doanh thu theo danh mục:", err);
+      }
+    };
+    fetchRevenueByCategory();
   }, []);
+
+
   const quickStats = [
     {
       title: "Tổng số tin đăng",
@@ -96,29 +112,26 @@ const DashboardPage = () => {
   const [revenueData, setRevenueData] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/payments/monthly-revenue")
-      .then((res) => {
+    const fetchMonthlyRevenue = async () => {
+      try {
+        const res = await paymentService.getMonthlyRevenue();
         setRevenueData(res.data);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error("Lỗi khi lấy dữ liệu doanh thu:", err);
-      });
+      }
+    };
+    fetchMonthlyRevenue();
   }, []);
-  const [latestPosts, setLatestPosts] = useState([]);
 
   useEffect(() => {
     const fetchLatestPosts = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5000/api/posts/latest-posts"
-        );
-        setLatestPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching latest posts:", error);
+        const res = await postService.getLatestPosts();
+        setLatestPosts(res.data);
+      } catch (err) {
+        console.error("Lỗi khi lấy bài đăng mới:", err);
       }
     };
-
     fetchLatestPosts();
   }, []);
   const postColumns = [

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal, Tag, message, Dropdown, Menu } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import axios from "axios";
+import { paymentService, postService } from "../../../Utils/api";
 
 const PaymentManagementPage = () => {
   const [payments, setPayments] = useState([]);
@@ -9,6 +10,7 @@ const PaymentManagementPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentPayment, setCurrentPayment] = useState(null);
   const [status, setStatus] = useState("");
+  const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     fetchPayments();
@@ -17,75 +19,66 @@ const PaymentManagementPage = () => {
   const fetchPayments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:5000/api/payments");
+      const response = await paymentService.getAll();
       setPayments(response.data);
-    } catch (error) {
-      console.error("Error fetching payments:", error);
-      message.error("Lỗi khi tải dữ liệu thanh toán");
+    } catch {
+      messageApi.open({
+        type: "error",
+        content: "Lỗi khi tải dữ liệu thanh toán",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   const handleStatusUpdate = async (id, newStatus) => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      // Update payment status
-      await axios.patch(`http://localhost:5000/api/payments/${id}`, {
-        status: newStatus,
+    // Cập nhật trạng thái thanh toán thông qua paymentService
+    await paymentService.updateStatus(id, newStatus);
+
+    const payment = payments.find((p) => p._id === id);
+    const postId = payment?.PostId?._id || payment?.PostId;
+
+    if (!postId) {
+      messageApi.open({
+        type: "success",
+        content: "Đã xác nhận thanh toán, nhưng không tìm thấy bài đăng tương ứng",
       });
-
-      // If payment is completed, also update the post status to 'waiting' for admin approval
-      if (newStatus === "completed") {
-        const payment = payments.find((p) => p._id === id);
-        if (payment && payment.PostId) {
-          // Update the post status to waiting for admin approval
-          await axios.patch(
-            `http://localhost:5000/api/posts/${
-              payment.PostId._id || payment.PostId
-            }`,
-            {
-              status: "waiting",
-            }
-          );
-          message.success(
-            "Đã xác nhận thanh toán và cập nhật trạng thái bài đăng"
-          );
-        } else {
-          message.success(
-            "Đã xác nhận thanh toán, nhưng không tìm thấy bài đăng tương ứng"
-          );
-        }
-      } else if (newStatus === "failed" || newStatus === "pending") {
-        // If payment failed or pending, update post status to unpaid
-        const payment = payments.find((p) => p._id === id);
-        if (payment && payment.PostId) {
-          await axios.patch(
-            `http://localhost:5000/api/posts/${
-              payment.PostId._id || payment.PostId
-            }`,
-            {
-              status: "unpaid",
-            }
-          );
-          message.success(
-            `Đã cập nhật trạng thái thanh toán thành ${
-              newStatus === "failed" ? "Thất bại" : "Đang chờ"
-            }`
-          );
-        }
-      }
-
-      // Refresh the payment list
-      fetchPayments();
-    } catch (error) {
-      message.error("Cập nhật trạng thái thất bại");
-      console.error(error);
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    let postStatus = "";
+    let successMessage = "";
+
+    if (newStatus === "completed") {
+      postStatus = "waiting";
+      successMessage = "Đã xác nhận thanh toán và chờ duyệt bài đăng";
+    } else if (newStatus === "failed" || newStatus === "pending") {
+      postStatus = "unpaid";
+      successMessage = `Đã cập nhật trạng thái thanh toán: ${newStatus}`;
+    }
+
+    if (postStatus) {
+      await postService.updatePostStatus(postId, postStatus);
+      messageApi.open({
+        type: "success",
+        content: successMessage,
+      });
+    }
+
+    fetchPayments();
+  } catch (error) {
+    messageApi.open({
+      type: "error",
+      content: "Cập nhật trạng thái thất bại",
+    });
+    console.error("Lỗi cập nhật trạng thái:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const openModal = (payment) => {
     setCurrentPayment(payment);
@@ -175,6 +168,7 @@ const PaymentManagementPage = () => {
 
   return (
     <div style={{ padding: "24px" }}>
+      {contextHolder}
       <Table
         columns={columns}
         dataSource={payments}

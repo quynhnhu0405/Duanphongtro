@@ -1,62 +1,28 @@
 import { useEffect, useState } from 'react';
-import { Input, Button, Table, Dropdown, Menu, message, Modal, Form } from 'antd';
-import { SearchOutlined, MoreOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import { Input, Table} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { categoryService } from '../../../Utils/api';
 
 const CategoryManagementPage = () => {
   const [searchText, setSearchText] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [editingCategory, setEditingCategory] = useState(null);
 
   // Dữ liệu mẫu danh sách danh mục
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/categories')
-      .then(response => {
-        setCategories(response.data);
-    })
-  })
-  // Hàm xử lý tìm kiếm
+  const fetchCategories = async () => {
+    try {
+      const response = await categoryService.getAll();
+      setCategories(response.data);
+    } catch (error) {
+      console.error('Lỗi khi tải danh sách danh mục:', error);
+    }
+  };
+  fetchCategories();
+}, []);
   const handleSearch = (value) => {
     setSearchText(value);
   };
-
-  // Hàm xử lý lọc theo trạng thái
-
-  // Hàm mở modal thêm/chỉnh sửa danh mục
-  const showModal = (category = null) => {
-    setEditingCategory(category);
-    if (category) {
-      form.setFieldsValue(category);
-    } else {
-      form.resetFields();
-    }
-    setIsModalVisible(true);
-  };
-
-  // Hàm đóng modal
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    form.resetFields();
-    setEditingCategory(null);
-  };
-
-  // Hàm xử lý thêm/chỉnh sửa danh mục
-  const handleSave = (values) => {
-    if (editingCategory) {
-      // Chỉnh sửa danh mục
-      setCategories(categories.map(cat =>
-        cat.id === editingCategory.id ? { ...cat, ...values } : cat
-      ));
-      message.success('Cập nhật danh mục thành công');
-    }
-    setIsModalVisible(false);
-    form.resetFields();
-  };
-
   // Cột cho bảng danh mục
   const columns = [
     {
@@ -79,8 +45,7 @@ const CategoryManagementPage = () => {
   // Lọc dữ liệu theo tìm kiếm và trạng thái
   const filteredCategories = categories.filter(category => {
     const matchesSearch = category.name.toLowerCase().includes(searchText.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || category.status === filterStatus;
-    return matchesSearch && matchesStatus;
+    return matchesSearch ;
   });
 
   return (
@@ -104,29 +69,6 @@ const CategoryManagementPage = () => {
         pagination={{ pageSize: 10 }}
         scroll={{ x: 1200 }}
       />
-
-      {/* Modal thêm/chỉnh sửa danh mục */}
-      <Modal
-        title={editingCategory ? 'Chỉnh sửa danh mục' : 'Thêm danh mục'}
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form form={form} onFinish={handleSave}>
-          <Form.Item
-            label="Tên danh mục"
-            name="name"
-            rules={[{ required: true, message: 'Vui lòng nhập tên danh mục' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              {editingCategory ? 'Cập nhật' : 'Thêm'}
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
     </div>
   );
 };

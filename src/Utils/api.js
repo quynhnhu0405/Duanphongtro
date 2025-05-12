@@ -49,6 +49,7 @@ export const postService = {
   hiddenPost: (id) => api.delete(`/posts/${id}`),
   renewPost: (postId,postData) => api.put(`/posts/${postId}/renew`, postData),
   getPostByUserId: (userId) => api.get(`/posts/count/${userId}`),
+  countAll: () => api.get("/posts/count"),
 };
   
 
@@ -57,6 +58,10 @@ export const paymentService = {
   createPayment: (paymentData) => api.post("/payments", paymentData),
   completePayment: (id) => api.patch(`/payments/${id}/complete`),
   getUserPayments: () => api.get("/payments/my-payments"),
+  getTotalCompleted: () => api.get("/payments/completed-total"),
+  getMonthlyRevenue: () => api.get("/payments/monthly-revenue"),
+  getAll: () => api.get("/payments"),
+  updateStatus: (id, status) => api.patch(`/payments/${id}`, { status }),
 };
 
 // Category services
@@ -72,6 +77,7 @@ export const utilityService = {
 // Package services
 export const packageService = {
   getAll: () => api.get("/packages"),
+  update: (id, data) => api.patch(`/packages/${id}`, data),
 };
 
 // Admin services
@@ -82,10 +88,16 @@ export const adminService = {
 
 // User services
 export const userService = {
+  getAllUsers: () => api.get('/users'),
+  getUserStats: (userId) => api.get(`/users/${userId}/stats`),
+  createUser: (data) => api.post('/users', data),
+  updateStatus: (id, status) => api.patch(`/users/${id}/status`, { status }),
+  deleteUser: (id) => api.delete(`/users/${id}`),
   getUser: (id) => api.get(`/users/user/${id}`),
   updateProfile: (id, data) => api.put(`/users/${id}`, data),
-  getMyProfile: () => api.get("/users/my-profile"),
-  changePassword: (data) => api.post("/users/change-password", data),
+  getMyProfile: () => api.get('/users/my-profile'),
+  changePassword: (data) => api.post('/users/change-password', data),
+  countAll: () => api.get("/users/count"),
 };
 
 export default api;

@@ -228,7 +228,7 @@ const ListPosts = () => {
                 emptyText: (
                   <div className="py-10">
                     <img
-                      src="empty.jpeg"
+                      src="/empty.jpeg"
                       alt="No data"
                       className="w-1/5 mx-auto"
                     />

@@ -20,9 +20,6 @@ const DefaultFooter = () => {
               <li>
                 <a href="/chinh-sach-bao-mat">Chính sách bảo mật</a>
               </li>
-              <li>
-                <a href="/lien-he">Liên hệ</a>
-              </li>
             </ul>
           </Col>
           <Col xs={24} sm={24} md={8} lg={8}>

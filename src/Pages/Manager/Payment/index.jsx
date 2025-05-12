@@ -1,4 +1,4 @@
-import { Button, Col, message, Row, Modal, QRCode, Space, Steps } from "antd";
+import { Button, Col, message, Row, Modal, Space, Steps } from "antd";
 import SelectPackage from "./Component/SelectPackage";
 import Bill from "./Component/Bill";
 import { useEffect, useState } from "react";
@@ -18,9 +18,17 @@ const Payment = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const [qrValue, setQrValue] = useState("");
-  const navigate = useNavigate();
+  const [transactionCode, setTransactionCode] = useState("");
   const [postData, setPostData] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.postData) {
+      setPostData(location.state.postData);
+    }
+  }, [location.state]);
+
   const handlePayment = async () => {
     if (!paymentData) {
       message.error("Vui lòng chọn gói đăng tin");
@@ -30,13 +38,22 @@ const Payment = () => {
     try {
       setIsSubmitting(true);
 
-      // Tạo mã QR tạm thời (trong thực tế sẽ nhận từ API thanh toán)
-      const transactionId = `TRX-${Date.now()}`;
-      setQrValue(
-        `https://payment-gateway.com/pay?amount=${paymentData.totalPrice}&id=${transactionId}`
-      );
+      const transactionId = `POST-${Date.now()}-${Math.floor(
+        Math.random() * 1000
+      )}`;
+      setTransactionCode(transactionId);
 
-      // Chuyển sang bước 2
+      const bankNumber = "56789904052004";
+      const bankCode = "MB";
+      const accountName = "HOANG THI QUYNH NHU";
+      const amount = paymentData.totalPrice;
+      const description = `Thanh toan ${transactionId}`;
+
+      const qr = `https://img.vietqr.io/image/${bankCode}-${bankNumber}-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(
+        description
+      )}&accountName=${encodeURIComponent(accountName)}`;
+
+      setQrValue(qr);
       setCurrentStep(1);
     } catch (error) {
       console.error("Payment error:", error);
@@ -45,48 +62,37 @@ const Payment = () => {
       setIsSubmitting(false);
     }
   };
-  useEffect(() => {
-      if (location.state?.postData) {
-        setPostData(location.state.postData);
-      }
-    }, [location.state]);
+
   const handlePaymentConfirmation = async () => {
     try {
       setIsSubmitting(true);
 
-      // Format package data according to the new schema
       const packageData = {
-        id: paymentData.package?.[0], // Package ID reference
-        period: packageType, // "day", "week", or "month"
+        id: paymentData.package?.[0],
+        period: packageType,
         quantity: getQuantityFromTotalDays(totalDays),
       };
-      // Gọi API xác nhận thanh toán
-      let response;
+
       if (postData._id) {
-        // For existing posts - renew
-        response = await postService.renewPost(postData._id,{
+        await postService.renewPost(postData._id, {
           postId: paymentData.id,
-          package: [packageData], // Send as array of package objects
+          package: [packageData],
           expiryDate: paymentData.expiryDate,
+          transactionCode,
         });
 
         message.success(
           "Gia hạn tin thành công! Thanh toán đang chờ xác nhận."
         );
       } else {
-        // Create post with updated package structure and total price
         const postDataWithPackage = {
           ...paymentData,
-          package: [packageData], // Send as array of package objects
+          package: [packageData],
+          transactionCode,
         };
 
-        response = await postService.createPost(postDataWithPackage);
-        console.log(response.data);
+        await postService.createPost(postDataWithPackage);
         message.success("Tạo tin thành công! Thanh toán đang chờ xác nhận.");
-
-        message.success(
-          "Đăng tin mới thành công! Thanh toán đang chờ xác nhận."
-        );
       }
 
       setPaymentConfirmed(true);
@@ -101,7 +107,6 @@ const Payment = () => {
     }
   };
 
-  // Helper function to convert totalDays string to quantity number
   const getQuantityFromTotalDays = (totalDays) => {
     const [value] = totalDays.split(" ");
     return parseInt(value, 10);
@@ -159,19 +164,22 @@ const Payment = () => {
             <p className="text-gray-600">
               Số tiền: {paymentData?.totalPrice?.toLocaleString()} VNĐ
             </p>
+            <p className="text-gray-600">
+              Nội dung chuyển khoản: <strong>{transactionCode}</strong>
+            </p>
           </div>
 
-          <QRCode
-            value={qrValue || "https://example.com/payment"}
-            size={256}
-            className="!mb-10"
+          <img
+            src={qrValue}
+            alt="QR Code"
+            className="mb-10 w-64 h-64 object-contain"
           />
 
           <Space>
             <Button
               type="default"
               size="large"
-              onClick={() => setCurrentStep(0)} // Quay lại bước 1
+              onClick={() => setCurrentStep(0)}
             >
               Quay lại
             </Button>
@@ -189,6 +197,7 @@ const Payment = () => {
       ),
     },
   ];
+
   return (
     <div>
       <div className="fixed w-full z-30 bg-white shadow-[0_1px_5px_rgba(0,0,0,0.3)] top-[60px] pt-5 pb-5 pl-15">
@@ -206,7 +215,7 @@ const Payment = () => {
 
         <Modal
           title="Thành công"
-          visible={paymentConfirmed}
+          open={paymentConfirmed}
           footer={null}
           closable={false}
         >
