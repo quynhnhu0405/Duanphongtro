@@ -68,10 +68,11 @@ const Payment = () => {
       setIsSubmitting(true);
 
       const packageData = {
-        id: paymentData.package?.[0],
+        id: paymentData.selectedPackage._id,
         period: packageType,
         quantity: getQuantityFromTotalDays(totalDays),
       };
+      
 
       if (postData._id) {
         await postService.renewPost(postData._id, {
@@ -138,7 +139,7 @@ const Payment = () => {
                 packageType={packageType}
                 totalDays={totalDays}
                 pricePerDay={pricePerDay}
-                postData={paymentData}
+                postData={setPaymentData}
               />
             </Col>
           </Row>
