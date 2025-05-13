@@ -81,6 +81,7 @@ const ForgotPassword = () => {
         otp,
         newPassword
       });
+      message.success(response.data.message);
       setShowSuccessModal(true);
       message.success({
         content: 'Đặt lại mật khẩu thành công! Vui lòng đăng nhập lại với mật khẩu mới.',
