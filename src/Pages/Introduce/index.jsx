@@ -86,10 +86,10 @@ const Introduce = () => {
         <p className=" mb-3">
           <strong>Thông tin về website:</strong>
         </p>
-        <p className=" mb-3">- Website RoomGo trực thuộc Công ty TNHH LBKCORP</p>
+        <p className=" mb-3">- Website RoomGo trực thuộc Công ty TNHH</p>
         <p className=" mb-3">
           - Website:&nbsp;
-          <a href="https://phongtro123.com/">https://phongtro123.com/</a>
+          <a href="https://roomgo.netlify.app/">https://roomgo.netlify.app/</a>
           &nbsp;
         </p>
         <p className=" mb-3">
@@ -97,7 +97,7 @@ const Introduce = () => {
           Thọ, Phường An Phú, Thành phố Thủ Đức, Thành phố Hồ Chí Minh, Việt
           Nam.&nbsp;
         </p>
-        <p className=" mb-3">- Số điện thoại: 0917.686.101</p>
+        <p className=" mb-3">- Số điện thoại: 0917332055</p>
         <p className=" mb-3">- Email: cskh.phongtro123@gmail.com</p>
         <p className=" mb-3">
           <strong>Kênh thông tin phòng trọ số 1 Việt Nam</strong>
