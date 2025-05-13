@@ -12,8 +12,8 @@ const Profile = () => {
   const [form] = Form.useForm();
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState("");
-  console.log("user", user);
-  useEffect(() => {
+  const [messageApi, contextHolder] = message.useMessage();
+    useEffect(() => {
     postService
       .getPostByUserId(user._id)
       .then((response) => {
@@ -21,21 +21,20 @@ const Profile = () => {
       })
       .catch((error) => console.error("Lỗi API:", error));
   }, [user._id]);
-  console.log("post", post);
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await userService.getMyProfile(); 
-        updateUser(response.data); 
+        const response = await userService.getMyProfile();
+        updateUser(response.data);
       } catch (error) {
         console.error("Lỗi khi lấy thông tin người dùng:", error);
       }
     };
-  
+
     fetchUserInfo();
-  
+
     postService
-      .getPostByUserId(user.id)
+      .getPostByUserId(user._id)
       .then((response) => {
         setPost(response.data);
       })
@@ -60,7 +59,10 @@ const Profile = () => {
   const beforeUpload = (file) => {
     const isImage = file.type.startsWith("image/");
     if (!isImage) {
-      message.error("Bạn chỉ có thể tải lên file ảnh!");
+      messageApi.open({
+        type: "error",
+        content: "Bạn chỉ có thể tải lên file ảnh!",
+      })
       return false;
     }
 
@@ -72,39 +74,48 @@ const Profile = () => {
     setAvatarFile(file);
     return false; // Prevent automatic upload
   };
-
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
 
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("phone", values.phone);
-      formData.append("avatar", avatarPreview);
-
-      const response = await userService.updateProfile(user.id, formData);
-      message.success("Cập nhật thành công!");
-      setIsModalVisible(false);
-      setIsSuccessModalVisible(true);
-      // Update user in context
-      updateUser({
-        ...user,
+      const payload = {
         name: values.name,
         phone: values.phone,
+        email: values.email,
+        avatar: avatarPreview,
+      };
+
+      const response = await userService.updateProfile(user._id, payload);
+      
+
+      messageApi.open({
+        type: "success",
+        content: "Cập nhật thành công",
+      })
+      setIsModalVisible(false);
+      setIsSuccessModalVisible(true);
+
+      // Update user context
+      updateUser({
+        ...user,
+        ...payload,
         avatar: response.data.avatar || user.avatar,
       });
 
-      // Reset states
       setAvatarFile(null);
       setAvatarPreview("");
     } catch (err) {
       console.error("Lỗi khi gửi dữ liệu:", err);
-      message.error("Cập nhật thất bại!");
+      messageApi.open({
+        type: "error",
+        content: "Cập nhật thất bại!",
+      })
     }
   };
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
+      {contextHolder}
       <div className="w-fit m-auto p-2 border border-black rounded-full">
         <Avatar
           src={user?.avatar || "/defaul-avt.png"}
@@ -155,7 +166,9 @@ const Profile = () => {
                   alt="Avatar"
                   className="!w-16 !h-16 rounded-full object-cover"
                 />
-                <Button icon={<UploadOutlined />} className="!ml-6">Tải lên avatar mới</Button>
+                <Button icon={<UploadOutlined />} className="!ml-6">
+                  Tải lên avatar mới
+                </Button>
               </div>
             </Upload>
           </Form.Item>
