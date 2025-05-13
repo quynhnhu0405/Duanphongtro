@@ -8,7 +8,7 @@ const ChangePassword = () => {
   const [form] = Form.useForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  
+
   const handleChangePassword = async (values) => {
     const { oldPassword, newPassword, confirmPassword } = values;
 
@@ -75,11 +75,16 @@ const ChangePassword = () => {
           name="newPassword"
           rules={[
             { required: true, message: "Vui lòng nhập mật khẩu mới!" },
-            { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+            {
+              pattern:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?]).{8,}$/,
+              message:
+                "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số và ký tự đặc biệt!",
+            },
           ]}
         >
           <Input.Password
-            placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)"
+            placeholder="Nhập mật khẩu mới (8 ký tự, gồm chữ hoa, thường, số, ký tự đặc biệt)"
             className="!p-3 rounded-lg !text-base"
           />
         </Form.Item>
