@@ -29,6 +29,7 @@ export const authService = {
   login: (credentials) => api.post("/users/login", credentials),
   register: (userData) => api.post("/users/register", userData),
   forgotPassword: (data) => api.post("/users/forgot-password", data),
+  resetPassword: (data) => api.post("/users/reset-password", data),
 };
 
 // Post services

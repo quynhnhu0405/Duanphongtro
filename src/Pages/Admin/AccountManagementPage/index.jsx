@@ -160,6 +160,7 @@ const AccountManagementPage = () => {
       const response = await userService.createUser({
         name: values.name,
         phone: values.phone,
+        email: values.email,
         password: values.password,
         role: values.role || "user",
         status: "active",
@@ -188,19 +189,24 @@ const AccountManagementPage = () => {
   // Table columns
   const columns = [
     {
-      title: "Tên người dùng",
+      title: "Tên",
       dataIndex: "name",
       key: "name",
       render: (text, record) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div className="flex items-center">
           <Avatar
-            src={record.avatar || null}
+            src={record.avatar}
             icon={<UserOutlined />}
-            style={{ marginRight: 8 }}
+            className="mr-2"
           />
           <span>{text}</span>
         </div>
       ),
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
     },
     {
       title: "Số điện thoại",
@@ -371,17 +377,40 @@ const AccountManagementPage = () => {
             <Input placeholder="Nhập tên người dùng" />
           </Form.Item>
           <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email" },
+              { type: "email", message: "Email không hợp lệ" },
+            ]}
+          >
+            <Input placeholder="Nhập email" />
+          </Form.Item>
+          <Form.Item
             label="Số điện thoại"
             name="phone"
             rules={[
               { required: true, message: "Vui lòng nhập số điện thoại" },
               {
-                pattern: /^[0-9]{10,11}$/,
+                pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
                 message: "Số điện thoại không hợp lệ",
               },
             ]}
           >
             <Input placeholder="Nhập số điện thoại" />
+          </Form.Item>
+          <Form.Item
+            label="Mật khẩu"
+            name="password"
+            rules={[
+              { required: true, message: "Vui lòng nhập mật khẩu" },
+              {
+                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+                message: "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+              },
+            ]}
+          >
+            <Input.Password placeholder="Nhập mật khẩu" />
           </Form.Item>
           <Form.Item label="Vai trò" name="role">
             <Select>
@@ -389,23 +418,10 @@ const AccountManagementPage = () => {
               <Option value="admin">Quản trị viên</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            label="Mật khẩu"
-            name="password"
-            rules={[
-              { required: true, message: "Vui lòng nhập mật khẩu" },
-              { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" },
-            ]}
-          >
-            <Input.Password placeholder="Nhập mật khẩu" />
-          </Form.Item>
           <Form.Item>
-            <Space>
-              <Button type="primary" htmlType="submit">
-                Lưu
-              </Button>
-              <Button onClick={handleCancel}>Hủy</Button>
-            </Space>
+            <Button type="primary" htmlType="submit" className="w-full">
+              Tạo tài khoản
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

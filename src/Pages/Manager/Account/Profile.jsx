@@ -47,6 +47,7 @@ const Profile = () => {
     form.setFieldsValue({
       name: user.name,
       phone: user.phone,
+      email: user.email,
     });
   };
 
@@ -113,6 +114,7 @@ const Profile = () => {
       <div className="text-center mt-6">
         <h2 className="text-xl font-bold mb-3">{user?.name}</h2>
         <p className="text-gray-600 text-base mb-3">{user?.phone}</p>
+        <p className="text-gray-600 text-base mb-3">{user?.email}</p>
         <p className="text-gray-600 text-base">Số tin đăng: {post.count}</p>
       </div>
       <div className="mt-5 w-fit m-auto mb-3">
@@ -137,7 +139,9 @@ const Profile = () => {
           initialValues={{
             name: user.name,
             phone: user.phone,
+            email: user.email,
           }}
+          onFinish={handleSubmit}
         >
           <Form.Item label="Avatar">
             <Upload
@@ -157,31 +161,42 @@ const Profile = () => {
           </Form.Item>
 
           <Form.Item
-            label="Tên"
+            label="Họ và tên"
             name="name"
-            rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập họ và tên" },
+              { min: 3, message: "Tên phải có ít nhất 3 ký tự" },
+            ]}
           >
-            <Input
-              placeholder="Nhập tên"
-              className="!p-2 rounded-2xl !text-base"
-            />
+            <Input placeholder="Nhập họ và tên" />
           </Form.Item>
 
           <Form.Item
             label="Số điện thoại"
             name="phone"
             rules={[
-              { required: true, message: "Vui lòng nhập số điện thoại!" },
+              { required: true, message: "Vui lòng nhập số điện thoại" },
               {
-                pattern: /^\d{10}$/,
-                message: "Số điện thoại phải có 10 chữ số!",
+                pattern: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                message: "Số điện thoại không hợp lệ",
               },
             ]}
           >
-            <Input
-              placeholder="Nhập số điện thoại"
-              className="!p-2 rounded-2xl !text-[15px]"
-            />
+            <Input placeholder="Nhập số điện thoại" />
+          </Form.Item>
+
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email" },
+              {
+                type: "email",
+                message: "Email không hợp lệ",
+              },
+            ]}
+          >
+            <Input placeholder="Nhập email" />
           </Form.Item>
 
           <p className="-mt-4 mb-4 text-xs text-red-500 flex items-center">
@@ -191,13 +206,8 @@ const Profile = () => {
           </p>
 
           <Form.Item>
-            <Button
-              type="primary"
-              block
-              className="!text-[15px] !p-5 !rounded-xl !bg-green-600"
-              onClick={handleSubmit}
-            >
-              Lưu thay đổi
+            <Button type="primary" htmlType="submit" className="w-full">
+              Cập nhật
             </Button>
           </Form.Item>
         </Form>

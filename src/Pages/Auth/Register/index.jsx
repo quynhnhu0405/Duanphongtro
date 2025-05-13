@@ -10,6 +10,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [passwordErrors, setPasswordErrors] = useState([]);
@@ -32,7 +33,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (!name || !phone || !password) {
+    if (!name || !phone || !email || !password) {
       messageApi.error("Vui lòng nhập đầy đủ thông tin");
       return;
     }
@@ -41,6 +42,13 @@ const Register = () => {
     const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
     if (!phoneRegex.test(phone)) {
       messageApi.error("Số điện thoại không hợp lệ");
+      return;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      messageApi.error("Email không hợp lệ");
       return;
     }
 
@@ -56,7 +64,7 @@ const Register = () => {
     setIsSuccess(false);
 
     try {
-      const response = await authService.register({ name, phone, password });
+      const response = await authService.register({ name, phone, email, password });
 
       // Use the login function from AuthContext
       login(response.data.user, response.data.token);
@@ -143,6 +151,27 @@ const Register = () => {
                 peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:text-xs"
             >
               Số điện thoại
+            </label>
+          </div>
+
+          <div className="relative w-full mt-5">
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="peer w-full border border-gray-300 rounded-2xl p-3 pt-5 outline-none focus:border-blue-300"
+              placeholder=" "
+              required
+            />
+            <label
+              htmlFor="email"
+              className="absolute left-3 bg-unset transition-all text-black
+                peer-placeholder-shown:top-5 peer-placeholder-shown:text-base 
+                peer-focus:top-1 peer-focus:text-xs peer-focus:pt-1
+                peer-[:not(:placeholder-shown)]:top-1 peer-[:not(:placeholder-shown)]:text-xs"
+            >
+              Email
             </label>
           </div>
 
