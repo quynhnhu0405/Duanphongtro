@@ -26,9 +26,9 @@ const Payment = () => {
   useEffect(() => {
     if (location.state?.postData) {
       setPostData(location.state.postData);
+      setPaymentData(location.state.postData);
     }
   }, [location.state]);
-
   const handlePayment = async () => {
     if (!paymentData) {
       message.error("Vui lòng chọn gói đăng tin");
@@ -72,7 +72,6 @@ const Payment = () => {
         period: packageType,
         quantity: getQuantityFromTotalDays(totalDays),
       };
-      
 
       if (postData._id) {
         await postService.renewPost(postData._id, {
@@ -139,7 +138,12 @@ const Payment = () => {
                 packageType={packageType}
                 totalDays={totalDays}
                 pricePerDay={pricePerDay}
-                postData={setPaymentData}
+                postData={(data) => {
+                  setPaymentData((prev) => ({
+                    ...prev,
+                    ...data,
+                  }));
+                }}
               />
             </Col>
           </Row>

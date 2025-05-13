@@ -38,19 +38,19 @@ const Bill = ({ selectedPackage, packageType, totalDays, postData }) => {
       const price = foundPackage[priceKey] * quantity;
       setTotalPrice(price);
 
-      const expirationDate = calculateExpirationDate(totalDays);
+      const expiryDate = calculateExpirationDate(totalDays);
 
       // Truyền dữ liệu ra ngoài thông qua postData
       if (typeof postData === "function") {
         const pricePerUnit = foundPackage[priceKey];
         const totalPrice = pricePerUnit * quantity;
-      
+
         postData({
           selectedPackage: foundPackage,
           pricePerUnit,
           quantity,
           totalPrice,
-          expirationDate,
+          expiryDate,
           packageType,
         });
       }
@@ -66,32 +66,27 @@ const Bill = ({ selectedPackage, packageType, totalDays, postData }) => {
   const calculateExpirationDate = (totalDays) => {
     const today = new Date();
     const [value, unit] = totalDays.split(" ");
-    let expirationDate = new Date(today);
+    const quantity = parseInt(value, 10);
 
+    let expiryDate = new Date(today);
     switch (unit) {
       case "ngày":
-        expirationDate.setDate(today.getDate() + parseInt(value, 10));
+        expiryDate.setDate(today.getDate() + quantity);
         break;
       case "tuần":
-        expirationDate.setDate(today.getDate() + parseInt(value, 10) * 7);
+        expiryDate.setDate(today.getDate() + quantity * 7);
         break;
       case "tháng":
-        expirationDate.setMonth(today.getMonth() + parseInt(value, 10));
+        expiryDate.setMonth(today.getMonth() + quantity);
         break;
       default:
-        expirationDate = today;
+        break;
     }
 
-    const day = expirationDate.getDate().toString().padStart(2, "0");
-    const month = (expirationDate.getMonth() + 1).toString().padStart(2, "0");
-    const year = expirationDate.getFullYear();
-    const hours = expirationDate.getHours().toString().padStart(2, "0");
-    const minutes = expirationDate.getMinutes().toString().padStart(2, "0");
-
-    return `${hours}:${minutes} ${day}/${month}/${year}`;
+    return expiryDate;
   };
 
-  const expirationDate = calculateExpirationDate(totalDays);
+  const expiryDate = calculateExpirationDate(totalDays);
 
   return (
     <div className="mr-1 mb-6 sticky top-[150px]">
@@ -117,7 +112,22 @@ const Bill = ({ selectedPackage, packageType, totalDays, postData }) => {
             </tr>
             <tr>
               <td>Đến ngày:</td>
-              <td>{expirationDate}</td>
+              <td>
+                {expiryDate
+                  ? `${expiryDate
+                      .getHours()
+                      .toString()
+                      .padStart(2, "0")}:${expiryDate
+                      .getMinutes()
+                      .toString()
+                      .padStart(2, "0")} ${expiryDate
+                      .getDate()
+                      .toString()
+                      .padStart(2, "0")}/${(expiryDate.getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}/${expiryDate.getFullYear()}`
+                  : ""}
+              </td>
             </tr>
             <tr>
               <td>Thành tiền:</td>

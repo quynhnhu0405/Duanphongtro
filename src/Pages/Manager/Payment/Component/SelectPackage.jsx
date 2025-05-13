@@ -185,8 +185,8 @@ const SelectPackage = ({
 
   // Get package _id by level
   const getPackageIdByLevel = (level) => {
-    if (!packageData.length || !level) return null;
-    const packageInfo = packageData.find((pkg) => pkg.level === level);
+    if (!packageData.length || level == null) return null;
+    const packageInfo = packageData.find((pkg) => pkg.level === Number(level));
     return packageInfo ? packageInfo._id : null;
   };
 
