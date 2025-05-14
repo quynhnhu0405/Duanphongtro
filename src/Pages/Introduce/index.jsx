@@ -98,7 +98,7 @@ const Introduce = () => {
           Nam.&nbsp;
         </p>
         <p className=" mb-3">- Số điện thoại: 0917332055</p>
-        <p className=" mb-3">- Email: cskh.phongtro123@gmail.com</p>
+        <p className=" mb-3">- Email: cskh.roomgo@gmail.com</p>
         <p className=" mb-3">
           <strong>Kênh thông tin phòng trọ số 1 Việt Nam</strong>
         </p>
