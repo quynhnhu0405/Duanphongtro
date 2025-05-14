@@ -67,7 +67,6 @@ const DefaultFooter = () => {
           Tổng đài CSKH: <span className="text-red-500">0785 604 557</span> -
           Email: cskh.roomgo@gmail.com
         </p>
-        <p>Giấy phép kinh doanh số 0313588502 cấp ngày 24/12/2015.</p>
       </div>
     </Layout.Footer>
   );

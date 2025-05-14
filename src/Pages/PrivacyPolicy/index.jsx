@@ -83,17 +83,16 @@ const PrivacyPolicy = () => {
             </strong>
           </p>
           <p className="mb-3">
-            <strong>CÔNG TY TNHH LBKCORP</strong>
+            <strong>CÔNG TY TNHH</strong>
           </p>
           <p className="mb-3">
-            Địa chỉ : 150 Trần Não, Phường Bình An, Quận 2, Thành phố Hồ Chí
-            Minh
+            Địa chỉ : Căn 02.34, Lầu 2, Tháp 3, The Sun Avenue, Số 28 Mai Chí Thọ, TP. Thủ Đức, TP. Hồ Chí Minh, Việt Nam.
           </p>
           <p className="mb-3">
-            Điện thoại: 0917 686 101&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Điện thoại: 0785 604 557&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           </p>
-          <p className="mb-3">Email: cskh.phongtro123@gmail.com</p>
+          <p className="mb-3">Email: cskh.roomgo@gmail.com</p>
           <p className="mb-3">
             <strong>
               Phương tiện và công cụ để người dùng tiếp cận và chỉnh sửa dữ liệu
