@@ -47,6 +47,7 @@ const AccountManagementPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [userStats, setUserStats] = useState({ postCount: 0, revenue: 0 });
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
 
   // Fetch users from API
   useEffect(() => {
@@ -56,7 +57,10 @@ const AccountManagementPage = () => {
         const response = await userService.getAllUsers();
         setAccounts(response.data);
       } catch (error) {
-        message.error("Không thể tải danh sách tài khoản");
+        messageApi.open({
+          type: "error",
+          content: "Không thể tải danh sách tài khoản",
+        });
         console.error("Error fetching users:", error);
       } finally {
         setLoading(false);
@@ -110,12 +114,18 @@ const AccountManagementPage = () => {
           account._id === id ? { ...account, status: newStatus } : account
         )
       );
-
-      message.success(
-        `Tài khoản đã được ${newStatus === "active" ? "mở khóa" : "khóa"}`
-      );
+      messageApi.open({
+        type: "success",
+        content: `Tài khoản đã được ${
+          newStatus === "active" ? "mở khóa" : "khóa"
+        }`,
+      });
+      message.success();
     } catch (error) {
-      message.error("Không thể cập nhật trạng thái tài khoản");
+      messageApi.open({
+        type: "error",
+        content: "Không thể cập nhật trạng thái tài khoản",
+      });
       console.error("Error updating account status:", error);
     }
   };
@@ -125,9 +135,15 @@ const AccountManagementPage = () => {
     try {
       await userService.deleteUser(id);
       setAccounts(accounts.filter((account) => account._id !== id));
-      message.success("Tài khoản đã được xóa thành công");
+      messageApi.open({
+        type: "success",
+        content: "Tài khoản đã được xóa thành công",
+      });
     } catch (error) {
-      message.error("Không thể xóa tài khoản");
+      messageApi.open({
+        type: "error",
+        content: "Không thể xóa tài khoản",
+      });
       console.error("Error deleting account:", error);
     }
   };
@@ -167,13 +183,17 @@ const AccountManagementPage = () => {
       });
 
       setAccounts([...accounts, response.data.user]);
-      message.success("Tạo tài khoản thành công");
+      messageApi.open({
+        type: "success",
+        content: "Tạo tài khoản thanh cong",
+      });
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || "Không thể tạo tài khoản";
-      message.error(errorMessage);
+      messageApi.open({
+        type: "error",
+        content: error.response?.data?.message || "Không thể tạo tài khoản",
+      });
       console.error("Error creating account:", error);
     }
   };
@@ -189,19 +209,19 @@ const AccountManagementPage = () => {
   // Table columns
   const columns = [
     {
+      title: "",
+      dataIndex: "avatar",
+      key: "avatar",
+      render: (avatar) => (
+        <div className="flex items-center">
+          <Avatar src={avatar || "/defaul-avt.png"} />
+        </div>
+      ),
+    },
+    {
       title: "Tên",
       dataIndex: "name",
       key: "name",
-      render: (text, record) => (
-        <div className="flex items-center">
-          <Avatar
-            src={record.avatar}
-            icon={<UserOutlined />}
-            className="mr-2"
-          />
-          <span>{text}</span>
-        </div>
-      ),
     },
     {
       title: "Email",
@@ -303,6 +323,7 @@ const AccountManagementPage = () => {
 
   return (
     <div style={{ padding: 24 }}>
+      {contextHolder}
       <div style={{ marginBottom: 16, display: "flex", gap: 16 }}>
         <Input
           placeholder="Tìm kiếm theo tên, số điện thoại"
@@ -405,8 +426,10 @@ const AccountManagementPage = () => {
             rules={[
               { required: true, message: "Vui lòng nhập mật khẩu" },
               {
-                pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
-                message: "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+                pattern:
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/,
+                message:
+                  "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
               },
             ]}
           >
