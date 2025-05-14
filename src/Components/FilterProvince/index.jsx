@@ -46,49 +46,6 @@ const FilterProvince = () => {
       path: `${location.pathname}/tinh-thanh/binh-duong`,
     },
   ];
-  const locations = [
-    {
-      id: 1,
-      city: "TP Hồ Chí Minh",
-      ward: [
-        {
-          id: 1,
-          name: "Gò Vấp",
-        },
-        {
-          id: 2,
-          name: "Quán 10",
-        },
-        {
-          id: 3,
-          name: "Quán 11",
-        },
-        {
-          id: 4,
-          name: "Quán 12",
-        },
-      ],
-    },
-    {
-      id: 2,
-      city: "Hà Nội",
-      ward: [
-        {
-          id: 1,
-          name: "Ba Đình",
-        },
-        {
-          id: 2,
-          name: "Hoàng Mai",
-        },
-        {
-          id: 3,
-          name: "Thanh Xuân",
-        },
-      ],
-    },
-  ];
-
   const handleMenuClick = (e) => {
     const selectedCity = city.find((item) => item.path === e.key);
 

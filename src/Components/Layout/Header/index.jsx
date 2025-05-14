@@ -9,8 +9,7 @@ import FilterModal from "../../Filter/FilterModal";
 import SearchModal from "../../search/SearchModal";
 import { useLocation, useNavigate } from "react-router";
 import User from "./User";
-import { useAuth } from "../../../Utils/AuthContext";
-import { postService } from "../../../Utils/api";
+import { categoryService, utilityService } from "../../../Utils/api";
 const menuItems = [
   { label: "Trang chủ", key: "/", path: "/" },
   { label: "Phòng trọ", key: "/phong-tro", path: "/phong-tro" },
@@ -46,10 +45,6 @@ const DefaultHeader = () => {
     const queryKeyword = params.get("keyword");
     if (queryKeyword) setKeyword(queryKeyword);
 
-    const queryProvince = params.get("province");
-    const queryDistrict = params.get("district");
-    const queryWard = params.get("ward");
-
     const queryPriceMin = params.get("priceMin");
     const queryPriceMax = params.get("priceMax");
     if (queryPriceMin && queryPriceMax) {
@@ -72,14 +67,17 @@ const DefaultHeader = () => {
 
   // Get category data
   useEffect(() => {
-    fetch("http://localhost:5000/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        setCategories(data);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    const fetchCategories = async () => {
+      try {
+        const response = await categoryService.getAll();
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
 
+    fetchCategories();
+  }, []);
   const priceRanges = [
     "Tất cả",
     "Dưới 1 triệu",
@@ -103,12 +101,16 @@ const DefaultHeader = () => {
 
   // Get utility data
   useEffect(() => {
-    fetch("http://localhost:5000/api/utilities")
-      .then((res) => res.json())
-      .then((data) => {
-        setUtilities(data);
-      })
-      .catch((err) => console.log(err));
+    const fetchUtilities = async () => {
+      try {
+        const response = await utilityService.getAll();
+        setUtilities(response.data);
+      } catch (error) {
+        console.error("Failed to fetch utilities:", error);
+      }
+    };
+
+    fetchUtilities();
   }, []);
 
   const TARGET_PROVINCES = [
@@ -457,37 +459,37 @@ const DefaultHeader = () => {
               onChange={(e) => setKeyword(e.target.value)}
               onSearch={applyFilters}
             />
-          <div className="filter">
-            <Button  onClick={() => setFillerVisible(true)}>
-              <FilterOutlined />
-              <span>Filter</span>
-            </Button>
-            <FilterModal
-              isFilterVisible={isFilterVisible}
-              setFillerVisible={setFillerVisible}
-              categories={categories}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-              handleProvinceChange={handleProvinceChange}
-              handleDistrictChange={handleDistrictChange}
-              handleWardChange={handleWardChange}
-              provinces={provinces}
-              districts={districts}
-              wards={wards}
-              selectedProvince={selectedProvince}
-              selectedDistrict={selectedDistrict}
-              selectedWard={selectedWard}
-              priceRanges={priceRanges}
-              acreages={acreages}
-              utilities={utilities}
-              selectedPrice={selectedPrice}
-              setSelectedPrice={setSelectedPrice}
-              isAcreage={isAcreage}
-              setIsAcreage={setIsAcreage}
-              isCharacteristics={isCharacteristics}
-              setIsCharacteristics={setIsCharacteristics}
-              onOk={handleApplyFilter}
-            />
+            <div className="filter">
+              <Button onClick={() => setFillerVisible(true)}>
+                <FilterOutlined />
+                <span>Filter</span>
+              </Button>
+              <FilterModal
+                isFilterVisible={isFilterVisible}
+                setFillerVisible={setFillerVisible}
+                categories={categories}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+                handleProvinceChange={handleProvinceChange}
+                handleDistrictChange={handleDistrictChange}
+                handleWardChange={handleWardChange}
+                provinces={provinces}
+                districts={districts}
+                wards={wards}
+                selectedProvince={selectedProvince}
+                selectedDistrict={selectedDistrict}
+                selectedWard={selectedWard}
+                priceRanges={priceRanges}
+                acreages={acreages}
+                utilities={utilities}
+                selectedPrice={selectedPrice}
+                setSelectedPrice={setSelectedPrice}
+                isAcreage={isAcreage}
+                setIsAcreage={setIsAcreage}
+                isCharacteristics={isCharacteristics}
+                setIsCharacteristics={setIsCharacteristics}
+                onOk={handleApplyFilter}
+              />
             </div>
           </div>
         </div>
