@@ -15,7 +15,7 @@ const Contact = () => {
         </Button>
         <br></br>
         <Button color="primary" variant="solid" className="w-52">
-          <a target="_blank" rel="nofollow" href="https://zalo.me/0909316890" className="font-bold text-base"><MessageOutlined/> &nbsp; &nbsp; Zalo: 0785604557 </a>
+          <a target="_blank" rel="nofollow" href="https://zalo.me/0785604557" className="font-bold text-base"><MessageOutlined/> &nbsp; &nbsp; Zalo: 0785604557 </a>
         </Button>
         </div>
       </div>
